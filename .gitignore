@@ -1,0 +1,21 @@
+# Xcode
+*.xcworkspace
+*.xcuserdata
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+DerivedData/
+build/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM
+
+# Swift Package Manager
+.build/
+
+# Cocoapods
+Pods/
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace

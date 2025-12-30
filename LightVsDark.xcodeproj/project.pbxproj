@@ -1,0 +1,373 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		83DC72B82F0465B100AECBE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72B72F0465B100AECBE1 /* AppDelegate.swift */; };
+		83DC72BA2F0465B100AECBE1 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72B92F0465B100AECBE1 /* GameViewController.swift */; };
+		83DC72CF2F046EBC00AECBE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83DC72CE2F046EBC00AECBE1 /* Assets.xcassets */; };
+		83DC72D32F0471DB00AECBE1 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D22F0471DB00AECBE1 /* GameScene.swift */; };
+		83DC72D52F04720000AECBE1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D42F04720000AECBE1 /* Player.swift */; };
+		83DC72D72F04721A00AECBE1 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D62F04721A00AECBE1 /* Obstacle.swift */; };
+		83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D82F04722B00AECBE1 /* SpawnManager.swift */; };
+		83DC72DB2F0477DA00AECBE1 /* .gitignore.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		83DC72B42F0465B100AECBE1 /* LightVsDark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightVsDark.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		83DC72B72F0465B100AECBE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		83DC72B92F0465B100AECBE1 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		83DC72CE2F046EBC00AECBE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		83DC72D22F0471DB00AECBE1 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		83DC72D42F04720000AECBE1 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		83DC72D62F04721A00AECBE1 /* Obstacle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Obstacle.swift; sourceTree = "<group>"; };
+		83DC72D82F04722B00AECBE1 /* SpawnManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpawnManager.swift; sourceTree = "<group>"; };
+		83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = .gitignore.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		83DC72B12F0465B100AECBE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		83DC72A62F0465AE00AECBE1 = {
+			isa = PBXGroup;
+			children = (
+				83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */,
+				83DC72CD2F046DEA00AECBE1 /* Utilities */,
+				83DC72CC2F046DE200AECBE1 /* Managers */,
+				83DC72CB2F046DDC00AECBE1 /* Nodes */,
+				83DC72CA2F046DD400AECBE1 /* Scenes */,
+				83DC72B62F0465B100AECBE1 /* LightVsDark iOS */,
+				83DC72B52F0465B100AECBE1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		83DC72B52F0465B100AECBE1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72B42F0465B100AECBE1 /* LightVsDark.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		83DC72B62F0465B100AECBE1 /* LightVsDark iOS */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72B72F0465B100AECBE1 /* AppDelegate.swift */,
+				83DC72B92F0465B100AECBE1 /* GameViewController.swift */,
+				83DC72CE2F046EBC00AECBE1 /* Assets.xcassets */,
+			);
+			path = "LightVsDark iOS";
+			sourceTree = "<group>";
+		};
+		83DC72CA2F046DD400AECBE1 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72D22F0471DB00AECBE1 /* GameScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		83DC72CB2F046DDC00AECBE1 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72D42F04720000AECBE1 /* Player.swift */,
+				83DC72D62F04721A00AECBE1 /* Obstacle.swift */,
+			);
+			path = Nodes;
+			sourceTree = "<group>";
+		};
+		83DC72CC2F046DE200AECBE1 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72D82F04722B00AECBE1 /* SpawnManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		83DC72CD2F046DEA00AECBE1 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		83DC72B32F0465B100AECBE1 /* LightVsDark iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83DC72C72F0465B100AECBE1 /* Build configuration list for PBXNativeTarget "LightVsDark iOS" */;
+			buildPhases = (
+				83DC72B02F0465B100AECBE1 /* Sources */,
+				83DC72B12F0465B100AECBE1 /* Frameworks */,
+				83DC72B22F0465B100AECBE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LightVsDark iOS";
+			productName = "LightVsDark iOS";
+			productReference = 83DC72B42F0465B100AECBE1 /* LightVsDark.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83DC72A72F0465AE00AECBE1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					83DC72B32F0465B100AECBE1 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 83DC72AA2F0465AE00AECBE1 /* Build configuration list for PBXProject "LightVsDark" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 83DC72A62F0465AE00AECBE1;
+			productRefGroup = 83DC72B52F0465B100AECBE1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				83DC72B32F0465B100AECBE1 /* LightVsDark iOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		83DC72B22F0465B100AECBE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83DC72CF2F046EBC00AECBE1 /* Assets.xcassets in Resources */,
+				83DC72DB2F0477DA00AECBE1 /* .gitignore.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		83DC72B02F0465B100AECBE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
+				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
+				83DC72D32F0471DB00AECBE1 /* GameScene.swift in Sources */,
+				83DC72D72F04721A00AECBE1 /* Obstacle.swift in Sources */,
+				83DC72BA2F0465B100AECBE1 /* GameViewController.swift in Sources */,
+				83DC72B82F0465B100AECBE1 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		83DC72C52F0465B100AECBE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "";
+				"INFOPLIST_FILE[sdk=*]" = "";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		83DC72C62F0465B100AECBE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		83DC72C82F0465B100AECBE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MYX8CUD6CS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrismiller.LightVsDark;
+				PRODUCT_NAME = LightVsDark;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		83DC72C92F0465B100AECBE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MYX8CUD6CS;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chrismiller.LightVsDark;
+				PRODUCT_NAME = LightVsDark;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		83DC72AA2F0465AE00AECBE1 /* Build configuration list for PBXProject "LightVsDark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83DC72C52F0465B100AECBE1 /* Debug */,
+				83DC72C62F0465B100AECBE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83DC72C72F0465B100AECBE1 /* Build configuration list for PBXNativeTarget "LightVsDark iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83DC72C82F0465B100AECBE1 /* Debug */,
+				83DC72C92F0465B100AECBE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83DC72A72F0465AE00AECBE1 /* Project object */;
+}
