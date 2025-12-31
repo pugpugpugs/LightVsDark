@@ -8,11 +8,16 @@
 import CoreGraphics
 
 extension CGPoint {
-
+    var length: CGFloat {
+        return sqrt(x*x + y*y)
+    }
+    
     func distance(to point: CGPoint) -> CGFloat {
-        let dx = point.x - x
-        let dy = point.y - y
-        return sqrt(dx*dx + dy*dy)
+        hypot(point.x - x, point.y - y)
+    }
+
+    func vector(to point: CGPoint) -> CGVector {
+        CGVector(dx: point.x - x, dy: point.y - y)
     }
 
     /// Signed angle difference [-π, π] — for shortest rotation

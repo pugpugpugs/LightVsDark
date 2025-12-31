@@ -17,6 +17,8 @@
 		83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */; };
 		83DC72E32F04A99600AECBE1 /* ObstacleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E22F04A99600AECBE1 /* ObstacleType.swift */; };
 		83DC72E62F04AF8300AECBE1 /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */; };
+		83DC72E82F05CB5E00AECBE1 /* CGVectorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E72F05CB5E00AECBE1 /* CGVectorExtensions.swift */; };
+		83DC72EA2F05DA9700AECBE1 /* LightCone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E92F05DA9700AECBE1 /* LightCone.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
 		83DC72E22F04A99600AECBE1 /* ObstacleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObstacleType.swift; sourceTree = "<group>"; };
 		83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
+		83DC72E72F05CB5E00AECBE1 /* CGVectorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGVectorExtensions.swift; sourceTree = "<group>"; };
+		83DC72E92F05DA9700AECBE1 /* LightCone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightCone.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +94,7 @@
 			children = (
 				83DC72D42F04720000AECBE1 /* Player.swift */,
 				83DC72D62F04721A00AECBE1 /* Obstacle.swift */,
+				83DC72E92F05DA9700AECBE1 /* LightCone.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -115,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */,
+				83DC72E72F05CB5E00AECBE1 /* CGVectorExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -190,8 +196,10 @@
 			files = (
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
+				83DC72E82F05CB5E00AECBE1 /* CGVectorExtensions.swift in Sources */,
 				83DC72D32F0471DB00AECBE1 /* GameScene.swift in Sources */,
 				83DC72D72F04721A00AECBE1 /* Obstacle.swift in Sources */,
+				83DC72EA2F05DA9700AECBE1 /* LightCone.swift in Sources */,
 				83DC72E32F04A99600AECBE1 /* ObstacleType.swift in Sources */,
 				83DC72BA2F0465B100AECBE1 /* GameViewController.swift in Sources */,
 				83DC72B82F0465B100AECBE1 /* AppDelegate.swift in Sources */,

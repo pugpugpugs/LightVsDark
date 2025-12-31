@@ -28,7 +28,7 @@ class SpawnManager {
         var zone: Int
         repeat {
             zone = Int.random(in: 0..<zoneCount)
-        } while zone == lastZone || (excludePlayerZone && zone == scene?.player?.currentZone)
+        } while zone == lastZone
         lastZone = zone
         return zone
     }
