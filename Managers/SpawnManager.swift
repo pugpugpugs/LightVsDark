@@ -24,11 +24,11 @@ class SpawnManager {
         self.scene = scene
     }
 
-    private func pickSpawnZone() -> Int {
+    private func pickSpawnZone(excludePlayerZone: Bool = true) -> Int {
         var zone: Int
         repeat {
             zone = Int.random(in: 0..<zoneCount)
-        } while zone == lastZone
+        } while zone == lastZone || (excludePlayerZone && zone == scene?.player?.currentZone)
         lastZone = zone
         return zone
     }

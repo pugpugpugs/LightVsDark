@@ -76,7 +76,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Game Loop
     override func update(_ currentTime: TimeInterval) {
         guard !isGameOver else { return }
-
+        
         // Calculate deltaTime using your lastUpdateTime extension
         let deltaTime: CGFloat = lastUpdateTime > 0 ? CGFloat(currentTime - lastUpdateTime) : 1.0 / 60.0
         lastUpdateTime = currentTime
@@ -85,6 +85,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         score += Double(deltaTime)
         scoreLabel.text = "\(Int(score))"
 
+        player.updateVisualRotation(deltaTime: deltaTime)
+        
         // Difficulty ramp — once every 10 seconds
         difficultyTimer += Double(deltaTime)
         if difficultyTimer - lastDifficultyUpdate >= 10.0 {
@@ -106,7 +108,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             )
             
             // Check if obstacle is inside the player's current zone
-            if player.zoneIndex(for: obstacle.position) == player.currentZone {
+            if player.isPointInsideLightCone(obstacle.position) {
                 // Destroy the obstacle
                 obstacle.removeFromParent()
                 obstacles.removeAll { $0 === obstacle }

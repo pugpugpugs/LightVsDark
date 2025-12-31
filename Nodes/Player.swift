@@ -17,6 +17,9 @@ class Player: SKShapeNode {
     var facingAngle: CGFloat {
         return CGFloat(currentZone) * anglePerZone
     }
+    
+    private(set) var visualAngle: CGFloat = 0
+    let rotationSpeed: CGFloat = 12.0 // radians per second
 
     let radius: CGFloat = 25
     private(set) var lightCone: SKShapeNode?
@@ -129,9 +132,13 @@ class Player: SKShapeNode {
         return Int(normalizedAngle / anglePerZone) % zoneCount
     }
 
-    func isTargetInCone(target: CGPoint) -> Bool {
-        let targetZone = zoneIndex(for: target)
-        return targetZone == currentZone
+    func isPointInsideLightCone(_ point: CGPoint) -> Bool {
+        let angleDiff = position.angleDiff0to2Pi(to: point, facingAngle: facingAngle)
+        
+        let shortestDiff = min(angleDiff, 2 * .pi - angleDiff)
+        
+        let graceAngle: CGFloat = (.pi / 180) * 6 // 6 degrees
+        return shortestDiff <= (anglePerZone / 2) - graceAngle
     }
     
     private var debugZones: [SKShapeNode] = []
@@ -139,6 +146,18 @@ class Player: SKShapeNode {
     private func colorForZone(_ index: Int) -> UIColor {
         let hue = CGFloat(index) / CGFloat(zoneCount) // evenly spaced hues
         return UIColor(hue: hue, saturation: 0.6, brightness: 0.9, alpha: 0.3)
+    }
+    
+    func updateVisualRotation(deltaTime: CGFloat) {
+        let targetAngle = facingAngle
+        let delta = shortestAngleBetween(visualAngle, targetAngle)
+        visualAngle += delta * min(1, rotationSpeed * deltaTime)
+        zRotation = visualAngle
+    }
+    
+    func shortestAngleBetween(_ a: CGFloat, _ b: CGFloat) -> CGFloat {
+        let diff = (b - a).truncatingRemainder(dividingBy: 2 * .pi)
+        return (2 * diff).truncatingRemainder(dividingBy: 2 * .pi) - diff
     }
 }
 
