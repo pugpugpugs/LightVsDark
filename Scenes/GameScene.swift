@@ -54,9 +54,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         if location.x < frame.midX {
-            player.rotateCounterClockwise()
+            player.rotateCounterClockwise(currentTime: lastUpdateTime)
         } else {
-            player.rotateClockwise()
+            player.rotateClockwise(currentTime: lastUpdateTime)
         }
     }
     
@@ -64,9 +64,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for press in presses {
             switch press.key?.keyCode {
             case .keyboardLeftArrow:
-                player.rotateCounterClockwise()
+                player.rotateCounterClockwise(currentTime: lastUpdateTime)
             case .keyboardRightArrow:
-                player.rotateClockwise()
+                player.rotateClockwise(currentTime: lastUpdateTime)
             default:
                 break
             }
@@ -85,6 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         score += Double(deltaTime)
         scoreLabel.text = "\(Int(score))"
 
+        player.updateConeLength(deltaTime: deltaTime)
         player.updateVisualRotation(deltaTime: deltaTime)
         
         // Difficulty ramp — once every 10 seconds

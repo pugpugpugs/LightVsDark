@@ -18,6 +18,16 @@ class Player: SKShapeNode {
         return CGFloat(currentZone) * anglePerZone
     }
     
+    // dynamic cone length
+    var coneShrinkRate: CGFloat = 5
+    var maxConeLength: CGFloat = 220
+    var minConeLength: CGFloat = 120
+    var currentConeLength: CGFloat = 220
+    
+    // rotation cooldowns
+    private var rotationCooldown: TimeInterval = 0.15 // 150ms between rotations
+    private var lastRotationTime: TimeInterval = 0
+    
     private(set) var visualAngle: CGFloat = 0
     let rotationSpeed: CGFloat = 12.0 // radians per second
 
@@ -46,17 +56,23 @@ class Player: SKShapeNode {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     // MARK: - Rotation
-    func rotateClockwise() {
+    func rotateClockwise(currentTime: TimeInterval) {
+        guard canRotate(currentTime: currentTime) else { return }
+        
         currentZone = (currentZone + 1) % zoneCount
         zRotation = facingAngle
         lightCone?.zRotation = 0        // cone itself stays unrotated
+        lastRotationTime = currentTime
         showDebugZones()
     }
 
-    func rotateCounterClockwise() {
+    func rotateCounterClockwise(currentTime: TimeInterval) {
+        guard canRotate(currentTime: currentTime) else { return }
+        
         currentZone = (currentZone - 1 + zoneCount) % zoneCount
         zRotation = facingAngle
         lightCone?.zRotation = 0        // cone itself stays unrotated
+        lastRotationTime = currentTime
         showDebugZones()
     }
 
@@ -64,7 +80,7 @@ class Player: SKShapeNode {
     func addLightCone(length: CGFloat = 220) -> SKShapeNode {
         let cone = SKShapeNode()
         let path = CGMutablePath()
-        let halfWidth = tan(anglePerZone / 2) * length
+        let halfWidth = tan(anglePerZone / 2) * currentConeLength
 
         // Draw triangle along +X axis
         path.move(to: .zero)
@@ -158,6 +174,25 @@ class Player: SKShapeNode {
     func shortestAngleBetween(_ a: CGFloat, _ b: CGFloat) -> CGFloat {
         let diff = (b - a).truncatingRemainder(dividingBy: 2 * .pi)
         return (2 * diff).truncatingRemainder(dividingBy: 2 * .pi) - diff
+    }
+    
+    func updateConeLength(deltaTime: CGFloat) {
+        currentConeLength -= coneShrinkRate * deltaTime
+        currentConeLength = max(minConeLength, currentConeLength)
+        
+        if let cone = lightCone {
+            let halfWidth = tan(anglePerZone / 2) * currentConeLength
+            let path = CGMutablePath()
+            path.move(to: .zero)
+            path.addLine(to: CGPoint(x: currentConeLength, y: -halfWidth))
+            path.addLine(to: CGPoint(x: currentConeLength, y: halfWidth))
+            path.closeSubpath()
+            cone.path = path
+        }
+    }
+    
+    func canRotate(currentTime: TimeInterval) -> Bool {
+        return currentTime - lastRotationTime > rotationCooldown
     }
 }
 
