@@ -10,8 +10,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score: TimeInterval = 0
     var scoreLabel: SKLabelNode!
     
+    var baseObstacleSpeed: CGFloat = 50
+    var spawnIntervalBase: TimeInterval = 1.0
+    
+    // Difficulty ramping
+    var difficultyTimer: TimeInterval = 0
+    private var lastDifficultyUpdate: TimeInterval = 0
+    let difficultyRampRate: CGFloat = 50 // speed increase per 10 seconds
+    let spawnIntervalMin: TimeInterval = 0.5
+   
+    private var lastUpdateTime: TimeInterval = 0
+    
+    override var canBecomeFirstResponder: Bool { true }
+    
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
+        super.didMove(to: view)
+        becomeFirstResponder()
+        
         backgroundColor = .black
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = .zero
@@ -24,6 +40,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Initialize spawn manager
         spawnManager = SpawnManager(scene: self)
         
+        // Score label
         scoreLabel = SKLabelNode(fontNamed: "Menlo")
         scoreLabel.fontSize = 24
         scoreLabel.fontColor = .white
@@ -34,79 +51,105 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Touch Input
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        player.rotateClockwise()
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        if location.x < frame.midX {
+            player.rotateCounterClockwise()
+        } else {
+            player.rotateClockwise()
+        }
+    }
+    
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        for press in presses {
+            switch press.key?.keyCode {
+            case .keyboardLeftArrow:
+                player.rotateCounterClockwise()
+            case .keyboardRightArrow:
+                player.rotateClockwise()
+            default:
+                break
+            }
+        }
     }
     
     // MARK: - Game Loop
     override func update(_ currentTime: TimeInterval) {
         guard !isGameOver else { return }
-        
-        score += 1.0 / 60.0
+
+        // Calculate deltaTime using your lastUpdateTime extension
+        let deltaTime: CGFloat = lastUpdateTime > 0 ? CGFloat(currentTime - lastUpdateTime) : 1.0 / 60.0
+        lastUpdateTime = currentTime
+
+        // Update score
+        score += Double(deltaTime)
         scoreLabel.text = "\(Int(score))"
-        
-        // Spawn obstacles via manager
+
+        // Difficulty ramp — once every 10 seconds
+        difficultyTimer += Double(deltaTime)
+        if difficultyTimer - lastDifficultyUpdate >= 10.0 {
+            lastDifficultyUpdate = difficultyTimer
+            baseObstacleSpeed += difficultyRampRate
+            spawnManager.spawnInterval = max(spawnIntervalMin, spawnManager.spawnInterval - 0.05)
+        }
+
+        // Spawn obstacles
         spawnManager.update(currentTime: currentTime)
-        
-        // Move obstacles
-        let speed: CGFloat = 2.5
-        
+
+        // Move obstacles and handle interactions
         for obstacle in obstacles {
-            obstacle.moveTowardPlayer(playerPosition: player.position, speed: speed)
+            // Move obstacle toward player
+            obstacle.moveTowardPlayer(
+                playerPosition: player.position,
+                baseSpeed: baseObstacleSpeed,
+                deltaTime: deltaTime
+            )
             
-            // Distance to player
-            let (distance, angleDiff) = player.position.distanceAndAngleDiff(to: obstacle.position, facingAngle: player.facingAngle)
-            
-            // Check if inside light cone 30 degree cone
-            if abs(angleDiff) < player.coneWidth / 2 {
-                // Obstacle is in light cone -> neutralize
+            // Check if obstacle is inside the player's current zone
+            if player.zoneIndex(for: obstacle.position) == player.currentZone {
+                // Destroy the obstacle
                 obstacle.removeFromParent()
-                
-                if let index = obstacles.firstIndex(of: obstacle) {
-                    obstacles.remove(at: index)
-                }
-            } else if distance < player.radius {
+                obstacles.removeAll { $0 === obstacle }
+                continue
+            }
+            
+            // Check collision with player
+            if player.position.distance(to: obstacle.position) < player.radius {
                 gameOver()
+                return
             }
             
             // Remove off-screen obstacles
             if obstacle.position.y + obstacle.frame.height / 2 < 0 {
                 obstacle.removeFromParent()
-                if let index = obstacles.firstIndex(of: obstacle) {
-                    obstacles.remove(at: index)
-                }
+                obstacles.removeAll { $0 === obstacle }
             }
         }
+
     }
+
     
     // MARK: - Physics Contact
     func didBegin(_ contact: SKPhysicsContact) {
-        
-        let bodyA = contact.bodyA.categoryBitMask
-        let bodyB = contact.bodyB.categoryBitMask
-        
-        let collision = bodyA | bodyB
-        
-        // Check if player collided with an obstacle
-        if collision == PhysicsCategory.player | PhysicsCategory.obstacle {
+        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        if collision == (PhysicsCategory.player | PhysicsCategory.obstacle) {
             gameOver()
         }
     }
     
+    // MARK: - Game Over
     func gameOver() {
         guard !isGameOver else { return }
         isGameOver = true
-        
         removeAllActions()
         
         let wait = SKAction.wait(forDuration: 1.0)
-        let restart = SKAction.run {
-            if let view = self.view {
-                let newScene = GameScene(size: view.bounds.size)
-                newScene.scaleMode = .resizeFill
-                view.presentScene(newScene, transition: .fade(withDuration: 0.5))
-            }
+        let restart = SKAction.run { [weak self] in
+            guard let self = self, let view = self.view else { return }
+            let newScene = GameScene(size: view.bounds.size)
+            newScene.scaleMode = .resizeFill
+            view.presentScene(newScene, transition: .fade(withDuration: 0.5))
         }
-        
         run(SKAction.sequence([wait, restart]))
     }
 }
