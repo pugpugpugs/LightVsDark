@@ -14,7 +14,9 @@
 		83DC72D52F04720000AECBE1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D42F04720000AECBE1 /* Player.swift */; };
 		83DC72D72F04721A00AECBE1 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D62F04721A00AECBE1 /* Obstacle.swift */; };
 		83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D82F04722B00AECBE1 /* SpawnManager.swift */; };
-		83DC72DB2F0477DA00AECBE1 /* .gitignore.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */; };
+		83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */; };
+		83DC72E32F04A99600AECBE1 /* ObstacleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E22F04A99600AECBE1 /* ObstacleType.swift */; };
+		83DC72E62F04AF8300AECBE1 /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,9 @@
 		83DC72D62F04721A00AECBE1 /* Obstacle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Obstacle.swift; sourceTree = "<group>"; };
 		83DC72D82F04722B00AECBE1 /* SpawnManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpawnManager.swift; sourceTree = "<group>"; };
 		83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = .gitignore.xib; sourceTree = "<group>"; };
+		83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
+		83DC72E22F04A99600AECBE1 /* ObstacleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObstacleType.swift; sourceTree = "<group>"; };
+		83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,11 +49,12 @@
 			isa = PBXGroup;
 			children = (
 				83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */,
+				83DC72B62F0465B100AECBE1 /* LightVsDark iOS */,
+				83DC72E42F04AF7000AECBE1 /* Extensions */,
 				83DC72CD2F046DEA00AECBE1 /* Utilities */,
 				83DC72CC2F046DE200AECBE1 /* Managers */,
 				83DC72CB2F046DDC00AECBE1 /* Nodes */,
 				83DC72CA2F046DD400AECBE1 /* Scenes */,
-				83DC72B62F0465B100AECBE1 /* LightVsDark iOS */,
 				83DC72B52F0465B100AECBE1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,8 +105,18 @@
 		83DC72CD2F046DEA00AECBE1 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */,
+				83DC72E22F04A99600AECBE1 /* ObstacleType.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		83DC72E42F04AF7000AECBE1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,7 +178,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				83DC72CF2F046EBC00AECBE1 /* Assets.xcassets in Resources */,
-				83DC72DB2F0477DA00AECBE1 /* .gitignore.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,8 +192,11 @@
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
 				83DC72D32F0471DB00AECBE1 /* GameScene.swift in Sources */,
 				83DC72D72F04721A00AECBE1 /* Obstacle.swift in Sources */,
+				83DC72E32F04A99600AECBE1 /* ObstacleType.swift in Sources */,
 				83DC72BA2F0465B100AECBE1 /* GameViewController.swift in Sources */,
 				83DC72B82F0465B100AECBE1 /* AppDelegate.swift in Sources */,
+				83DC72E62F04AF8300AECBE1 /* CGPointExtensions.swift in Sources */,
+				83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
