@@ -20,9 +20,11 @@ class Player: SKShapeNode {
     private var zoneCount: Int = 6
 
     // MARK: - Init
-    init(position: CGPoint) {
+    init(position: CGPoint, screenSize: CGSize) {
         super.init()
         self.position = position
+        
+        let radius: CGFloat = 25
         self.path = CGPath(ellipseIn: CGRect(x: -radius, y: -radius, width: radius*2, height: radius*2), transform: nil)
         self.fillColor = .white
         self.strokeColor = .clear
@@ -36,7 +38,10 @@ class Player: SKShapeNode {
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.allowsRotation = false
 
-        addLightCone()
+        lightCone = LightCone(screenSize: screenSize)
+        if let cone = lightCone {
+            addChild(cone)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -62,19 +67,6 @@ class Player: SKShapeNode {
         facingAngle += spinSpeed * deltaTime
         zRotation = facingAngle
         lightCone?.zRotation = facingAngle
-    }
-
-    // MARK: - Light Cone
-    private func addLightCone() {
-        let cone = LightCone(angle: anglePerZone, length: 220, minLength: 120, shrinkRate: 5, color: .yellow)
-        cone.name = "lightCone"
-        cone.position = CGPoint.zero    
-        addChild(cone)
-        self.lightCone = cone
-    }
-
-    func updateLightCone(deltaTime: CGFloat) {
-        lightCone?.updateLength(deltaTime: deltaTime)
     }
 
     // MARK: - Debug Zones

@@ -33,10 +33,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = .zero
 
         // Player setup
-        player = Player(position: CGPoint(x: frame.midX, y: frame.midY))
+        player = Player(position: CGPoint(x: frame.midX, y: frame.midY), screenSize: self.size)
         addChild(player)
+        
+        #if DEBUG
         player.addDebugZones(to: self)
-
+        #endif
+        
         // Spawn manager
         spawnManager = SpawnManager(scene: self)
 
@@ -76,7 +79,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.updateRotation(deltaTime: deltaTime, inputDirection: input)
 
         // Shrink light cone over time
-        player.lightCone?.updateLength(deltaTime: deltaTime)
+        player.lightCone?.update(deltaTime: deltaTime)
 
         // Update score
         score += Double(deltaTime)
