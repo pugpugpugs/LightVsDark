@@ -11,6 +11,10 @@ class SpawnManager {
     weak var scene: GameScene?
     let safeSpawnGenerator: SafeSpawnGenerator
     
+    #if DEBUG
+    private let debugDrawer: DebugDrawer?
+    #endif
+    
     private var lastEnemySpawnTime: TimeInterval = 0
     
     private var lastPowerUpTime: TimeInterval = 0
@@ -22,6 +26,9 @@ class SpawnManager {
     init(scene: GameScene) {
         self.scene = scene
         self.safeSpawnGenerator = SafeSpawnGenerator(sceneSize: scene.size, player: scene.player)
+        #if DEBUG
+        self.debugDrawer = DebugDrawer(scene: scene)
+        #endif
     }
 
     // MARK: - Update on tic
@@ -43,6 +50,10 @@ class SpawnManager {
     
     private func spawnPowerUp(player: Player) {
         guard let scene = scene else { return }
+        
+        #if DEBUG
+        debugDrawer?.clearTemporary()
+        #endif
      
         let powerUp = PowerUp(type: .widenCone, duration: 3.0, size: CGSize(width: 40, height: 40))
         
@@ -54,19 +65,9 @@ class SpawnManager {
         
         scene.addChild(powerUp)
         
-        // DEBUG: log spawn
-        print("Spawned POWERUP at \(powerUp.position)")
-        
         #if DEBUG
-        let debugDot = SKShapeNode(circleOfRadius: 5)
-        debugDot.position = powerUp.position
-        debugDot.fillColor = .yellow
-        debugDot.strokeColor = .clear
-        debugDot.zPosition = 50
-        scene.addChild(debugDot)
-        
-        // Remove after a short time
-        debugDot.run(SKAction.sequence([.wait(forDuration: 1.0), .removeFromParent()]))
+        debugDrawer?.drawDot(at: powerUp.position, color: .red, persist: true)
+        print("Spawned POWERUP at \(powerUp.position)")
         #endif
     }
 
@@ -85,19 +86,9 @@ class SpawnManager {
         scene.addChild(enemy)
         scene.enemies.append(enemy)
         
-        // DEBUG: log spawn
-           print("Spawned ENEMY at \(enemy.position)")
-           
-           #if DEBUG
-           let debugDot = SKShapeNode(circleOfRadius: 5)
-           debugDot.position = enemy.position
-           debugDot.fillColor = .red
-           debugDot.strokeColor = .clear
-           debugDot.zPosition = 50
-           scene.addChild(debugDot)
-           
-           // Remove after a short time
-           debugDot.run(SKAction.sequence([.wait(forDuration: 1.0), .removeFromParent()]))
-           #endif
+        #if DEBUG
+        debugDrawer?.drawDot(at: enemy.position, color: .green, persist: true)
+        print("Spawned ENEMY at \(enemy.position)")
+        #endif
     }
 }

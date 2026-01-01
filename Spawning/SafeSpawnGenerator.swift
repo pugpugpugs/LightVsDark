@@ -6,13 +6,15 @@ final class SafeSpawnGenerator {
     let player: Player
 
     #if DEBUG
-    private var coneLines: SKShapeNode?
-    private var paddedLines: SKShapeNode?
+    private let debugDrawer: DebugDrawer?
     #endif
 
     init(sceneSize: CGSize, player: Player) {
         self.sceneSize = sceneSize
         self.player = player
+        #if DEBUG
+        self.debugDrawer = player.scene.map { DebugDrawer(scene: $0) }
+        #endif
     }
 
     // MARK: - Generate test spawn and debug candidate
@@ -42,19 +44,19 @@ final class SafeSpawnGenerator {
         let paddedRight = vectorWithPadding(rightDir, padding: paddingAngle)
         let paddedLeftPoint  = addPoints(origin, CGPoint(x: paddedLeft.dx, y: paddedLeft.dy))
         let paddedRightPoint = addPoints(origin, CGPoint(x: paddedRight.dx, y: paddedRight.dy))
+        
+        let candidate = candidatePointOutsideCone(origin: origin,
+                                                  paddedLeftPoint: paddedLeftPoint,
+                                                  paddedRightPoint: paddedRightPoint,
+                                                  minDistance: 100)
 
         #if DEBUG
-        drawDebug(scene: scene,
-                  origin: origin,
-                  leftScene: leftScene,
-                  rightScene: rightScene,
-                  paddedLeftPoint: paddedLeftPoint,
-                  paddedRightPoint: paddedRightPoint,
-                  spawnPoint: spawnPoint,
-                  debugColor: debugColor)
+        debugDrawer?.clearTemporary()
+        debugDrawer?.drawLines(origin: origin, points: [leftScene, rightScene], color: .cyan, persist: false)
+        debugDrawer?.drawLines(origin: origin, points: [paddedLeftPoint, paddedRightPoint], color: .magenta, persist: false)
         #endif
 
-        return spawnPoint
+        return candidate
     }
 
     private func vectorWithPadding(_ v: CGVector, padding: CGFloat) -> CGVector {
@@ -66,63 +68,6 @@ final class SafeSpawnGenerator {
     // Helper for adding points
     private func addPoints(_ a: CGPoint, _ b: CGPoint) -> CGPoint {
         CGPoint(x: a.x + b.x, y: a.y + b.y)
-    }
-
-    #if DEBUG
-    private func drawDebug(scene: SKScene,
-                           origin: CGPoint,
-                           leftScene: CGPoint,
-                           rightScene: CGPoint,
-                           paddedLeftPoint: CGPoint,
-                           paddedRightPoint: CGPoint,
-                           spawnPoint: CGPoint,
-                           debugColor: SKColor) {
-
-        // --- Cone edges ---
-        if coneLines == nil {
-            let node = SKShapeNode()
-            node.strokeColor = .cyan
-            node.lineWidth = 2
-            node.zPosition = 9_999
-            scene.addChild(node)
-            coneLines = node
-        }
-        coneLines?.path = pathForConeEdges(origin: origin, leftScene: leftScene, rightScene: rightScene)
-
-        // --- Padded edges ---
-        if paddedLines == nil {
-            let node = SKShapeNode()
-            node.strokeColor = .magenta
-            node.lineWidth = 2
-            node.zPosition = 9_999
-            scene.addChild(node)
-            paddedLines = node
-        }
-        paddedLines?.path = pathForPaddedEdges(origin: origin,
-                                               paddedLeftPoint: paddedLeftPoint,
-                                               paddedRightPoint: paddedRightPoint)
-
-        // --- Green test spawn ---
-        let testDot = SKShapeNode(circleOfRadius: 8)
-        testDot.fillColor = .green
-        testDot.strokeColor = .black
-        testDot.lineWidth = 1
-        testDot.position = spawnPoint
-        testDot.zPosition = 10_000
-        scene.addChild(testDot)
-
-        // --- Blue candidate (full history) ---
-        let candidate = candidatePointOutsideCone(origin: origin,
-                                                  paddedLeftPoint: paddedLeftPoint,
-                                                  paddedRightPoint: paddedRightPoint,
-                                                  minDistance: 100)
-        let blueDot = SKShapeNode(circleOfRadius: 6)
-        blueDot.fillColor = debugColor
-        blueDot.strokeColor = .black
-        blueDot.lineWidth = 1
-        blueDot.position = candidate
-        blueDot.zPosition = 10_001
-        scene.addChild(blueDot)
     }
 
     // MARK: - Candidate generation — every call returns a point outside padded cone
@@ -195,5 +140,4 @@ final class SafeSpawnGenerator {
         path.addLine(to: paddedRightPoint)
         return path
     }
-    #endif
 }

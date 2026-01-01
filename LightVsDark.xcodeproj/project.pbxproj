@@ -26,6 +26,7 @@
 		83DC72F52F06F85200AECBE1 /* CollisionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72F42F06F85200AECBE1 /* CollisionHandler.swift */; };
 		83DC72F72F06F85C00AECBE1 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */; };
 		83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */; };
+		83DC72FE2F07250800AECBE1 /* DebugDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72FD2F07250800AECBE1 /* DebugDrawer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		83DC72F42F06F85200AECBE1 /* CollisionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionHandler.swift; sourceTree = "<group>"; };
 		83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
 		83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyEnemy.swift; sourceTree = "<group>"; };
+		83DC72FD2F07250800AECBE1 /* DebugDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDrawer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 			children = (
 				83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */,
 				83DC72B62F0465B100AECBE1 /* LightVsDark iOS */,
+				83DC72FC2F0724EE00AECBE1 /* Debug */,
 				83DC72E42F04AF7000AECBE1 /* Extensions */,
 				83DC72CD2F046DEA00AECBE1 /* Utilities */,
 				83DC72CC2F046DE200AECBE1 /* Managers */,
@@ -170,6 +173,14 @@
 			path = Enemies;
 			sourceTree = "<group>";
 		};
+		83DC72FC2F0724EE00AECBE1 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72FD2F07250800AECBE1 /* DebugDrawer.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -257,6 +268,7 @@
 				83DC72EC2F06001100AECBE1 /* PowerUp.swift in Sources */,
 				83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */,
 				83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */,
+				83DC72FE2F07250800AECBE1 /* DebugDrawer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
