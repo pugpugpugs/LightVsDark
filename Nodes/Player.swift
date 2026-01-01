@@ -12,7 +12,17 @@ class Player: SKShapeNode {
     let spinAcceleration: CGFloat = .pi * 4
     let spinDecay: CGFloat = 6.0
     var facingAngle: CGFloat = 0
-
+    
+    // Power up
+    private var activePowerUps: [PowerUpType: TimeInterval] = [:]
+    
+    // Widen boost
+    private var widenBoost: CGFloat = 0
+    
+    // Multipliers
+    var spinSpeedMultiplier: CGFloat = 1.0
+    var lightConeWidened: Bool { return activePowerUps[.widenCone] != nil }
+    
     // Light cone
     private(set) var lightCone: LightCone?
     
@@ -64,7 +74,7 @@ class Player: SKShapeNode {
         }
 
         // Update rotation
-        facingAngle += spinSpeed * deltaTime
+        facingAngle += spinSpeed * spinSpeedMultiplier * deltaTime
         zRotation = facingAngle
         lightCone?.zRotation = facingAngle
     }
@@ -90,6 +100,49 @@ class Player: SKShapeNode {
             zone.zRotation = CGFloat(i) * anglePerZone
             scene.addChild(zone)
             debugZones.append(zone)
+        }
+    }
+    
+    // MARK: - Activate Power Ups
+    func activate(powerUp: PowerUp, sceneTime: TimeInterval, obstacles: [Obstacle]) {
+        let expiration = sceneTime + powerUp.duration
+        activePowerUps[powerUp.type] = expiration
+
+        // Apply immediate effect
+        switch powerUp.type {
+        case .widenCone:
+            guard let cone = lightCone else { return }
+            
+            let addedLength = cone.maxLength * 0.5
+            let addedAngle = cone.maxAngle * 0.5
+            
+            cone.currentLength = min(cone.currentLength + addedLength, cone.maxLength)
+            cone.currentAngle = min(cone.currentAngle + addedAngle, cone.maxAngle)
+
+            widenBoost += 1.0
+            
+        case .speedBoost:
+            spinSpeedMultiplier *= 1.5
+        case .slowObstacles:
+            obstacles.forEach { $0.speedMultiplier *= 0.5 }
+        }
+    }
+    
+    // MARK: - Update Power Ups
+    func updatePowerUps(sceneTime: TimeInterval, obstacles: [Obstacle]) {
+        for (type, expiration) in activePowerUps {
+            if sceneTime >= expiration {
+                // Time’s up — revert effect
+                switch type {
+                case .widenCone:
+                    break
+                case .speedBoost:
+                    spinSpeedMultiplier /= 1.5
+                case .slowObstacles:
+                    obstacles.forEach { $0.speedMultiplier *= 2.0 }
+                }
+                activePowerUps[type] = nil
+            }
         }
     }
 }

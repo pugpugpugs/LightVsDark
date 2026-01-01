@@ -3,16 +3,14 @@ import SpriteKit
 class Obstacle: SKNode {
 
     // Old properties
-    let speedMultiplier: CGFloat
-    let zoneIndex: Int
+    var speedMultiplier: CGFloat
 
     // Sprite / animation
     private let sprite: SKSpriteNode
     private let frames: [SKTexture]
 
-    init(position: CGPoint, zoneIndex: Int, spriteSize: CGSize = CGSize(width: 80, height: 80)) {
+    init(position: CGPoint, spriteSize: CGSize = CGSize(width: 80, height: 80)) {
         self.speedMultiplier = CGFloat.random(in: 0.8...1.3)
-        self.zoneIndex = zoneIndex
 
         // Load sprite sheet and slice frames (1 row x 8 columns)
         let sheet = SKTexture(imageNamed: "green_octonid")

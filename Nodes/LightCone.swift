@@ -62,10 +62,27 @@ class LightCone: SKShapeNode {
         // Update physics body to match shape
         self.physicsBody = SKPhysicsBody(polygonFrom: path)
         self.physicsBody?.categoryBitMask = PhysicsCategory.lightCone
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.obstacle
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.obstacle | PhysicsCategory.powerUp
         self.physicsBody?.collisionBitMask = 0
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.usesPreciseCollisionDetection = true
+    }
+    
+    // MARK: - Determines if spawn point is inside lightcone
+    func containsPointWithPadding(_ point: CGPoint, padding: CGFloat) -> Bool {
+        let offsets: [CGPoint] = [
+            CGPoint(x: -padding, y: -padding),
+            CGPoint(x: padding, y: -padding),
+            CGPoint(x: -padding, y: padding),
+            CGPoint(x: padding, y: padding),
+        ]
+        
+        for offset in offsets {
+            if self.contains(point + offset) {
+                return true
+            }
+        }
+        return false
     }
 }

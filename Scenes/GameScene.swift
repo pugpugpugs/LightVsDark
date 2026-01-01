@@ -3,6 +3,8 @@ import SpriteKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Properties
+    private var sceneStartTime: TimeInterval?
+    
     var player: Player!
     var spawnManager: SpawnManager!
     var obstacles: [Obstacle] = []
@@ -22,6 +24,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdateTime: TimeInterval = 0
     var isTouchingLeft = false
     var isTouchingRight = false
+    
+    var sceneTime: TimeInterval = 0
 
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
@@ -68,9 +72,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Game Loop
     override func update(_ currentTime: TimeInterval) {
         guard !isGameOver else { return }
+        
+        if sceneStartTime == nil {
+            sceneStartTime = currentTime
+        }
+        
+        sceneTime = currentTime - sceneStartTime!
+        
+        player.updatePowerUps(sceneTime: sceneTime, obstacles: obstacles)
 
-        let deltaTime: CGFloat = lastUpdateTime > 0 ? CGFloat(currentTime - lastUpdateTime) : 1.0 / 60.0
-        lastUpdateTime = currentTime
+        let deltaTime: CGFloat = lastUpdateTime > 0 ? CGFloat(sceneTime - lastUpdateTime) : 1.0 / 60.0
+        lastUpdateTime = sceneTime
 
         // Rotation input
         var input: CGFloat = 0
@@ -94,7 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         // Spawn obstacles
-        spawnManager.update(currentTime: currentTime)
+        spawnManager.update(currentTime: sceneTime)
 
         // Move obstacles and remove off-screen
         for obstacle in obstacles {
@@ -118,6 +130,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         },
         PhysicsCategory.player | PhysicsCategory.obstacle: { [weak self] _, _ in
             self?.gameOver()
+        },
+        
+        PhysicsCategory.lightCone | PhysicsCategory.powerUp: { [weak self] nodeA, nodeB in guard let self = self else { return }
+            
+            let lightConeNode =
+                nodeA.physicsBody?.categoryBitMask == PhysicsCategory.lightCone ? nodeA : nodeB
+            let powerUpNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.powerUp ? nodeA : nodeB
+                guard
+                    let lightCone = lightConeNode as? LightCone,
+                    let powerUp = powerUpNode as? PowerUp
+                else { return }
+            powerUp.apply(to: self.player, in: self)
+                powerUp.removeFromParent()
         }
     ]
 
