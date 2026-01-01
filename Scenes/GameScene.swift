@@ -7,25 +7,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var player: Player!
     var spawnManager: SpawnManager!
-    var obstacles: [Obstacle] = []
+    var enemies: [Enemy] = []
     var isGameOver = false
-    var score: TimeInterval = 0
-    var scoreLabel: SKLabelNode!
-
-    var baseObstacleSpeed: CGFloat = 50
-    var spawnIntervalBase: TimeInterval = 1.0
-
-    // Difficulty ramping
-    var difficultyTimer: TimeInterval = 0
-    private var lastDifficultyUpdate: TimeInterval = 0
-    let difficultyRampRate: CGFloat = 50 // speed increase per 10 seconds
-    let spawnIntervalMin: TimeInterval = 0.5
-
+    
     private var lastUpdateTime: TimeInterval = 0
     var isTouchingLeft = false
     var isTouchingRight = false
-    
     var sceneTime: TimeInterval = 0
+
+    // Managers / Handlers
+    var difficultyManager: DifficultyManager!
+    var collisionHandler: CollisionHandler!
+    var scoreManager: ScoreManager!
 
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
@@ -47,13 +40,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Spawn manager
         spawnManager = SpawnManager(scene: self)
 
-        // Score label
-        scoreLabel = SKLabelNode(fontNamed: "Menlo")
-        scoreLabel.fontSize = 24
-        scoreLabel.fontColor = .white
-        scoreLabel.position = CGPoint(x: frame.midX, y: frame.height - 60)
-        scoreLabel.text = "0"
-        addChild(scoreLabel)
+        // Difficulty Manager
+        difficultyManager = DifficultyManager(
+            initialSpeed: 50,
+            initialSpawnInterval: 2.5,
+            spawnIntervalMin: 0.5,
+            rampRate: 10,
+            spawnDecrease: 0.1
+        )
+
+        // Collision Handler
+        collisionHandler = CollisionHandler(scene: self)
+
+        // Score Manager
+        scoreManager = ScoreManager(
+            scene: self,
+            position: CGPoint(x: frame.midX, y: frame.height - 60)
+        )
     }
 
     // MARK: - Touch Input
@@ -73,91 +76,53 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         guard !isGameOver else { return }
         
+        // Initialize scene start time
         if sceneStartTime == nil {
             sceneStartTime = currentTime
         }
-        
         sceneTime = currentTime - sceneStartTime!
         
-        player.updatePowerUps(sceneTime: sceneTime, obstacles: obstacles)
-
+        // Delta time
         let deltaTime: CGFloat = lastUpdateTime > 0 ? CGFloat(sceneTime - lastUpdateTime) : 1.0 / 60.0
         lastUpdateTime = sceneTime
 
-        // Rotation input
+        // --- Player ---
         var input: CGFloat = 0
         if isTouchingLeft { input = -1 }
         if isTouchingRight { input = 1 }
         player.updateRotation(deltaTime: deltaTime, inputDirection: input)
-
-        // Shrink light cone over time
+        player.updatePowerUps(sceneTime: sceneTime, enemies: enemies)
         player.lightCone?.update(deltaTime: deltaTime)
 
-        // Update score
-        score += Double(deltaTime)
-        scoreLabel.text = "\(Int(score))"
+        // --- Difficulty ---
+        difficultyManager.update(deltaTime: Double(deltaTime))
 
-        // Difficulty ramp — every 10 seconds
-        difficultyTimer += Double(deltaTime)
-        if difficultyTimer - lastDifficultyUpdate >= 10.0 {
-            lastDifficultyUpdate = difficultyTimer
-            baseObstacleSpeed += difficultyRampRate
-            spawnManager.spawnInterval = max(spawnIntervalMin, spawnManager.spawnInterval - 0.05)
-        }
+        // --- Spawn ---
+        spawnManager.update(currentTime: sceneTime, enemySpawnInterval: difficultyManager.enemySpawnInterval)
 
-        // Spawn obstacles
-        spawnManager.update(currentTime: sceneTime)
-
-        // Move obstacles and remove off-screen
-        for obstacle in obstacles {
-            obstacle.moveTowardPlayer(playerPosition: player.position, baseSpeed: baseObstacleSpeed, deltaTime: deltaTime)
+        // --- Move enemies ---
+        for enemy in enemies {
+            enemy.moveTowardPlayer(playerPosition: player.position, baseSpeed: difficultyManager.enemySpeed, deltaTime: deltaTime)
 
             // Off-screen removal
-            if obstacle.position.y + obstacle.frame.height / 2 < 0 {
-                obstacle.removeFromParent()
-                obstacles.removeAll { $0 === obstacle }
+            if enemy.position.y + enemy.frame.height / 2 < 0 {
+                enemy.removeFromParent()
+                enemies.removeAll { $0 === enemy }
             }
         }
+
+        // --- Score ---
+        scoreManager.update(deltaTime: Double(deltaTime))
     }
 
-    // Collision handler dictionary
-    lazy var collisionHandlers: [UInt32: (SKNode, SKNode) -> Void] = [
-        PhysicsCategory.lightCone | PhysicsCategory.obstacle: { [weak self] nodeA, nodeB in
-            guard let self = self else { return }
-            let obstacle = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.obstacle ? nodeA : nodeB
-            obstacle.removeFromParent()
-            self.obstacles.removeAll { $0 === obstacle }
-        },
-        PhysicsCategory.player | PhysicsCategory.obstacle: { [weak self] _, _ in
-            self?.gameOver()
-        },
-        
-        PhysicsCategory.lightCone | PhysicsCategory.powerUp: { [weak self] nodeA, nodeB in guard let self = self else { return }
-            
-            let lightConeNode =
-                nodeA.physicsBody?.categoryBitMask == PhysicsCategory.lightCone ? nodeA : nodeB
-            let powerUpNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.powerUp ? nodeA : nodeB
-                guard
-                    let lightCone = lightConeNode as? LightCone,
-                    let powerUp = powerUpNode as? PowerUp
-                else { return }
-            powerUp.apply(to: self.player, in: self)
-                powerUp.removeFromParent()
-        }
-    ]
-
+    // MARK: - Physics Contact
     func didBegin(_ contact: SKPhysicsContact) {
-        guard let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node else { return }
-
-        // Compute combined categoryBitMask
-        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-
-        // Call handler if exists
-        collisionHandlers[collision]?(nodeA, nodeB)
+        collisionHandler.handle(contact: contact)
     }
 
     // MARK: - Game Over
     func gameOver() {
+        return
         guard !isGameOver else { return }
         isGameOver = true
         removeAllActions()

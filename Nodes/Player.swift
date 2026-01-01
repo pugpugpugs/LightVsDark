@@ -42,7 +42,7 @@ class Player: SKShapeNode {
 
         self.physicsBody = SKPhysicsBody(circleOfRadius: radius)
         self.physicsBody?.categoryBitMask = PhysicsCategory.player
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.obstacle
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.enemy
         self.physicsBody?.collisionBitMask = 0
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
@@ -104,7 +104,7 @@ class Player: SKShapeNode {
     }
     
     // MARK: - Activate Power Ups
-    func activate(powerUp: PowerUp, sceneTime: TimeInterval, obstacles: [Obstacle]) {
+    func activate(powerUp: PowerUp, sceneTime: TimeInterval, enemies: [Enemy]) {
         let expiration = sceneTime + powerUp.duration
         activePowerUps[powerUp.type] = expiration
 
@@ -123,13 +123,13 @@ class Player: SKShapeNode {
             
         case .speedBoost:
             spinSpeedMultiplier *= 1.5
-        case .slowObstacles:
-            obstacles.forEach { $0.speedMultiplier *= 0.5 }
+        case .slowEnemies:
+            enemies.forEach { $0.speedMultiplier *= 0.5 }
         }
     }
     
     // MARK: - Update Power Ups
-    func updatePowerUps(sceneTime: TimeInterval, obstacles: [Obstacle]) {
+    func updatePowerUps(sceneTime: TimeInterval, enemies: [Enemy]) {
         for (type, expiration) in activePowerUps {
             if sceneTime >= expiration {
                 // Time’s up — revert effect
@@ -138,8 +138,8 @@ class Player: SKShapeNode {
                     break
                 case .speedBoost:
                     spinSpeedMultiplier /= 1.5
-                case .slowObstacles:
-                    obstacles.forEach { $0.speedMultiplier *= 2.0 }
+                case .slowEnemies:
+                    enemies.forEach { $0.speedMultiplier *= 2.0 }
                 }
                 activePowerUps[type] = nil
             }

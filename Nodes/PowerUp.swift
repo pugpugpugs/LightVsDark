@@ -41,6 +41,6 @@ class PowerUp: SKShapeNode {
 
     // Called when player collects it
     func apply(to player: Player, in scene: GameScene) {
-        player.activate(powerUp: self, sceneTime: scene.sceneTime, obstacles: scene.obstacles)
+        player.activate(powerUp: self, sceneTime: scene.sceneTime, enemies: scene.enemies)
     }
 }

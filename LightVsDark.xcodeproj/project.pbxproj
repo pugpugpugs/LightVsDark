@@ -12,16 +12,20 @@
 		83DC72CF2F046EBC00AECBE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83DC72CE2F046EBC00AECBE1 /* Assets.xcassets */; };
 		83DC72D32F0471DB00AECBE1 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D22F0471DB00AECBE1 /* GameScene.swift */; };
 		83DC72D52F04720000AECBE1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D42F04720000AECBE1 /* Player.swift */; };
-		83DC72D72F04721A00AECBE1 /* Obstacle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D62F04721A00AECBE1 /* Obstacle.swift */; };
+		83DC72D72F04721A00AECBE1 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D62F04721A00AECBE1 /* Enemy.swift */; };
 		83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72D82F04722B00AECBE1 /* SpawnManager.swift */; };
 		83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */; };
-		83DC72E32F04A99600AECBE1 /* ObstacleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E22F04A99600AECBE1 /* ObstacleType.swift */; };
+		83DC72E32F04A99600AECBE1 /* EnemyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E22F04A99600AECBE1 /* EnemyType.swift */; };
 		83DC72E62F04AF8300AECBE1 /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */; };
 		83DC72E82F05CB5E00AECBE1 /* CGVectorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E72F05CB5E00AECBE1 /* CGVectorExtensions.swift */; };
 		83DC72EA2F05DA9700AECBE1 /* LightCone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72E92F05DA9700AECBE1 /* LightCone.swift */; };
 		83DC72EC2F06001100AECBE1 /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72EB2F06001100AECBE1 /* PowerUp.swift */; };
 		83DC72EE2F06002600AECBE1 /* PowerUpType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72ED2F06002600AECBE1 /* PowerUpType.swift */; };
 		83DC72F02F06D60600AECBE1 /* SafeSpawnGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72EF2F06D60600AECBE1 /* SafeSpawnGenerator.swift */; };
+		83DC72F22F06F5D500AECBE1 /* DifficultyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72F12F06F5D500AECBE1 /* DifficultyManager.swift */; };
+		83DC72F52F06F85200AECBE1 /* CollisionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72F42F06F85200AECBE1 /* CollisionHandler.swift */; };
+		83DC72F72F06F85C00AECBE1 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */; };
+		83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,17 +35,21 @@
 		83DC72CE2F046EBC00AECBE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83DC72D22F0471DB00AECBE1 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		83DC72D42F04720000AECBE1 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		83DC72D62F04721A00AECBE1 /* Obstacle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Obstacle.swift; sourceTree = "<group>"; };
+		83DC72D62F04721A00AECBE1 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		83DC72D82F04722B00AECBE1 /* SpawnManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpawnManager.swift; sourceTree = "<group>"; };
 		83DC72DA2F0477DA00AECBE1 /* .gitignore.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = .gitignore.xib; sourceTree = "<group>"; };
 		83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
-		83DC72E22F04A99600AECBE1 /* ObstacleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObstacleType.swift; sourceTree = "<group>"; };
+		83DC72E22F04A99600AECBE1 /* EnemyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyType.swift; sourceTree = "<group>"; };
 		83DC72E52F04AF8300AECBE1 /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
 		83DC72E72F05CB5E00AECBE1 /* CGVectorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGVectorExtensions.swift; sourceTree = "<group>"; };
 		83DC72E92F05DA9700AECBE1 /* LightCone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightCone.swift; sourceTree = "<group>"; };
 		83DC72EB2F06001100AECBE1 /* PowerUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
 		83DC72ED2F06002600AECBE1 /* PowerUpType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUpType.swift; sourceTree = "<group>"; };
 		83DC72EF2F06D60600AECBE1 /* SafeSpawnGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeSpawnGenerator.swift; sourceTree = "<group>"; };
+		83DC72F12F06F5D500AECBE1 /* DifficultyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultyManager.swift; sourceTree = "<group>"; };
+		83DC72F42F06F85200AECBE1 /* CollisionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionHandler.swift; sourceTree = "<group>"; };
+		83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
+		83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyEnemy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +72,9 @@
 				83DC72CD2F046DEA00AECBE1 /* Utilities */,
 				83DC72CC2F046DE200AECBE1 /* Managers */,
 				83DC72CB2F046DDC00AECBE1 /* Nodes */,
+				83DC72F32F06F82600AECBE1 /* Spawning */,
 				83DC72CA2F046DD400AECBE1 /* Scenes */,
+				83DC72F82F06F89000AECBE1 /* Handlers */,
 				83DC72B52F0465B100AECBE1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -98,8 +108,8 @@
 		83DC72CB2F046DDC00AECBE1 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				83DC72F92F06F92800AECBE1 /* Enemies */,
 				83DC72D42F04720000AECBE1 /* Player.swift */,
-				83DC72D62F04721A00AECBE1 /* Obstacle.swift */,
 				83DC72E92F05DA9700AECBE1 /* LightCone.swift */,
 				83DC72EB2F06001100AECBE1 /* PowerUp.swift */,
 			);
@@ -110,7 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				83DC72D82F04722B00AECBE1 /* SpawnManager.swift */,
-				83DC72EF2F06D60600AECBE1 /* SafeSpawnGenerator.swift */,
+				83DC72F12F06F5D500AECBE1 /* DifficultyManager.swift */,
+				83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -119,7 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */,
-				83DC72E22F04A99600AECBE1 /* ObstacleType.swift */,
+				83DC72E22F04A99600AECBE1 /* EnemyType.swift */,
 				83DC72ED2F06002600AECBE1 /* PowerUpType.swift */,
 			);
 			path = Utilities;
@@ -132,6 +143,31 @@
 				83DC72E72F05CB5E00AECBE1 /* CGVectorExtensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		83DC72F32F06F82600AECBE1 /* Spawning */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72EF2F06D60600AECBE1 /* SafeSpawnGenerator.swift */,
+			);
+			path = Spawning;
+			sourceTree = "<group>";
+		};
+		83DC72F82F06F89000AECBE1 /* Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72F42F06F85200AECBE1 /* CollisionHandler.swift */,
+			);
+			path = Handlers;
+			sourceTree = "<group>";
+		};
+		83DC72F92F06F92800AECBE1 /* Enemies */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72D62F04721A00AECBE1 /* Enemy.swift */,
+				83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */,
+			);
+			path = Enemies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,15 +243,19 @@
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
 				83DC72EE2F06002600AECBE1 /* PowerUpType.swift in Sources */,
 				83DC72E82F05CB5E00AECBE1 /* CGVectorExtensions.swift in Sources */,
+				83DC72F22F06F5D500AECBE1 /* DifficultyManager.swift in Sources */,
 				83DC72D32F0471DB00AECBE1 /* GameScene.swift in Sources */,
-				83DC72D72F04721A00AECBE1 /* Obstacle.swift in Sources */,
+				83DC72D72F04721A00AECBE1 /* Enemy.swift in Sources */,
 				83DC72F02F06D60600AECBE1 /* SafeSpawnGenerator.swift in Sources */,
 				83DC72EA2F05DA9700AECBE1 /* LightCone.swift in Sources */,
-				83DC72E32F04A99600AECBE1 /* ObstacleType.swift in Sources */,
+				83DC72E32F04A99600AECBE1 /* EnemyType.swift in Sources */,
+				83DC72F72F06F85C00AECBE1 /* ScoreManager.swift in Sources */,
 				83DC72BA2F0465B100AECBE1 /* GameViewController.swift in Sources */,
+				83DC72F52F06F85200AECBE1 /* CollisionHandler.swift in Sources */,
 				83DC72B82F0465B100AECBE1 /* AppDelegate.swift in Sources */,
 				83DC72E62F04AF8300AECBE1 /* CGPointExtensions.swift in Sources */,
 				83DC72EC2F06001100AECBE1 /* PowerUp.swift in Sources */,
+				83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */,
 				83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

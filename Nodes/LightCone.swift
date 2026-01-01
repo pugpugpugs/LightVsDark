@@ -62,7 +62,7 @@ class LightCone: SKShapeNode {
         // Update physics body to match shape
         self.physicsBody = SKPhysicsBody(polygonFrom: path)
         self.physicsBody?.categoryBitMask = PhysicsCategory.lightCone
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.obstacle | PhysicsCategory.powerUp
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.enemy | PhysicsCategory.powerUp
         self.physicsBody?.collisionBitMask = 0
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
