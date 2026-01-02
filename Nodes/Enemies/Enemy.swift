@@ -12,6 +12,10 @@ class Enemy: SKNode {
     private var timeElapsed: CGFloat = 0
     var zigZagTime: CGFloat = 0
     private var forwardAnchor: CGPoint?
+    
+    var maxHealth: CGFloat = 3
+    var health: CGFloat = 10
+
 
     // Base initializer
     init(position: CGPoint,
@@ -46,6 +50,18 @@ class Enemy: SKNode {
 
         setupPhysics(radius: hitRadius)
     }
+    
+    func takeDamage(_ amount: CGFloat) {
+        health -= amount
+        return
+        if health <= 0 {
+            die()
+        }
+    }
+    
+    private func die() {
+        removeFromParent()
+    }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
@@ -60,6 +76,7 @@ class Enemy: SKNode {
     }
 
     func moveTowardPlayer(playerPosition: CGPoint, baseSpeed: CGFloat, deltaTime: CGFloat, difficultyLevel: CGFloat) {
+        return
         let dx = playerPosition.x - position.x
         let dy = playerPosition.y - position.y
         let distance = sqrt(dx*dx + dy*dy)

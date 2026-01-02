@@ -16,9 +16,10 @@ class PowerUpManager {
 
         switch powerUp.type {
         case .widenCone:
-            cone?.applyPowerUp(
-                lengthBoost: cone!.maxLength * 0.5,
-                angleBoost: cone!.maxAngle * 0.5
+            guard let cone = cone else { return }
+            cone.applyPowerUp(
+                lengthBoost: cone.baseLength * 0.5,
+                angleBoost: cone.baseAngle * 0.5
             )
         case .speedBoost:
             player?.spinSpeedMultiplier *= 1.5

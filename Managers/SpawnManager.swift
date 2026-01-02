@@ -18,10 +18,7 @@ class SpawnManager {
     private var lastEnemySpawnTime: TimeInterval = 0
     
     private var lastPowerUpTime: TimeInterval = 0
-    private let powerUpInterval: TimeInterval = 5
-
-    private let zoneCount = 6
-    private var lastZone: Int? = nil
+    private let powerUpInterval: TimeInterval = 1000
 
     init(scene: GameScene) {
         self.scene = scene
@@ -73,6 +70,7 @@ class SpawnManager {
 
     private func spawnEnemy(player: Player) {
         guard let scene = scene else { return }
+        if scene.enemies.count > 0 { return }
 
         // Determine spawn position (safe from player/cone)
         let spawnPosition: CGPoint

@@ -34,10 +34,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player = Player(position: CGPoint(x: frame.midX, y: frame.midY), screenSize: self.size)
         addChild(player)
         
-        #if DEBUG
-        player.addDebugZones(to: self)
-        #endif
-
         // --- PowerUpManager ---
         powerUpManager = PowerUpManager(cone: player.lightCone, player: player, enemies: enemies)
 
@@ -99,8 +95,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if isTouchingRight { input = 1 }
         
         player.updateRotation(deltaTime: deltaTime, inputDirection: input)
-        player.updatePowerUps(sceneTime: sceneTime, enemies: enemies)
-        player.lightCone?.update(deltaTime: deltaTime, difficultyLevel: difficultyManager.currentDifficulty)
+        
+        player.lightCone?.update(deltaTime: deltaTime)
+        
+        player.lightCone?.applyDamage(deltaTime: deltaTime, enemies: enemies)
 
         // --- Difficulty ---
         difficultyManager.update(deltaTime: Double(deltaTime))
