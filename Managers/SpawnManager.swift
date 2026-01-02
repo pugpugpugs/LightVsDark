@@ -66,29 +66,50 @@ class SpawnManager {
         scene.addChild(powerUp)
         
         #if DEBUG
-        debugDrawer?.drawDot(at: powerUp.position, color: .red, persist: true)
+        debugDrawer?.drawDot(at: powerUp.position, color: .green, persist: true)
         print("Spawned POWERUP at \(powerUp.position)")
         #endif
     }
 
     private func spawnEnemy(player: Player) {
         guard let scene = scene else { return }
-        
-        var spawnPosition: CGPoint
-        
+
+        // Determine spawn position (safe from player/cone)
+        let spawnPosition: CGPoint
         if let cone = player.lightCone {
-            spawnPosition = safeSpawnGenerator.generateSafeSpawnPoint(spriteSize: CGSize(width: 40, height: 40), minDistance: player.radius + 50, cone: cone, debugColor: .blue)
+            spawnPosition = safeSpawnGenerator.generateSafeSpawnPoint(
+                spriteSize: CGSize(width: 40, height: 40),
+                minDistance: player.radius + 50,
+                cone: cone,
+                debugColor: .blue
+            )
         } else {
             spawnPosition = player.position + CGPoint(x: 0, y: 300)
         }
-        
-        let enemy = EasyEnemy(position: spawnPosition)
+
+        // Decide enemy type based on difficulty or random chance
+        let difficulty = scene.difficultyManager.currentDifficulty
+        let enemy: Enemy
+
+        // Weighted random: early game mostly Easy, late game mostly Hard
+//        let hardChance = min(max((difficulty - 1) / 9, 0), 1) // maps 1-10 to 0..1
+//        let rand = CGFloat.random(in: 0...1)
+
+        enemy = EasyEnemy(position: spawnPosition)
+//        if rand < hardChance {
+//            enemy = HardEnemy(position: spawnPosition)
+//        } else {
+//            enemy = HardEnemy(position: spawnPosition)
+//        }
+
+        // Add enemy to scene & tracking array
         scene.addChild(enemy)
         scene.enemies.append(enemy)
-        
+
         #if DEBUG
-        debugDrawer?.drawDot(at: enemy.position, color: .green, persist: true)
-        print("Spawned ENEMY at \(enemy.position)")
+        debugDrawer?.drawDot(at: enemy.position, color: .red, persist: true)
+        print("Spawned \(type(of: enemy)) at \(enemy.position)")
         #endif
     }
+
 }

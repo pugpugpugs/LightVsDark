@@ -27,6 +27,9 @@
 		83DC72F72F06F85C00AECBE1 /* ScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */; };
 		83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */; };
 		83DC72FE2F07250800AECBE1 /* DebugDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72FD2F07250800AECBE1 /* DebugDrawer.swift */; };
+		83DC73002F0745F300AECBE1 /* PowerUpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC72FF2F0745F300AECBE1 /* PowerUpManager.swift */; };
+		83DC73022F07499600AECBE1 /* MovementStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73012F07499600AECBE1 /* MovementStyle.swift */; };
+		83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73032F074A8200AECBE1 /* HardEnemy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +55,9 @@
 		83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreManager.swift; sourceTree = "<group>"; };
 		83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyEnemy.swift; sourceTree = "<group>"; };
 		83DC72FD2F07250800AECBE1 /* DebugDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDrawer.swift; sourceTree = "<group>"; };
+		83DC72FF2F0745F300AECBE1 /* PowerUpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUpManager.swift; sourceTree = "<group>"; };
+		83DC73012F07499600AECBE1 /* MovementStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementStyle.swift; sourceTree = "<group>"; };
+		83DC73032F074A8200AECBE1 /* HardEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardEnemy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +131,7 @@
 				83DC72D82F04722B00AECBE1 /* SpawnManager.swift */,
 				83DC72F12F06F5D500AECBE1 /* DifficultyManager.swift */,
 				83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */,
+				83DC72FF2F0745F300AECBE1 /* PowerUpManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -167,7 +174,9 @@
 		83DC72F92F06F92800AECBE1 /* Enemies */ = {
 			isa = PBXGroup;
 			children = (
+				83DC73012F07499600AECBE1 /* MovementStyle.swift */,
 				83DC72D62F04721A00AECBE1 /* Enemy.swift */,
+				83DC73032F074A8200AECBE1 /* HardEnemy.swift */,
 				83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */,
 			);
 			path = Enemies;
@@ -251,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
+				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
 				83DC72EE2F06002600AECBE1 /* PowerUpType.swift in Sources */,
 				83DC72E82F05CB5E00AECBE1 /* CGVectorExtensions.swift in Sources */,
@@ -264,8 +274,10 @@
 				83DC72BA2F0465B100AECBE1 /* GameViewController.swift in Sources */,
 				83DC72F52F06F85200AECBE1 /* CollisionHandler.swift in Sources */,
 				83DC72B82F0465B100AECBE1 /* AppDelegate.swift in Sources */,
+				83DC73022F07499600AECBE1 /* MovementStyle.swift in Sources */,
 				83DC72E62F04AF8300AECBE1 /* CGPointExtensions.swift in Sources */,
 				83DC72EC2F06001100AECBE1 /* PowerUp.swift in Sources */,
+				83DC73002F0745F300AECBE1 /* PowerUpManager.swift in Sources */,
 				83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */,
 				83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */,
 				83DC72FE2F07250800AECBE1 /* DebugDrawer.swift in Sources */,

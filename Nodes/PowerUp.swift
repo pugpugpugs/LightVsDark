@@ -4,6 +4,7 @@ class PowerUp: SKShapeNode {
 
     let type: PowerUpType
     let duration: TimeInterval
+    var expirationTime: TimeInterval?
 
     init(type: PowerUpType, duration: TimeInterval = 3.0, size: CGSize = CGSize(width: 40, height: 40)) {
         self.type = type
@@ -38,9 +39,4 @@ class PowerUp: SKShapeNode {
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    // Called when player collects it
-    func apply(to player: Player, in scene: GameScene) {
-        player.activate(powerUp: self, sceneTime: scene.sceneTime, enemies: scene.enemies)
-    }
 }

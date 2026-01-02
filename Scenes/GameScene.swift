@@ -19,6 +19,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var difficultyManager: DifficultyManager!
     var collisionHandler: CollisionHandler!
     var scoreManager: ScoreManager!
+    var powerUpManager: PowerUpManager!
 
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
@@ -29,18 +30,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = .zero
 
-        // Player setup
+        // --- Player setup ---
         player = Player(position: CGPoint(x: frame.midX, y: frame.midY), screenSize: self.size)
         addChild(player)
         
         #if DEBUG
         player.addDebugZones(to: self)
         #endif
-        
-        // Spawn manager
+
+        // --- PowerUpManager ---
+        powerUpManager = PowerUpManager(cone: player.lightCone, player: player, enemies: enemies)
+
+        // --- CollisionHandler ---
+        collisionHandler = CollisionHandler(scene: self, powerUpManager: powerUpManager)
+
+        // --- SpawnManager ---
         spawnManager = SpawnManager(scene: self)
 
-        // Difficulty Manager
+        // --- DifficultyManager ---
         difficultyManager = DifficultyManager(
             initialSpeed: 50,
             initialSpawnInterval: 2.5,
@@ -49,10 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spawnDecrease: 0.1
         )
 
-        // Collision Handler
-        collisionHandler = CollisionHandler(scene: self)
-
-        // Score Manager
+        // --- ScoreManager ---
         scoreManager = ScoreManager(
             scene: self,
             position: CGPoint(x: frame.midX, y: frame.height - 60)
@@ -77,22 +81,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard !isGameOver else { return }
         
         // Initialize scene start time
-        if sceneStartTime == nil {
-            sceneStartTime = currentTime
-        }
-        sceneTime = currentTime - sceneStartTime!
+        if sceneStartTime == nil { sceneStartTime = currentTime }
+        sceneTime = currentTime - (sceneStartTime ?? currentTime)
         
         // Delta time
-        let deltaTime: CGFloat = lastUpdateTime > 0 ? CGFloat(sceneTime - lastUpdateTime) : 1.0 / 60.0
+        let deltaTime: CGFloat
+        if lastUpdateTime > 0 {
+            deltaTime = CGFloat(sceneTime - lastUpdateTime)
+        } else {
+            deltaTime = 1.0 / 60.0
+        }
         lastUpdateTime = sceneTime
 
         // --- Player ---
         var input: CGFloat = 0
         if isTouchingLeft { input = -1 }
         if isTouchingRight { input = 1 }
+        
         player.updateRotation(deltaTime: deltaTime, inputDirection: input)
         player.updatePowerUps(sceneTime: sceneTime, enemies: enemies)
-        player.lightCone?.update(deltaTime: deltaTime)
+        player.lightCone?.update(deltaTime: deltaTime, difficultyLevel: difficultyManager.currentDifficulty)
 
         // --- Difficulty ---
         difficultyManager.update(deltaTime: Double(deltaTime))
@@ -102,7 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Move enemies ---
         for enemy in enemies {
-            enemy.moveTowardPlayer(playerPosition: player.position, baseSpeed: difficultyManager.enemySpeed, deltaTime: deltaTime)
+            enemy.moveTowardPlayer(playerPosition: player.position, baseSpeed: difficultyManager.enemySpeed, deltaTime: deltaTime, difficultyLevel: difficultyManager.currentDifficulty)
 
             // Off-screen removal
             if enemy.position.y + enemy.frame.height / 2 < 0 {

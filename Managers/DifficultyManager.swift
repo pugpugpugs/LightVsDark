@@ -13,6 +13,21 @@ class DifficultyManager {
     private var elapsedTime: TimeInterval = 0
     private var lastRampTime: TimeInterval = 0
     
+    /// Current difficulty as a value from 1 (easiest) to 10 (hardest)
+    var currentDifficulty: CGFloat {
+        // Define the total time to reach max difficulty
+        let timeToMaxDifficulty: TimeInterval = 30.0
+
+        // Compute fraction of ramp completed
+        let fraction = elapsedTime / timeToMaxDifficulty
+
+        // Map fraction to 1...10 scale
+        let difficulty = 1 + fraction * (10 - 1)
+
+        // Clamp to 1...10
+        return min(max(difficulty, 1), 10)
+    }
+    
     init(
         initialSpeed: CGFloat,
         initialSpawnInterval: TimeInterval,

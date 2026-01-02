@@ -116,9 +116,8 @@ class Player: SKShapeNode {
             let addedLength = cone.maxLength * 0.5
             let addedAngle = cone.maxAngle * 0.5
             
-            cone.currentLength = min(cone.currentLength + addedLength, cone.maxLength)
-            cone.currentAngle = min(cone.currentAngle + addedAngle, cone.maxAngle)
-
+            cone.applyPowerUp(lengthBoost: addedLength, angleBoost: addedAngle)
+            
             widenBoost += 1.0
             
         case .speedBoost:
