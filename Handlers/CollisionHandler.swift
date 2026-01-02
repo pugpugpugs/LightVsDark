@@ -16,11 +16,7 @@ class CollisionHandler {
             let enemyNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.enemy ? nodeA : nodeB
             guard let enemy = enemyNode as? Enemy else { return }
             
-            // Confirm with cone geometry
-            if cone.containsWorldPoint(enemy.position, padding: enemy.hitRadius) {
-                enemy.removeFromParent()
-                scene.enemies.removeAll { $0 === enemy }
-            }
+//            enemy.applyDamage(deltaTime: <#T##CGFloat#>, enemies: <#T##[Enemy]#>)
         },
 
         PhysicsCategory.player | PhysicsCategory.enemy: { [weak self] _, _ in

@@ -69,6 +69,7 @@ class SpawnManager {
     }
 
     private func spawnEnemy(player: Player) {
+        return
         guard let scene = scene else { return }
         if scene.enemies.count > 0 { return }
 

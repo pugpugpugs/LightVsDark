@@ -59,6 +59,143 @@ class Enemy: SKNode {
         }
     }
     
+    static func testEnemiesWithinConeLength(
+        lightCone: LightCone,
+        scene: SKScene,
+        count: Int = 5
+    ) {
+        var testEnemies: [Enemy] = []
+
+        guard let parent = lightCone.parent else { return }
+
+        // Cone tip in scene space
+        let coneTip = parent.convert(lightCone.position, to: scene)
+        let radius = lightCone.currentLength
+
+        for _ in 0..<count {
+            let angle = CGFloat.random(in: 0...(2 * .pi))
+            let distance = sqrt(CGFloat.random(in: 0...1)) * radius
+
+            let x = coneTip.x + cos(angle) * distance
+            let y = coneTip.y + sin(angle) * distance
+
+            let enemy = EasyEnemy(position: CGPoint(x: x, y: y))
+            testEnemies.append(enemy)
+            scene.addChild(enemy)
+
+            // Debug dot
+            let dot = SKShapeNode(circleOfRadius: 4)
+            dot.fillColor = .red
+            dot.position = CGPoint(x: x, y: y)
+            dot.zPosition = 100
+            scene.addChild(dot)
+        }
+
+        scene.run(SKAction.repeatForever(
+            SKAction.sequence([
+                SKAction.run { lightCone.applyDamage(deltaTime: 1/60, enemies: testEnemies) },
+                SKAction.wait(forDuration: 1 / 60)
+            ])
+        ))
+    }
+    
+    static func testEnemiesOutOfConeLength(
+        lightCone: LightCone,
+        scene: SKScene,
+        count: Int = 5
+    ) {
+        var testEnemies: [Enemy] = []
+
+        guard let parent = lightCone.parent else { return }
+
+        // Cone tip in world space
+        let coneTipWorld = parent.convert(lightCone.position, to: scene)
+
+        // Cone maximum forward Y (include any arc if needed)
+        let coneMaxWorldY = coneTipWorld.y + lightCone.currentLength + 20
+
+        // The top of the screen
+        let maxY = scene.frame.maxY
+
+        for _ in 0..<count {
+            // Random X anywhere on screen
+            let x = CGFloat.random(in: scene.frame.minX ... scene.frame.maxX)
+
+            // Random Y above coneMaxWorldY, but clamp to screen
+            guard maxY > coneMaxWorldY else {
+                print("Screen too small to spawn enemies outside cone")
+                continue
+            }
+
+            let y = CGFloat.random(in: coneMaxWorldY ... maxY)
+
+            let worldPos = CGPoint(x: x, y: y)
+
+            let enemy = EasyEnemy(position: worldPos)
+            testEnemies.append(enemy)
+            scene.addChild(enemy)
+        }
+
+        scene.run(
+            SKAction.repeatForever(
+                SKAction.sequence([
+                    SKAction.run { lightCone.applyDamage(deltaTime: 1/60, enemies: testEnemies) },
+                    SKAction.wait(forDuration: 1/60)
+                ])
+            )
+        )
+    }
+
+
+
+    
+    static func testConeEnemies(lightCone: LightCone, scene: SKScene, count: Int = 3) {
+        var testEnemies: [Enemy] = []
+
+        for _ in 0..<count {
+            // Pick a random Y within the cone length (local space)
+            let yLocal = CGFloat.random(in: 0.1 * lightCone.currentLength
+                                             ... 0.9 * lightCone.currentLength)
+
+            // Compute outer width at that Y
+            let halfWidthAtY = lightCone.outerHalfWidth * (yLocal / lightCone.currentLength)
+
+            // Pick a random X within cone bounds (local space)
+            let xLocal = CGFloat.random(in: -halfWidthAtY...halfWidthAtY)
+
+            // Local cone-space position
+            let localPoint = CGPoint(x: xLocal, y: yLocal)
+
+            // 🔑 Convert to scene space
+            let scenePoint = lightCone.convert(localPoint, to: scene)
+
+            // Spawn enemy in scene space
+            let enemy = EasyEnemy(position: scenePoint)
+            testEnemies.append(enemy)
+            scene.addChild(enemy)
+
+            // Debug marker
+            let debugDot = SKShapeNode(circleOfRadius: 4)
+            debugDot.fillColor = .red
+            debugDot.position = scenePoint
+            debugDot.zPosition = 100
+            scene.addChild(debugDot)
+        }
+
+        // Test damage loop
+        let testAction = SKAction.repeatForever(
+            SKAction.sequence([
+                SKAction.run {
+                    lightCone.applyDamage(deltaTime: 1 / 60, enemies: testEnemies)
+                },
+                SKAction.wait(forDuration: 1 / 60)
+            ])
+        )
+
+        scene.run(testAction)
+    }
+
+    
     private func die() {
         removeFromParent()
     }

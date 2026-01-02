@@ -52,32 +52,29 @@ class LightCone: SKShapeNode {
     
     // MARK: - Overlays setup
     private func setupOverlays() {
-        // Darkest inner
-        let innerColor  = UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 0.5)  // strong orange-red
-        // Medium middle
-        let middleColor = UIColor(red: 1.0, green: 0.65, blue: 0.1, alpha: 0.35) // orange
-        // Lightest outer
-        let outerColor  = UIColor(red: 1.0, green: 0.8,  blue: 0.2, alpha: 0.2)  // yellow-orange
-        
-        func addOverlay(_ overlay: SKShapeNode, color: UIColor) {
+        // Colors for zones
+        let innerColor  = UIColor(red: 1.0, green: 0.45, blue: 0.0, alpha: 0.75)
+        let middleColor = UIColor(red: 1.0, green: 0.65, blue: 0.1, alpha: 0.75)
+        let outerColor  = UIColor(red: 1.0, green: 1.0,  blue: 0.2, alpha: 0.75)
+
+        func addOverlay(_ overlay: SKShapeNode, color: UIColor, blurRadius: CGFloat) {
             overlay.fillColor = color
             overlay.strokeColor = .clear
             overlay.zPosition = 0
-            
-            // Slight blur to blend zones
+
+            // Use SKEffectNode for blur
             let glow = SKEffectNode()
             glow.shouldRasterize = true
-            glow.filter = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": 2])
+            glow.filter = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": blurRadius])
             glow.addChild(overlay)
             addChild(glow)
         }
-        
-        // Add from outer → inner so the darkest inner sits on top
-        addOverlay(outerOverlay, color: outerColor)
-        addOverlay(middleOverlay, color: middleColor)
-        addOverlay(innerOverlay, color: innerColor)
-    }
 
+        // Add overlays from outer → inner so the inner is on top
+        addOverlay(outerOverlay, color: outerColor, blurRadius: 4)
+        addOverlay(middleOverlay, color: middleColor, blurRadius: 3)
+        addOverlay(innerOverlay, color: innerColor, blurRadius: 2)
+    }
     
     // MARK: - Update half-widths
     private func updateHalfWidths() {
@@ -135,12 +132,10 @@ class LightCone: SKShapeNode {
         physicsBody?.categoryBitMask = PhysicsCategory.lightCone
         physicsBody?.contactTestBitMask = PhysicsCategory.enemy | PhysicsCategory.powerUp
         physicsBody?.collisionBitMask = 0
-        physicsBody?.isDynamic = true
+        physicsBody?.isDynamic = false
         physicsBody?.affectedByGravity = false
         physicsBody?.usesPreciseCollisionDetection = true
     }
-
-
     
     // MARK: - Update per frame
     func update(deltaTime: CGFloat) {
@@ -160,11 +155,13 @@ class LightCone: SKShapeNode {
             guard let enemyParent = enemy.parent else { continue }
 
             let enemyWorldPos = enemyParent.convert(enemy.position, to: coneParent)
-            guard containsWorldPoint(enemyWorldPos) else { continue }
+//            guard containsWorldPoint(enemyWorldPos) else { continue }
 
             let localPos = convert(enemyWorldPos, from: coneParent)
             let x = localPos.x
             let y = localPos.y
+            
+            guard y >= 0 && y <= currentLength else { continue }
 
             // Scale half-widths based on current Y
             let innerWidthAtY  = innerHalfWidth  * (y / currentLength)
@@ -202,16 +199,6 @@ class LightCone: SKShapeNode {
             ])
             enemy.sprite.run(flash)
         }
-    }
-
-    
-    // MARK: - Check if point is inside cone
-    func containsWorldPoint(_ point: CGPoint, padding: CGFloat = 0) -> Bool {
-        guard let parent = parent else { return false }
-        let local = convert(point, from: parent)
-        guard local.y > 0, local.y <= currentLength + padding else { return false }
-        let halfWidthAtY = tan(currentAngle / 2) * local.y
-        return abs(local.x) <= halfWidthAtY + padding
     }
     
     // MARK: - Power-ups
