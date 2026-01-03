@@ -52,9 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spawnDecrease: 0.1
         )
         
-        Enemy.testEnemiesOutOfConeLength(lightCone: player.lightCone!, scene: self)
         Enemy.testEnemiesWithinConeLength(lightCone: player.lightCone!, scene: self)
-
 
         // --- ScoreManager ---
         scoreManager = ScoreManager(
@@ -102,7 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         player.lightCone?.update(deltaTime: deltaTime)
         
-        player.lightCone?.applyDamage(deltaTime: deltaTime, enemies: enemies)
+        player.lightCone?.applyDamage(deltaTime: deltaTime)
 
         // --- Difficulty ---
         difficultyManager.update(deltaTime: Double(deltaTime))
@@ -112,13 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Move enemies ---
         for enemy in enemies {
-            enemy.moveTowardPlayer(playerPosition: player.position, baseSpeed: difficultyManager.enemySpeed, deltaTime: deltaTime, difficultyLevel: difficultyManager.currentDifficulty)
-
-            // Off-screen removal
-            if enemy.position.y + enemy.frame.height / 2 < 0 {
-                enemy.removeFromParent()
-                enemies.removeAll { $0 === enemy }
-            }
+            enemy.update(deltaTime: deltaTime)
         }
 
         // --- Score ---
@@ -127,7 +119,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Physics Contact
     func didBegin(_ contact: SKPhysicsContact) {
-        collisionHandler.handle(contact: contact)
+        collisionHandler.handleBegin(contact: contact)
+    }
+    
+    func didEnd(_ contact: SKPhysicsContact) {
+        collisionHandler.handleEnd(contact: contact)
     }
 
     // MARK: - Game Over

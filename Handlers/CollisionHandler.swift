@@ -9,14 +9,13 @@ class CollisionHandler {
         self.powerUpManager = powerUpManager
     }
 
-    private lazy var handlers: [UInt32: (SKNode, SKNode) -> Void] = [
+    private lazy var beginHandlers: [UInt32: (SKNode, SKNode) -> Void] = [
         PhysicsCategory.lightCone | PhysicsCategory.enemy: { [weak self] nodeA, nodeB in
             guard let self = self, let scene = self.scene, let cone = scene.player.lightCone else { return }
 
             let enemyNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.enemy ? nodeA : nodeB
             guard let enemy = enemyNode as? Enemy else { return }
-            
-//            enemy.applyDamage(deltaTime: <#T##CGFloat#>, enemies: <#T##[Enemy]#>)
+            cone.enemyEnteredCone(enemy)
         },
 
         PhysicsCategory.player | PhysicsCategory.enemy: { [weak self] _, _ in
@@ -31,10 +30,36 @@ class CollisionHandler {
             self.powerUpManager.collect(powerUp, sceneTime: scene.sceneTime)
         }
     ]
+    
+    private lazy var endHandlers: [UInt32: (SKNode, SKNode) -> Void] = [
+        PhysicsCategory.lightCone | PhysicsCategory.enemy: { [weak self] nodeA, nodeB in
+            guard let self = self, let scene = self.scene, let cone = scene.player.lightCone else { return }
 
-    func handle(contact: SKPhysicsContact) {
-        guard let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node else { return }
+            let enemyNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.enemy ? nodeA : nodeB
+            guard let enemy = enemyNode as? Enemy else { return }
+            
+            print("exited cone")
+
+            cone.enemyExitedCone(enemy)
+        }
+    ]
+
+    func handleBegin(contact: SKPhysicsContact) {
+        print("handle begin")
+        guard let nodeA = contact.bodyA.node,
+              let nodeB = contact.bodyB.node else { return }
+
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        handlers[collision]?(nodeA, nodeB)
+        beginHandlers[collision]?(nodeA, nodeB)
     }
+
+    func handleEnd(contact: SKPhysicsContact) {
+        print("handle end")
+        guard let nodeA = contact.bodyA.node,
+              let nodeB = contact.bodyB.node else { return }
+
+        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        endHandlers[collision]?(nodeA, nodeB)
+    }
+
 }

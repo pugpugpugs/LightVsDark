@@ -28,6 +28,10 @@ class LightCone: SKShapeNode {
     private let middleOverlay = SKShapeNode()
     private let outerOverlay = SKShapeNode()
     
+    let damageTickInterval: TimeInterval = 0.15
+    
+    var enemiesInCone: Set<Enemy> = []
+    
     // MARK: - Init
     init(baseLength: CGFloat = 150, baseAngle: CGFloat = .pi / 3) {
         self.baseLength = baseLength
@@ -127,14 +131,16 @@ class LightCone: SKShapeNode {
 
         // Inner = scaled
         innerOverlay.path  = pathForZone(halfWidth: innerHalfWidth)
-
-        physicsBody = SKPhysicsBody(polygonFrom: outerPath)
-        physicsBody?.categoryBitMask = PhysicsCategory.lightCone
-        physicsBody?.contactTestBitMask = PhysicsCategory.enemy | PhysicsCategory.powerUp
-        physicsBody?.collisionBitMask = 0
-        physicsBody?.isDynamic = false
-        physicsBody?.affectedByGravity = false
-        physicsBody?.usesPreciseCollisionDetection = true
+        
+        if physicsBody == nil {
+            physicsBody = SKPhysicsBody(polygonFrom: outerPath)
+            physicsBody?.categoryBitMask = PhysicsCategory.lightCone
+            physicsBody?.contactTestBitMask = PhysicsCategory.enemy | PhysicsCategory.powerUp
+            physicsBody?.collisionBitMask = 0
+            physicsBody?.isDynamic = false
+            physicsBody?.affectedByGravity = false
+            physicsBody?.usesPreciseCollisionDetection = true
+        }
     }
     
     // MARK: - Update per frame
@@ -146,22 +152,29 @@ class LightCone: SKShapeNode {
         updatePathAndPhysics()
     }
     
-    func applyDamage(deltaTime: CGFloat, enemies: [Enemy]) {
-        let baseDamage = baseDPS * deltaTime
-        guard let coneParent = parent else { return }
+    func enemyEnteredCone(_ enemy: Enemy) {
+        enemiesInCone.insert(enemy)
+        enemy.enterLight()
+    }
 
-        for enemy in enemies {
+    func enemyExitedCone(_ enemy: Enemy) {
+        enemiesInCone.remove(enemy)
+        enemy.exitLight()
+    }
+    
+    func applyDamage(deltaTime: CGFloat) {
+        let baseDamage = baseDPS * deltaTime
+
+        for enemy in enemiesInCone {
             guard let enemyParent = enemy.parent else { continue }
 
             // Convert enemy position to cone's local space
-            let enemyWorldPos = enemyParent.convert(enemy.position, to: coneParent)
-            let localPos = convert(enemyWorldPos, from: coneParent)
+            let localPos = convert(enemy.position, from: enemyParent)
             let x = localPos.x
             let y = localPos.y
 
             // Check Y (cone length)
             if y < 0 || y > currentLength {
-                enemy.stopDamageEffect()
                 continue
             }
 
@@ -186,7 +199,6 @@ class LightCone: SKShapeNode {
                 multiplier = outerMultiplier
             } else {
                 // Outside cone horizontally
-                enemy.stopDamageEffect()
                 continue
             }
 
@@ -195,7 +207,7 @@ class LightCone: SKShapeNode {
             enemy.takeDamage(damage)
 
             // Debug
-            print("Enemy \(enemy) hit in \(zone) zone for \(damage) damage")
+//            print("Enemy \(enemy) hit in \(zone) zone for \(damage) damage")
         }
     }
 
