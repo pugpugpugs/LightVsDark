@@ -46,6 +46,16 @@ final class DebugDrawer {
         handlePersist(node: node, shouldPersist: persist)
     }
     
+    // MARK: - Draw rectangle
+    func drawRect(_ rect: CGRect, color: SKColor, persist: Bool, fill: Bool = false, lineWidth: CGFloat = 2, zPosition: CGFloat = 10_000) {
+        let node = SKShapeNode(rect: rect)
+        node.strokeColor = color
+        node.lineWidth = lineWidth
+        node.zPosition = zPosition
+        node.fillColor = fill ? color.withAlphaComponent(0.3) : .clear
+        handlePersist(node: node, shouldPersist: persist)
+    }
+    
     private func handlePersist(node: SKNode, shouldPersist: Bool) {
         if shouldPersist {
             persistantRoot.addChild(node)
