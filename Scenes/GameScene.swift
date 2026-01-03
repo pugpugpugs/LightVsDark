@@ -52,7 +52,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spawnDecrease: 0.1
         )
         
-        Enemy.testEnemiesWithinConeLength(lightCone: player.lightCone!, scene: self)
         Enemy.testEnemiesOutOfConeLength(lightCone: player.lightCone!, scene: self)
 
         // --- ScoreManager ---

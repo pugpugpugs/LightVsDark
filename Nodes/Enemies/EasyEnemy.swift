@@ -1,20 +1,17 @@
 import SpriteKit
 
 class EasyEnemy: Enemy {
-
     init(position: CGPoint) {
-        // Pass the exact specs your old Enemy had
-        super.init(position: position,
-                   spriteSheetName: "green_octonid",
-                   rowIndex: 0,
-                   rows: 5,
-                   columns: 8,
-                   spriteSize: CGSize(width: 80, height: 80),
-                   speedMultiplierRange: 0.8...1.3)
+        let sheet = SKTexture(imageNamed: "green_octonid")
+        let provider = SpriteSheetAnimationProvider(
+            spriteSheet: sheet,
+            stateRows: [.idle: 0, .moving: 1, .takingDamage: 2, .dead: 3],
+            totalRows: 5,
+            columns: 8
+        )
+        super.init(position: position, animationProvider: provider, spriteSize: CGSize(width: 80, height: 80), attackRange: 100)
         self.name = "enemy"
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
+    
+    required init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
 }

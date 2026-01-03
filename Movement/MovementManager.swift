@@ -3,6 +3,7 @@ import CoreGraphics
 final class MovementManager {
 
     // MARK: - Public API
+
     func movementDelta(
         for enemy: Enemy,
         toward target: CGPoint,

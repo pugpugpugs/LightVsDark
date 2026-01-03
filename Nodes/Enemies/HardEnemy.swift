@@ -3,20 +3,15 @@ import SpriteKit
 class HardEnemy: Enemy {
 
     init(position: CGPoint) {
-        super.init(
-            position: position,
-            spriteSheetName: "red_octonid",
-            rowIndex: 0,
-            rows: 5,
-            columns: 8,
-            spriteSize: CGSize(width: 100, height: 100),
-            speedMultiplierRange: 1.2...1.6
+        let sheet = SKTexture(imageNamed: "red_octonid")
+        let provider = SpriteSheetAnimationProvider(
+            spriteSheet: sheet,
+            stateRows: [.idle: 0, .moving: 1, .takingDamage: 2, .dead: 3],
+            totalRows: 5,
+            columns: 8
         )
-
+        super.init(position: position, animationProvider: provider, spriteSize: CGSize(width: 80, height: 80), attackRange: 100)
         self.name = "enemy"
-
-        // Hard enemies zig-zag aggressively
-        self.movementStyle = .zigZag(amplitude: 120, frequency: 8)
     }
 
     required init?(coder aDecoder: NSCoder) {
