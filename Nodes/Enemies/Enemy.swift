@@ -13,9 +13,10 @@ class Enemy: SKNode {
     var zigZagTime: CGFloat = 0
     private var forwardAnchor: CGPoint?
     
-    var maxHealth: CGFloat = 3
+    var maxHealth: CGFloat = 10
     var health: CGFloat = 10
-
+    let healthBar: HealthBar
+    var isTakingDamage: Bool = false
 
     // Base initializer
     init(position: CGPoint,
@@ -25,6 +26,8 @@ class Enemy: SKNode {
          columns: Int = 1,
          spriteSize: CGSize = CGSize(width: 80, height: 80),
          speedMultiplierRange: ClosedRange<CGFloat> = 0.8...1.3) {
+        
+        healthBar = HealthBar(maxHealth: maxHealth, size: CGSize(width: 40, height: 6))
 
         let spriteCollisionSize = 0.2
         self.hitRadius = max(spriteSize.width, spriteSize.height) * spriteCollisionSize
@@ -39,26 +42,81 @@ class Enemy: SKNode {
         self.sprite = SKSpriteNode(texture: frames[0])
         self.sprite.size = spriteSize
         self.sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        self.sprite.zPosition = 9
 
         super.init()
         self.position = position
         addChild(sprite)
+        
+        healthBar.position = CGPoint(x: 0, y: sprite.size.height/2 + 8)
+        addChild(healthBar)
 
-        // Animate sprite
-        let animation = SKAction.animate(with: frames, timePerFrame: 0.1)
-        sprite.run(SKAction.repeatForever(animation))
+        // Setup normal animation
+        setupAnimation()
 
         setupPhysics(radius: hitRadius)
     }
     
+    private func setupAnimation() {
+        // Base animation (idle/movement)
+        guard sprite.action(forKey: "animation") == nil else { return }
+        let animation = SKAction.animate(with: frames, timePerFrame: 0.1)
+        sprite.run(SKAction.repeatForever(animation), withKey: "animation")
+    }
+    
     func takeDamage(_ amount: CGFloat) {
         health -= amount
-        return
+        healthBar.takeDamage(amount)
+
+        if !isTakingDamage {
+            isTakingDamage = true
+            playDamageAnimation()
+        }
+
         if health <= 0 {
             die()
         }
     }
     
+    // MARK: - Damage Animation (replaces color flicker)
+    private func playDamageAnimation() {
+        // Only start if not already running
+        guard sprite.action(forKey: "damageAnimation") == nil else { return }
+
+        // Create a "damage sequence" animation using the same frames
+        let damageFrames: [SKTexture] = frames
+        let damageAnimation = SKAction.animate(with: damageFrames, timePerFrame: 0.1)
+
+        // Loop animation while taking damage
+        let repeatDamage = SKAction.repeatForever(
+            SKAction.sequence([
+                SKAction.run { [weak self] in
+                    guard let s = self else { return }
+                    s.sprite.color = .red
+                    s.sprite.colorBlendFactor = 1.0
+                },
+                damageAnimation,
+                SKAction.run { [weak self] in
+                    guard let s = self else { return }
+                    s.sprite.color = .white
+                    s.sprite.colorBlendFactor = 1.0
+                }
+            ])
+        )
+
+        sprite.run(repeatDamage, withKey: "damageAnimation")
+    }
+
+    func stopDamageEffect() {
+        isTakingDamage = false
+        sprite.removeAction(forKey: "damageAnimation")
+        sprite.colorBlendFactor = 0
+        // Restore normal animation
+        setupAnimation()
+    }
+
+    // MARK: - Test Spawns
     static func testEnemiesWithinConeLength(
         lightCone: LightCone,
         scene: SKScene,
@@ -68,7 +126,6 @@ class Enemy: SKNode {
 
         guard let parent = lightCone.parent else { return }
 
-        // Cone tip in scene space
         let coneTip = parent.convert(lightCone.position, to: scene)
         let radius = lightCone.currentLength
 
@@ -83,7 +140,6 @@ class Enemy: SKNode {
             testEnemies.append(enemy)
             scene.addChild(enemy)
 
-            // Debug dot
             let dot = SKShapeNode(circleOfRadius: 4)
             dot.fillColor = .red
             dot.position = CGPoint(x: x, y: y)
@@ -98,7 +154,7 @@ class Enemy: SKNode {
             ])
         ))
     }
-    
+
     static func testEnemiesOutOfConeLength(
         lightCone: LightCone,
         scene: SKScene,
@@ -108,73 +164,43 @@ class Enemy: SKNode {
 
         guard let parent = lightCone.parent else { return }
 
-        // Cone tip in world space
         let coneTipWorld = parent.convert(lightCone.position, to: scene)
-
-        // Cone maximum forward Y (include any arc if needed)
         let coneMaxWorldY = coneTipWorld.y + lightCone.currentLength + 20
-
-        // The top of the screen
         let maxY = scene.frame.maxY
 
         for _ in 0..<count {
-            // Random X anywhere on screen
             let x = CGFloat.random(in: scene.frame.minX ... scene.frame.maxX)
-
-            // Random Y above coneMaxWorldY, but clamp to screen
-            guard maxY > coneMaxWorldY else {
-                print("Screen too small to spawn enemies outside cone")
-                continue
-            }
-
+            guard maxY > coneMaxWorldY else { continue }
             let y = CGFloat.random(in: coneMaxWorldY ... maxY)
 
             let worldPos = CGPoint(x: x, y: y)
-
             let enemy = EasyEnemy(position: worldPos)
             testEnemies.append(enemy)
             scene.addChild(enemy)
         }
 
-        scene.run(
-            SKAction.repeatForever(
-                SKAction.sequence([
-                    SKAction.run { lightCone.applyDamage(deltaTime: 1/60, enemies: testEnemies) },
-                    SKAction.wait(forDuration: 1/60)
-                ])
-            )
-        )
+        scene.run(SKAction.repeatForever(
+            SKAction.sequence([
+                SKAction.run { lightCone.applyDamage(deltaTime: 1/60, enemies: testEnemies) },
+                SKAction.wait(forDuration: 1/60)
+            ])
+        ))
     }
 
-
-
-    
     static func testConeEnemies(lightCone: LightCone, scene: SKScene, count: Int = 3) {
         var testEnemies: [Enemy] = []
 
         for _ in 0..<count {
-            // Pick a random Y within the cone length (local space)
-            let yLocal = CGFloat.random(in: 0.1 * lightCone.currentLength
-                                             ... 0.9 * lightCone.currentLength)
-
-            // Compute outer width at that Y
+            let yLocal = CGFloat.random(in: 0.1 * lightCone.currentLength ... 0.9 * lightCone.currentLength)
             let halfWidthAtY = lightCone.outerHalfWidth * (yLocal / lightCone.currentLength)
-
-            // Pick a random X within cone bounds (local space)
             let xLocal = CGFloat.random(in: -halfWidthAtY...halfWidthAtY)
-
-            // Local cone-space position
             let localPoint = CGPoint(x: xLocal, y: yLocal)
-
-            // 🔑 Convert to scene space
             let scenePoint = lightCone.convert(localPoint, to: scene)
 
-            // Spawn enemy in scene space
             let enemy = EasyEnemy(position: scenePoint)
             testEnemies.append(enemy)
             scene.addChild(enemy)
 
-            // Debug marker
             let debugDot = SKShapeNode(circleOfRadius: 4)
             debugDot.fillColor = .red
             debugDot.position = scenePoint
@@ -182,20 +208,16 @@ class Enemy: SKNode {
             scene.addChild(debugDot)
         }
 
-        // Test damage loop
         let testAction = SKAction.repeatForever(
             SKAction.sequence([
-                SKAction.run {
-                    lightCone.applyDamage(deltaTime: 1 / 60, enemies: testEnemies)
-                },
+                SKAction.run { lightCone.applyDamage(deltaTime: 1 / 60, enemies: testEnemies) },
                 SKAction.wait(forDuration: 1 / 60)
             ])
         )
-
         scene.run(testAction)
     }
 
-    
+    // MARK: - Base methods
     private func die() {
         removeFromParent()
     }
@@ -214,50 +236,8 @@ class Enemy: SKNode {
 
     func moveTowardPlayer(playerPosition: CGPoint, baseSpeed: CGFloat, deltaTime: CGFloat, difficultyLevel: CGFloat) {
         return
-        let dx = playerPosition.x - position.x
-        let dy = playerPosition.y - position.y
-        let distance = sqrt(dx*dx + dy*dy)
-        guard distance > 0 else { return }
-
-        // Initialize forward anchor if needed
-        if forwardAnchor == nil {
-            forwardAnchor = position
-        }
-
-        // Move forward toward player
-        let forwardVelocity = baseSpeed * speedMultiplier * deltaTime
-        let forwardX = dx / distance * forwardVelocity
-        let forwardY = dy / distance * forwardVelocity
-        forwardAnchor!.x += forwardX
-        forwardAnchor!.y += forwardY
-
-        var finalX = forwardAnchor!.x
-        var finalY = forwardAnchor!.y
-
-        // Update zigzag time
-        zigZagTime += deltaTime
-
-        // Zigzag movement
-        switch movementStyle {
-        case .zigZag(let baseAmplitude, let baseFrequency):
-            // Scale slightly with difficulty
-            let adjustedAmplitude = baseAmplitude * (0.5 + 0.05 * difficultyLevel)
-            let adjustedFrequency = min(baseFrequency * (0.8 + 0.02 * difficultyLevel), 2.5) // max 2.5 Hz
-
-            let sideOffset = sin(zigZagTime * adjustedFrequency * 2 * .pi) * adjustedAmplitude
-
-            // Perpendicular to forward movement
-            let perpX = -dy / distance
-            let perpY = dx / distance
-
-            finalX += perpX * sideOffset
-            finalY += perpY * sideOffset
-        default: break
-        }
-
-        position = CGPoint(x: finalX, y: finalY)
     }
-    
+
     static func loadFramesFromSheet(sheet: SKTexture, rowIndex: Int, rows: Int, columns: Int) -> [SKTexture] {
         var frames: [SKTexture] = []
         let frameWidth = 1.0 / CGFloat(columns)

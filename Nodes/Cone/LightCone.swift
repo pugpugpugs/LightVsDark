@@ -14,7 +14,7 @@ class LightCone: SKShapeNode {
     
     // DPS
     var baseDPS: CGFloat = 1
-    private let innerMultiplier: CGFloat = 1.5
+    private let innerMultiplier: CGFloat = 2.5
     private let middleMultiplier: CGFloat = 1.0
     private let outerMultiplier: CGFloat = 0.5
     
@@ -146,7 +146,6 @@ class LightCone: SKShapeNode {
         updatePathAndPhysics()
     }
     
-    // MARK: - Zone multiplier / DPS
     func applyDamage(deltaTime: CGFloat, enemies: [Enemy]) {
         let baseDamage = baseDPS * deltaTime
         guard let coneParent = parent else { return }
@@ -154,52 +153,53 @@ class LightCone: SKShapeNode {
         for enemy in enemies {
             guard let enemyParent = enemy.parent else { continue }
 
+            // Convert enemy position to cone's local space
             let enemyWorldPos = enemyParent.convert(enemy.position, to: coneParent)
-//            guard containsWorldPoint(enemyWorldPos) else { continue }
-
             let localPos = convert(enemyWorldPos, from: coneParent)
             let x = localPos.x
             let y = localPos.y
-            
-            guard y >= 0 && y <= currentLength else { continue }
 
-            // Scale half-widths based on current Y
+            // Check Y (cone length)
+            if y < 0 || y > currentLength {
+                enemy.stopDamageEffect()
+                continue
+            }
+
+            // Compute half-widths at this Y
             let innerWidthAtY  = innerHalfWidth  * (y / currentLength)
             let middleWidthAtY = middleHalfWidth * (y / currentLength)
             let outerWidthAtY  = outerHalfWidth  * (y / currentLength)
 
-            // Determine which zone enemy is in
+            // Determine zone based on X
             let zone: String
             let multiplier: CGFloat
+            let absX = abs(x)
 
-            if abs(x) <= innerWidthAtY {
+            if absX <= innerWidthAtY {
                 zone = "INNER"
                 multiplier = innerMultiplier
-            } else if abs(x) <= middleWidthAtY {
+            } else if absX <= middleWidthAtY {
                 zone = "MIDDLE"
                 multiplier = middleMultiplier
-            } else if abs(x) <= outerWidthAtY {
+            } else if absX <= outerWidthAtY {
                 zone = "OUTER"
                 multiplier = outerMultiplier
             } else {
-                continue // outside the cone horizontally
+                // Outside cone horizontally
+                enemy.stopDamageEffect()
+                continue
             }
 
+            // Apply damage
             let damage = baseDamage * multiplier
             enemy.takeDamage(damage)
 
-            // Debug print
+            // Debug
             print("Enemy \(enemy) hit in \(zone) zone for \(damage) damage")
-
-            // Optional flash for visual feedback
-            let flash = SKAction.sequence([
-                SKAction.run { enemy.sprite.color = .red; enemy.sprite.colorBlendFactor = 0.6 },
-                SKAction.wait(forDuration: 0.05),
-                SKAction.run { enemy.sprite.colorBlendFactor = 0 }
-            ])
-            enemy.sprite.run(flash)
         }
     }
+
+
     
     // MARK: - Power-ups
     func applyPowerUp(lengthBoost: CGFloat, angleBoost: CGFloat) {

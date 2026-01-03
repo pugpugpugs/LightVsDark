@@ -32,6 +32,7 @@
 		83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73032F074A8200AECBE1 /* HardEnemy.swift */; };
 		83DC73072F0820E200AECBE1 /* ConeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73062F0820E200AECBE1 /* ConeZone.swift */; };
 		83DC73092F0820EC00AECBE1 /* ConeZoneConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */; };
+		83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC730A2F088D1900AECBE1 /* HealthBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		83DC73032F074A8200AECBE1 /* HardEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardEnemy.swift; sourceTree = "<group>"; };
 		83DC73062F0820E200AECBE1 /* ConeZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConeZone.swift; sourceTree = "<group>"; };
 		83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConeZoneConfig.swift; sourceTree = "<group>"; };
+		83DC730A2F088D1900AECBE1 /* HealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				83DC72F92F06F92800AECBE1 /* Enemies */,
 				83DC72D42F04720000AECBE1 /* Player.swift */,
 				83DC72EB2F06001100AECBE1 /* PowerUp.swift */,
+				83DC730A2F088D1900AECBE1 /* HealthBar.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
+				83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */,
 				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
 				83DC72EE2F06002600AECBE1 /* PowerUpType.swift in Sources */,
