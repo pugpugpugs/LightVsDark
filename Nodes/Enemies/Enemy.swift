@@ -4,12 +4,9 @@ class Enemy: SKNode {
 
     // MARK: - Properties
     let hitRadius: CGFloat
-    var speedMultiplier: CGFloat
     let sprite: SKSpriteNode
     let frames: [SKTexture]
-    var movementStyle: MovementStyle = .straight
-    private var timeElapsed: CGFloat = 0
-    var zigZagTime: CGFloat = 0
+    var timeElapsed: CGFloat = 0
     private var forwardAnchor: CGPoint?
     let defaultSpriteColor: UIColor
     
@@ -31,7 +28,14 @@ class Enemy: SKNode {
             }
         }
     }
-
+    
+    var baseSpeed: CGFloat = 60.0
+    var speedMultiplier: CGFloat = 1.0
+    private let movementManager = MovementManager()
+    var movementStyle: MovementStyle = .straight
+    private var movementTime: CGFloat = 0
+    private var movementAnchor: CGPoint?
+    
     // MARK: - Initializer
     init(position: CGPoint,
          spriteSheetName: String,
@@ -65,6 +69,19 @@ class Enemy: SKNode {
 
         setupAnimation()
         setupPhysics(radius: hitRadius)
+    }
+    
+    func update(deltaTime: CGFloat, targetPosition: CGPoint) {
+        movementTime += deltaTime
+        
+        move(deltaTime: deltaTime, targetPosition: targetPosition)
+    }
+    
+    func move(deltaTime: CGFloat, targetPosition: CGPoint) {
+        let movement = movementManager.movementDelta(for: self, toward: targetPosition, deltaTime: deltaTime)
+        
+        position.x += movement.dx
+        position.y += movement.dy
     }
 
     // MARK: - Animations
@@ -131,26 +148,6 @@ class Enemy: SKNode {
         physicsBody?.collisionBitMask = 0
         physicsBody?.affectedByGravity = false
         physicsBody?.usesPreciseCollisionDetection = true
-    }
-    
-    func update(deltaTime: CGFloat) {
-        // --- Damage flashing ---
-//        print(isTakingDamage)
-//        if isTakingDamage {
-//            damageFlashTimer -= deltaTime
-//            if damageFlashTimer <= 0 {
-//                print(flashRed)
-//                flashRed.toggle()
-//                sprite.color = flashRed ? .red : .black
-//                sprite.colorBlendFactor = 1.0
-//                damageFlashTimer = flashDuration
-//            }
-//        }
-    }
-
-    // MARK: - Movement (placeholder)
-    func moveTowardPlayer(playerPosition: CGPoint, baseSpeed: CGFloat, deltaTime: CGFloat, difficultyLevel: CGFloat) {
-        // Implement movement later
     }
 
     // MARK: - Death

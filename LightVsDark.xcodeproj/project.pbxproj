@@ -33,6 +33,7 @@
 		83DC73072F0820E200AECBE1 /* ConeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73062F0820E200AECBE1 /* ConeZone.swift */; };
 		83DC73092F0820EC00AECBE1 /* ConeZoneConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */; };
 		83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC730A2F088D1900AECBE1 /* HealthBar.swift */; };
+		83DC730E2F098E9D00AECBE1 /* MovementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC730D2F098E9D00AECBE1 /* MovementManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		83DC73062F0820E200AECBE1 /* ConeZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConeZone.swift; sourceTree = "<group>"; };
 		83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConeZoneConfig.swift; sourceTree = "<group>"; };
 		83DC730A2F088D1900AECBE1 /* HealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthBar.swift; sourceTree = "<group>"; };
+		83DC730D2F098E9D00AECBE1 /* MovementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				83DC72E42F04AF7000AECBE1 /* Extensions */,
 				83DC72CD2F046DEA00AECBE1 /* Utilities */,
 				83DC72CC2F046DE200AECBE1 /* Managers */,
+				83DC730C2F098DC500AECBE1 /* Movement */,
 				83DC72CB2F046DDC00AECBE1 /* Nodes */,
 				83DC72F32F06F82600AECBE1 /* Spawning */,
 				83DC72CA2F046DD400AECBE1 /* Scenes */,
@@ -147,7 +150,6 @@
 			isa = PBXGroup;
 			children = (
 				83DC72DE2F04897300AECBE1 /* PhysicsCategory.swift */,
-				83DC72E22F04A99600AECBE1 /* EnemyType.swift */,
 				83DC72ED2F06002600AECBE1 /* PowerUpType.swift */,
 			);
 			path = Utilities;
@@ -181,6 +183,7 @@
 		83DC72F92F06F92800AECBE1 /* Enemies */ = {
 			isa = PBXGroup;
 			children = (
+				83DC72E22F04A99600AECBE1 /* EnemyType.swift */,
 				83DC73012F07499600AECBE1 /* MovementStyle.swift */,
 				83DC72D62F04721A00AECBE1 /* Enemy.swift */,
 				83DC73032F074A8200AECBE1 /* HardEnemy.swift */,
@@ -205,6 +208,14 @@
 				83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */,
 			);
 			path = Cone;
+			sourceTree = "<group>";
+		};
+		83DC730C2F098DC500AECBE1 /* Movement */ = {
+			isa = PBXGroup;
+			children = (
+				83DC730D2F098E9D00AECBE1 /* MovementManager.swift */,
+			);
+			path = Movement;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,6 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DC730E2F098E9D00AECBE1 /* MovementManager.swift in Sources */,
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
 				83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */,
 				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,

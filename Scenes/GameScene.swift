@@ -53,6 +53,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         )
         
         Enemy.testEnemiesWithinConeLength(lightCone: player.lightCone!, scene: self)
+        Enemy.testEnemiesOutOfConeLength(lightCone: player.lightCone!, scene: self)
 
         // --- ScoreManager ---
         scoreManager = ScoreManager(
@@ -60,20 +61,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             position: CGPoint(x: frame.midX, y: frame.height - 60)
         )
     }
- 
-    // MARK: - Touch Input
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let location = touch.location(in: self)
-        isTouchingLeft = location.x < frame.midX
-        isTouchingRight = location.x >= frame.midX
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isTouchingLeft = false
-        isTouchingRight = false
-    }
-
+    
     // MARK: - Game Loop
     override func update(_ currentTime: TimeInterval) {
         guard !isGameOver else { return }
@@ -110,11 +98,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Move enemies ---
         for enemy in enemies {
-            enemy.update(deltaTime: deltaTime)
+            enemy.update(deltaTime: deltaTime, targetPosition: player.position)
         }
 
         // --- Score ---
         scoreManager.update(deltaTime: Double(deltaTime))
+    }
+ 
+    // MARK: - Touch Input
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        isTouchingLeft = location.x < frame.midX
+        isTouchingRight = location.x >= frame.midX
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isTouchingLeft = false
+        isTouchingRight = false
     }
 
     // MARK: - Physics Contact
