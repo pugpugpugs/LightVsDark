@@ -107,7 +107,7 @@ class SpawnManager {
 
     private func spawnEnemy(player: Player) {
         guard let scene = scene else { return }
-        if scene.enemies.count > 10 { return }
+        if scene.enemies.count > 0 { return }
 
         // Random zone spawn
         let spawnPosition: CGPoint
@@ -122,7 +122,7 @@ class SpawnManager {
 
         // Alternate enemy types using modulo
         let enemy: Enemy
-        if scene.enemies.count % 2 == 0 {
+        if scene.enemies.count == 0 {
             enemy = EasyEnemy(position: spawnPosition)
         } else if scene.enemies.count % 3 == 0 {
             enemy = HardEnemy(position: spawnPosition)

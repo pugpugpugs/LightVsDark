@@ -152,7 +152,6 @@
 		83DC72CC2F046DE200AECBE1 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				83DC72D82F04722B00AECBE1 /* SpawnManager.swift */,
 				83DC72F12F06F5D500AECBE1 /* DifficultyManager.swift */,
 				83DC72F62F06F85C00AECBE1 /* ScoreManager.swift */,
 				83DC72FF2F0745F300AECBE1 /* PowerUpManager.swift */,
@@ -181,6 +180,7 @@
 		83DC72F32F06F82600AECBE1 /* Spawning */ = {
 			isa = PBXGroup;
 			children = (
+				83DC72D82F04722B00AECBE1 /* SpawnManager.swift */,
 				83DC72EF2F06D60600AECBE1 /* SafeSpawnGenerator.swift */,
 			);
 			path = Spawning;

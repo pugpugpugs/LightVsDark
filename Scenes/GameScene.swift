@@ -100,6 +100,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Score ---
         scoreManager.update(deltaTime: Double(deltaTime))
+        print(enemies.count)
     }
  
     // MARK: - Touch Input

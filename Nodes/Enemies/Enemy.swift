@@ -20,7 +20,7 @@ class Enemy: SKNode {
         didSet { handleLightConeChange() }
     }
     
-    var baseSpeed: CGFloat = 15.0
+    var baseSpeed: CGFloat = 35.0
     var speedMultiplier: CGFloat = 1.0
     private let movementManager = MovementManager()
     var movementStyle: MovementStyle
@@ -111,14 +111,7 @@ class Enemy: SKNode {
     }
     
     func didFinishAttack() {
-        // damage player here
-        // then decide next state
-
-        if health <= 0 {
-            stateMachine.enter(.dead)
-        } else {
-            stateMachine.enter(.idle)
-        }
+        destroy()
     }
 
     func startDamageEffect() {
@@ -174,80 +167,12 @@ class Enemy: SKNode {
     }
 
     // MARK: - Death
-    func die() {
+    func destroy() {
         physicsBody = nil
         removeAllActions()
         removeFromParent()
-        if let scene = self.scene as? GameScene {
-            scene.enemies.removeAll { $0 === self }
-        }
-    }
-
-    // MARK: - Sprite Sheet Helper
-    static func loadFramesFromSheet(sheet: SKTexture, rowIndex: Int, rows: Int, columns: Int) -> [SKTexture] {
-        var frames: [SKTexture] = []
-        let frameWidth = 1.0 / CGFloat(columns)
-        let frameHeight = 1.0 / CGFloat(rows)
-
-        for col in 0..<columns {
-            let rect = CGRect(
-                x: CGFloat(col) * frameWidth,
-                y: CGFloat(rows - 1 - rowIndex) * frameHeight,
-                width: frameWidth,
-                height: frameHeight
-            )
-            frames.append(SKTexture(rect: rect, in: sheet))
-        }
-        return frames
-    }
-
-    // MARK: - Debug / Test Methods
-    static func testEnemiesWithinConeLength(lightCone: LightCone, scene: GameScene, count: Int = 1) {
-        guard let parent = lightCone.parent else { return }
-        let coneTip = parent.convert(lightCone.position, to: scene)
-        let radius = lightCone.currentLength
-
-        for _ in 0..<count {
-            let angle = CGFloat.random(in: 0...(2 * .pi))
-            let distance = sqrt(CGFloat.random(in: 0...1)) * radius
-            let x = coneTip.x + cos(angle) * distance
-            let y = coneTip.y + sin(angle) * distance
-
-            let enemy = EasyEnemy(position: CGPoint(x: x, y: y))
-            scene.addChild(enemy)
-            scene.enemies.append(enemy)
-        }
-    }
-
-    static func testEnemiesOutOfConeLength(lightCone: LightCone, scene: GameScene, count: Int = 2) {
-        guard let parent = lightCone.parent else { return }
-        let coneTipWorld = parent.convert(lightCone.position, to: scene)
-        let coneMaxWorldY = coneTipWorld.y + lightCone.currentLength + 20
-        let maxY = scene.frame.maxY
-
-        for _ in 0..<count {
-            let x = CGFloat.random(in: scene.frame.minX...scene.frame.maxX)
-            guard maxY > coneMaxWorldY else { continue }
-            let y = CGFloat.random(in: coneMaxWorldY...maxY)
-            let worldPos = CGPoint(x: x, y: y)
-
-            let enemy = EasyEnemy(position: worldPos)
-            scene.addChild(enemy)
-            scene.enemies.append(enemy)
-        }
-    }
-
-    static func testConeEnemies(lightCone: LightCone, scene: GameScene, count: Int = 3) {
-        for _ in 0..<count {
-            let yLocal = CGFloat.random(in: 0.1 * lightCone.currentLength ... 0.9 * lightCone.currentLength)
-            let halfWidthAtY = lightCone.outerHalfWidth * (yLocal / lightCone.currentLength)
-            let xLocal = CGFloat.random(in: -halfWidthAtY...halfWidthAtY)
-            let localPoint = CGPoint(x: xLocal, y: yLocal)
-            let scenePoint = lightCone.convert(localPoint, to: scene)
-
-            let enemy = EasyEnemy(position: scenePoint)
-            scene.addChild(enemy)
-            scene.enemies.append(enemy)
-        }
+        guard let scene = self.scene as? GameScene else { return }
+        scene.enemies.removeAll { $0 === self }
+        scene.player.lightCone?.enemiesInCone.remove(self)
     }
 }

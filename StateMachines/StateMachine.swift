@@ -3,38 +3,39 @@ import CoreGraphics
 
 /// Generic State Machine
 class StateMachine<State: Hashable> {
-    
+
     private(set) var currentState: State
-    private var enterHandlers: [State: () -> Void] = [:]
-    private var exitHandlers: [State: () -> Void] = [:]
-    private var updateHandlers: [State: (_ deltaTime: CGFloat) -> Void] = [:]
-    
+
     init(initialState: State) {
         self.currentState = initialState
     }
-    
-    /// Register callbacks for a specific state
-    func register(
-        state: State,
-        onEnter: (() -> Void)? = nil,
-        onExit: (() -> Void)? = nil,
-        onUpdate: ((_ deltaTime: CGFloat) -> Void)? = nil
-    ) {
-        if let enter = onEnter { enterHandlers[state] = enter }
-        if let exit = onExit { exitHandlers[state] = exit }
-        if let update = onUpdate { updateHandlers[state] = update }
-    }
-    
-    /// Transition to a new state
+
+    /// Call this to enter a new state
     func enter(_ newState: State) {
+        // Don't re-enter the same state
         guard newState != currentState else { return }
-        exitHandlers[currentState]?()
+
+        // Call exit for current
+        exit(currentState)
+
+        // Update state
         currentState = newState
-        enterHandlers[newState]?()
+
+        // Call enter for new
+        enterState(newState)
     }
-    
-    /// Call in your update loop
+
+    /// Update the current state
     func update(deltaTime: CGFloat) {
-        updateHandlers[currentState]?(deltaTime)
+        updateState(currentState, deltaTime: deltaTime)
     }
+
+    /// Override in subclass: things that happen on enter
+    func enterState(_ state: State) {}
+
+    /// Override in subclass: things that happen on exit
+    func exit(_ state: State) {}
+
+    /// Override in subclass: things that happen every frame for current state
+    func updateState(_ state: State, deltaTime: CGFloat) {}
 }
