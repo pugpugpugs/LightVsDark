@@ -10,26 +10,32 @@ class EnemyStateMachine: StateMachine<EnemyState> {
     init(enemy: Enemy, animationProvider: AnimationProvider) {
         self.enemy = enemy
         self.animationProvider = animationProvider
-        super.init(initialState: .idle)
+        super.init(initialState: .none)
         setupAnimations()
         setupStates()
     }
     
     // MARK: - Setup Animations per State
     private func setupAnimations() {
-        for state in [EnemyState.idle, .moving, .takingDamage, .dead] {
+        for state in [EnemyState.idle, .moving, .takingDamage, .dead, .attacking] {
             let frames = animationProvider.frames(for: state)
             guard !frames.isEmpty else { continue }
             
-            // Create repeating animation SKAction
-            let animation = SKAction.repeatForever(SKAction.animate(with: frames, timePerFrame: 0.1))
-            stateAnimations[state] = animation
+            let action: SKAction
+            
+            if state == .attacking || state == .dead {
+                action = SKAction.animate(with: frames, timePerFrame:  0.1)
+            } else {
+                action = SKAction.repeatForever(SKAction.animate(with: frames, timePerFrame: 0.1))
+            }
+            
+            stateAnimations[state] = action
         }
     }
     
     // MARK: - Setup States
     private func setupStates() {
-        for state in [EnemyState.idle, .moving, .takingDamage, .dead] {
+        for state in [EnemyState.idle, .moving, .takingDamage, .dead, .attacking] {
             register(
                 state: state,
                 onEnter: { [weak self] in self?.enter(state: state) },
@@ -42,23 +48,40 @@ class EnemyStateMachine: StateMachine<EnemyState> {
     // MARK: - State Enter
     private func enter(state: EnemyState) {
         guard let enemy = enemy else { return }
-        
-        // Stop previous state animation (optional, only if key differs)
-        // Not needed if each state has its own key
-        
-        // Play frame animation for this state
-        if let action = stateAnimations[state] {
-            let actionKey = "\(state)Animation"
-            if enemy.sprite.action(forKey: actionKey) == nil {
-                enemy.sprite.run(action, withKey: actionKey)
+
+        // Stop previous state actions
+        enemy.sprite.removeAllActions()
+
+        guard let action = stateAnimations[state] else { return }
+
+        switch state {
+
+        case .idle:
+            if let idleAnim = stateAnimations[.idle] {
+                enemy.sprite.run(idleAnim, withKey: "idleAnimation")
             }
+
+            let waitThenMove = SKAction.sequence([
+                SKAction.wait(forDuration: 2.0),
+                SKAction.run { [weak enemy] in
+                    enemy?.stateMachine.enter(.moving)
+                }
+            ])
+            enemy.sprite.run(waitThenMove, withKey: "idleTransition")
+
+        case .attacking:
+            enemy.sprite.run(action, completion: { [weak self] in
+                self?.enemy?.didFinishAttack()
+            })
+        case .dead:
+            enemy.sprite.run(action, completion: { [weak enemy] in
+                enemy?.die()
+            })
+        default:
+            enemy.sprite.run(action, withKey: "\(state)Animation")
         }
-        
-        // Set tint for differentiation (optional)
-//        enemy.sprite.color = color(for: state)
-//        enemy.sprite.colorBlendFactor = 1.0
-//        enemy.sprite.blendMode = .add
     }
+
     
     // MARK: - State Exit
     private func exit(state: EnemyState) {
@@ -73,8 +96,13 @@ class EnemyStateMachine: StateMachine<EnemyState> {
     private func updateState(state: EnemyState, deltaTime: CGFloat) {
         guard let enemy = enemy else { return }
         
-        if state != .dead && state != .idle {
-            enemy.move(deltaTime: deltaTime, targetPosition: targetPosition)
+        if state == .moving {
+            let distance = enemy.position.distance(to: targetPosition)
+            if distance <= enemy.attackRange {
+                self.enter(state: .attacking)
+            } else {
+                enemy.move(deltaTime: deltaTime, targetPosition: targetPosition)
+            }
         }
         
         switch state {
@@ -87,14 +115,4 @@ class EnemyStateMachine: StateMachine<EnemyState> {
             break
         }
     }
-    
-    // MARK: - Helpers
-//    private func color(for state: EnemyState) -> UIColor {
-//        switch state {
-//        case .idle: return .blue
-//        case .moving: return .black
-//        case .takingDamage: return .red
-//        case .dead: return .white
-//        }
-//    }
 }

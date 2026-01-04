@@ -3,4 +3,6 @@ enum EnemyState {
     case moving
     case takingDamage
     case dead
+    case attacking
+    case none
 }

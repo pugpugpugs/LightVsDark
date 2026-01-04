@@ -2,14 +2,30 @@ import SpriteKit
 
 class EasyEnemy: Enemy {
     init(position: CGPoint) {
-        let sheet = SKTexture(imageNamed: "green_octonid")
         let provider = SpriteSheetAnimationProvider(
-            spriteSheet: sheet,
-            stateRows: [.idle: 0, .moving: 1, .takingDamage: 2, .dead: 3],
-            totalRows: 5,
-            columns: 8
+            stateSheets: [
+                .idle: SKTexture(imageNamed: "Pawn_Idle"),
+                .moving: SKTexture(imageNamed: "Pawn_Run"),
+                .takingDamage: SKTexture(imageNamed: "Pawn_Run_Knife"),
+                .dead: SKTexture(imageNamed: "Pawn_Run_Gold"),
+                .attacking: SKTexture(imageNamed: "Pawn_Interact_Axe")
+            ],
+            rowsPerSheet: [
+                .idle: 1,
+                .moving: 1,
+                .takingDamage: 1,
+                .dead: 1,
+                .attacking: 1
+            ],
+            columnsPerSheet: [
+                .idle: 8,
+                .moving: 6,
+                .takingDamage: 6,
+                .dead: 6,
+                .attacking: 6
+            ]
         )
-        super.init(position: position, animationProvider: provider, spriteSize: CGSize(width: 80, height: 80), attackRange: 20)
+        super.init(position: position, animationProvider: provider, spriteSize: CGSize(width: 80, height: 80), attackRange: 40)
         self.name = "enemy"
     }
     

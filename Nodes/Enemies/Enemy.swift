@@ -79,9 +79,8 @@ class Enemy: SKNode {
         setupPhysics(radius: hitRadius)
 
         // Set initial state safely after everything is initialized
-        stateMachine.enter(.moving)
+        stateMachine.enter(.idle)
     }
-
     
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
@@ -91,39 +90,16 @@ class Enemy: SKNode {
         
         stateMachine.targetPosition = targetPosition
         stateMachine.update(deltaTime: deltaTime)
-        
-//        updateStateCycleTest(deltaTime: deltaTime)
     }
     
     private func handleLightConeChange() {
         if isInLightCone {
             stateMachine.enter(.takingDamage)
         } else if stateMachine.currentState == .takingDamage {
-            let nextState: EnemyState = position.distance(to: stateMachine.targetPosition) <= attackRange ? .idle : .moving
+            let nextState: EnemyState = position.distance(to: stateMachine.targetPosition) <= attackRange ? .attacking : .moving
             stateMachine.enter(nextState)
         }
     }
-    
-    // MARK: - Test State Cycling
-//    private var testStateIndex = 0
-//    private var testStateTimer: CGFloat = 0
-//
-//    func startStateCycleTest(interval: CGFloat = 2.0) {
-//        testStateIndex = 0
-//        testStateTimer = 0
-//    }
-//
-//    func updateStateCycleTest(deltaTime: CGFloat) {
-//        testStateTimer += deltaTime
-//        guard testStateTimer >= 2.0 else { return } // 2 seconds per state
-//        testStateTimer = 0
-//
-//        let states: [EnemyState] = [.idle, .moving, .takingDamage, .dead]
-//        let nextState = states[testStateIndex % states.count]
-//        stateMachine.enter(nextState)
-//        testStateIndex += 1
-//        print(nextState)
-//    }
     
     // MARK: - Movement
     func move(deltaTime: CGFloat, targetPosition: CGPoint) {
@@ -132,6 +108,17 @@ class Enemy: SKNode {
         let movement = movementManager.movementDelta(for: self, toward: targetPosition, deltaTime: deltaTime)
         position.x += movement.dx
         position.y += movement.dy
+    }
+    
+    func didFinishAttack() {
+        // damage player here
+        // then decide next state
+
+        if health <= 0 {
+            stateMachine.enter(.dead)
+        } else {
+            stateMachine.enter(.idle)
+        }
     }
 
     func startDamageEffect() {
@@ -187,7 +174,14 @@ class Enemy: SKNode {
     }
 
     // MARK: - Death
-    func die() { removeFromParent() }
+    func die() {
+        physicsBody = nil
+        removeAllActions()
+        removeFromParent()
+        if let scene = self.scene as? GameScene {
+            scene.enemies.removeAll { $0 === self }
+        }
+    }
 
     // MARK: - Sprite Sheet Helper
     static func loadFramesFromSheet(sheet: SKTexture, rowIndex: Int, rows: Int, columns: Int) -> [SKTexture] {
