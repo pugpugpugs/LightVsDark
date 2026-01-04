@@ -23,7 +23,7 @@ class Enemy: SKNode {
     var baseSpeed: CGFloat = 15.0
     var speedMultiplier: CGFloat = 1.0
     private let movementManager = MovementManager()
-    var movementStyle: MovementStyle = .straight
+    var movementStyle: MovementStyle
     private var movementTime: CGFloat = 0
     private var movementAnchor: CGPoint?
     
@@ -40,11 +40,13 @@ class Enemy: SKNode {
     // MARK: - Init
     init(position: CGPoint,
          animationProvider: SpriteSheetAnimationProvider,
+         movementStyle: MovementStyle = .straight,
          spriteSize: CGSize = CGSize(width: 80, height: 80),
          speedMultiplierRange: ClosedRange<CGFloat> = 0.8...1.3,
          attackRange: CGFloat) {
 
         // MARK: Health
+        self.movementStyle = movementStyle
         self.maxHealth = 10
         self.health = maxHealth
         self.healthBar = HealthBar(maxHealth: maxHealth, size: CGSize(width: 40, height: 6))
@@ -90,7 +92,7 @@ class Enemy: SKNode {
         stateMachine.targetPosition = targetPosition
         stateMachine.update(deltaTime: deltaTime)
         
-        updateStateCycleTest(deltaTime: deltaTime)
+//        updateStateCycleTest(deltaTime: deltaTime)
     }
     
     private func handleLightConeChange() {
@@ -103,25 +105,25 @@ class Enemy: SKNode {
     }
     
     // MARK: - Test State Cycling
-    private var testStateIndex = 0
-    private var testStateTimer: CGFloat = 0
-    
-    func startStateCycleTest(interval: CGFloat = 2.0) {
-        testStateIndex = 0
-        testStateTimer = 0
-    }
-    
-    func updateStateCycleTest(deltaTime: CGFloat) {
-        testStateTimer += deltaTime
-        guard testStateTimer >= 2.0 else { return } // 2 seconds per state
-        testStateTimer = 0
-        
-        let states: [EnemyState] = [.idle, .moving, .takingDamage, .dead]
-        let nextState = states[testStateIndex % states.count]
-        stateMachine.enter(nextState)
-        testStateIndex += 1
-        print(nextState)
-    }
+//    private var testStateIndex = 0
+//    private var testStateTimer: CGFloat = 0
+//
+//    func startStateCycleTest(interval: CGFloat = 2.0) {
+//        testStateIndex = 0
+//        testStateTimer = 0
+//    }
+//
+//    func updateStateCycleTest(deltaTime: CGFloat) {
+//        testStateTimer += deltaTime
+//        guard testStateTimer >= 2.0 else { return } // 2 seconds per state
+//        testStateTimer = 0
+//
+//        let states: [EnemyState] = [.idle, .moving, .takingDamage, .dead]
+//        let nextState = states[testStateIndex % states.count]
+//        stateMachine.enter(nextState)
+//        testStateIndex += 1
+//        print(nextState)
+//    }
     
     // MARK: - Movement
     func move(deltaTime: CGFloat, targetPosition: CGPoint) {

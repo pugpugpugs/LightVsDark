@@ -9,7 +9,7 @@ class EasyEnemy: Enemy {
             totalRows: 5,
             columns: 8
         )
-        super.init(position: position, animationProvider: provider, spriteSize: CGSize(width: 80, height: 80), attackRange: 100)
+        super.init(position: position, animationProvider: provider, spriteSize: CGSize(width: 80, height: 80), attackRange: 20)
         self.name = "enemy"
     }
     

@@ -47,7 +47,7 @@ final class DebugDrawer {
     }
     
     // MARK: - Draw rectangle
-    func drawRect(_ rect: CGRect, color: SKColor, persist: Bool, fill: Bool = false, lineWidth: CGFloat = 2, zPosition: CGFloat = 10_000) {
+    func drawRect(_ rect: CGRect, color: SKColor, persist: Bool, fill: Bool = false, lineWidth: CGFloat = 2, zPosition: CGFloat = 0) {
         let node = SKShapeNode(rect: rect)
         node.strokeColor = color
         node.lineWidth = lineWidth

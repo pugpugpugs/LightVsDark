@@ -120,7 +120,16 @@ class SpawnManager {
             spawnPosition = player.position + CGPoint(x: 0, y: 300)
         }
 
-        let enemy = EasyEnemy(position: spawnPosition)
+        // Alternate enemy types using modulo
+        let enemy: Enemy
+        if scene.enemies.count % 2 == 0 {
+            enemy = EdgeSkaterEnemy(position: spawnPosition)
+        } else if scene.enemies.count % 3 == 0 {
+            enemy = HardEnemy(position: spawnPosition)
+        } else {
+            enemy = EasyEnemy(position: spawnPosition)
+        }
+
         scene.addChild(enemy)
         scene.enemies.append(enemy)
 
@@ -129,6 +138,7 @@ class SpawnManager {
         print("Spawned \(type(of: enemy)) at \(enemy.position)")
         #endif
     }
+
 }
     
 ////

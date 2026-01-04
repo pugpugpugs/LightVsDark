@@ -39,6 +39,7 @@
 		83DC73152F09B10F00AECBE1 /* EnemyStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73142F09B10F00AECBE1 /* EnemyStateMachine.swift */; };
 		83DC73182F09B56700AECBE1 /* AnimationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73172F09B56700AECBE1 /* AnimationProvider.swift */; };
 		83DC731A2F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73192F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift */; };
+		83DC731C2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC731B2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		83DC73142F09B10F00AECBE1 /* EnemyStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyStateMachine.swift; sourceTree = "<group>"; };
 		83DC73172F09B56700AECBE1 /* AnimationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationProvider.swift; sourceTree = "<group>"; };
 		83DC73192F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteSheetAnimationProvider.swift; sourceTree = "<group>"; };
+		83DC731B2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSkaterEnemy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +202,7 @@
 				83DC72D62F04721A00AECBE1 /* Enemy.swift */,
 				83DC73032F074A8200AECBE1 /* HardEnemy.swift */,
 				83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */,
+				83DC731B2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift */,
 			);
 			path = Enemies;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				83DC72D72F04721A00AECBE1 /* Enemy.swift in Sources */,
 				83DC73132F09AF7C00AECBE1 /* EnemyState.swift in Sources */,
 				83DC73072F0820E200AECBE1 /* ConeZone.swift in Sources */,
+				83DC731C2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift in Sources */,
 				83DC72F02F06D60600AECBE1 /* SafeSpawnGenerator.swift in Sources */,
 				83DC72EA2F05DA9700AECBE1 /* LightCone.swift in Sources */,
 				83DC73112F09AF3700AECBE1 /* StateMachine.swift in Sources */,

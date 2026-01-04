@@ -55,9 +55,9 @@ class EnemyStateMachine: StateMachine<EnemyState> {
         }
         
         // Set tint for differentiation (optional)
-        enemy.sprite.color = color(for: state)
-        enemy.sprite.colorBlendFactor = 1.0
-        enemy.sprite.blendMode = .add
+//        enemy.sprite.color = color(for: state)
+//        enemy.sprite.colorBlendFactor = 1.0
+//        enemy.sprite.blendMode = .add
     }
     
     // MARK: - State Exit
@@ -72,23 +72,29 @@ class EnemyStateMachine: StateMachine<EnemyState> {
     // MARK: - State Update
     private func updateState(state: EnemyState, deltaTime: CGFloat) {
         guard let enemy = enemy else { return }
-        switch state {
-        case .moving:
+        
+        if state != .dead && state != .idle {
             enemy.move(deltaTime: deltaTime, targetPosition: targetPosition)
+        }
+        
+        switch state {
+//        case .moving:
+//            enemy.move(deltaTime: deltaTime, targetPosition: targetPosition)
         case .takingDamage:
-            enemy.startDamageEffect() // runs separate "damageFlash" SKAction
+            enemy.startDamageEffect()
+
         default:
             break
         }
     }
     
     // MARK: - Helpers
-    private func color(for state: EnemyState) -> UIColor {
-        switch state {
-        case .idle: return .blue
-        case .moving: return .black
-        case .takingDamage: return .red
-        case .dead: return .white
-        }
-    }
+//    private func color(for state: EnemyState) -> UIColor {
+//        switch state {
+//        case .idle: return .blue
+//        case .moving: return .black
+//        case .takingDamage: return .red
+//        case .dead: return .white
+//        }
+//    }
 }
