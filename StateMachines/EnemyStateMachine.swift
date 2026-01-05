@@ -72,10 +72,10 @@ class EnemyStateMachine: StateMachine<EnemyState> {
         case .dead:
             if let anim = stateAnimations[.dead] {
                 enemy.sprite.run(anim, completion: { [weak enemy] in
-                    enemy?.destroy()
+                    enemy?.die()
                 })
             } else {
-                enemy.destroy()
+                enemy.die()
             }
         default:
             break

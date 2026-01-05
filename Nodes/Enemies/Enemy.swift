@@ -29,6 +29,9 @@ class Enemy: SKNode {
     
     var attackRange: CGFloat
     
+    var onDestroyed: (() -> Void)?
+    var onAttackHit: (() -> Void)?
+    
     // MARK: - Animation Provider
     let animationProvider: SpriteSheetAnimationProvider
     
@@ -36,7 +39,7 @@ class Enemy: SKNode {
     lazy var stateMachine: EnemyStateMachine = {
         EnemyStateMachine(enemy: self, animationProvider: animationProvider)
     }()
-
+    
     // MARK: - Init
     init(position: CGPoint,
          animationProvider: SpriteSheetAnimationProvider,
@@ -111,6 +114,7 @@ class Enemy: SKNode {
     }
     
     func didFinishAttack() {
+        onAttackHit?()
         destroy()
     }
 
@@ -165,14 +169,17 @@ class Enemy: SKNode {
         physicsBody?.affectedByGravity = false
         physicsBody?.usesPreciseCollisionDetection = true
     }
+    
+    func die() {
+        ScoreManager.shared.enemyKilled(basePoints: 10)
+        destroy()
+    }
 
     // MARK: - Death
     func destroy() {
         physicsBody = nil
         removeAllActions()
         removeFromParent()
-        guard let scene = self.scene as? GameScene else { return }
-        scene.enemies.removeAll { $0 === self }
-        scene.player.lightCone?.enemiesInCone.remove(self)
+        onDestroyed?()
     }
 }

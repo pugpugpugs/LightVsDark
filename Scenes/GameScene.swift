@@ -6,7 +6,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var sceneStartTime: TimeInterval?
     
     var player: Player!
+    var lightCone: LightCone!
     var spawnManager: SpawnManager!
+    var safeSpawnGenerator: SafeSpawnGenerator!
+    var enemyFactory: EnemyFactory!
+    
     var enemies: [Enemy] = []
     var isGameOver = false
     
@@ -20,7 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var collisionHandler: CollisionHandler!
     var scoreManager: ScoreManager!
     var powerUpManager: PowerUpManager!
-
+    
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -32,16 +36,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Player setup ---
         player = Player(position: CGPoint(x: frame.midX, y: frame.midY), screenSize: self.size)
+        lightCone = player.lightCone
         addChild(player)
         
         // --- PowerUpManager ---
         powerUpManager = PowerUpManager(cone: player.lightCone, player: player, enemies: enemies)
 
         // --- CollisionHandler ---
-        collisionHandler = CollisionHandler(scene: self, powerUpManager: powerUpManager)
+        collisionHandler = CollisionHandler(player: player, lightCone: lightCone, powerUpManager: powerUpManager)
 
+        enemyFactory = EnemyFactory()
+        safeSpawnGenerator = SafeSpawnGenerator(sceneSize: size, player: player)
+        
         // --- SpawnManager ---
-        spawnManager = SpawnManager(scene: self)
+        spawnManager = SpawnManager(enemyFactory: enemyFactory, safeSpawnGenerator: safeSpawnGenerator)
 
         // --- DifficultyManager ---
         difficultyManager = DifficultyManager(
@@ -55,17 +63,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // --- ScoreManager ---
         scoreManager = ScoreManager(
             scene: self,
-            position: CGPoint(x: frame.midX, y: frame.height - 60)
+            scorePosition: CGPoint(x: frame.midX, y: frame.height - 60),
+            comboPosition: CGPoint(x: frame.midX, y: frame.height - 120)
         )
     }
     
     // MARK: - Game Loop
     override func update(_ currentTime: TimeInterval) {
         guard !isGameOver else { return }
-        
-        // Initialize scene start time
-        if sceneStartTime == nil { sceneStartTime = currentTime }
-        sceneTime = currentTime - (sceneStartTime ?? currentTime)
         
         // Delta time
         let deltaTime: CGFloat
@@ -91,16 +96,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         difficultyManager.update(deltaTime: Double(deltaTime))
 
         // --- Spawn ---
-        spawnManager.update(currentTime: sceneTime, enemySpawnInterval: difficultyManager.enemySpawnInterval)
+        if let enemy = spawnManager.update(currentTime: currentTime) {
+                    // Set closure for attack
+                    enemy.onAttackHit = { [weak self] in
+                        self?.player.takeDamage()
+                    }
 
-        // --- Move enemies ---
-        for enemy in enemies {
-            enemy.update(deltaTime: deltaTime, targetPosition: player.position)
-        }
+                    // Set closure for destruction
+                    enemy.onDestroyed = { [weak self, weak enemy] in
+                        guard let self = self, let enemy = enemy else { return }
+                        self.enemies.removeAll { $0 === enemy }
+                    }
+
+                    addChild(enemy)
+                    enemies.append(enemy)
+                }
+
+                // Update all enemies
+                for enemy in enemies {
+                    enemy.update(deltaTime: CGFloat(deltaTime), targetPosition: player.position)
+                }
 
         // --- Score ---
         scoreManager.update(deltaTime: Double(deltaTime))
-        print(enemies.count)
     }
  
     // MARK: - Touch Input

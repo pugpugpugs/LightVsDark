@@ -40,6 +40,7 @@
 		83DC73182F09B56700AECBE1 /* AnimationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73172F09B56700AECBE1 /* AnimationProvider.swift */; };
 		83DC731A2F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73192F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift */; };
 		83DC731C2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC731B2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift */; };
+		83DC73202F0C1C0000AECBE1 /* EnemyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC731F2F0C1C0000AECBE1 /* EnemyFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		83DC73172F09B56700AECBE1 /* AnimationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationProvider.swift; sourceTree = "<group>"; };
 		83DC73192F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteSheetAnimationProvider.swift; sourceTree = "<group>"; };
 		83DC731B2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSkaterEnemy.swift; sourceTree = "<group>"; };
+		83DC731F2F0C1C0000AECBE1 /* EnemyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +205,7 @@
 				83DC73032F074A8200AECBE1 /* HardEnemy.swift */,
 				83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */,
 				83DC731B2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift */,
+				83DC731F2F0C1C0000AECBE1 /* EnemyFactory.swift */,
 			);
 			path = Enemies;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 			files = (
 				83DC730E2F098E9D00AECBE1 /* MovementManager.swift in Sources */,
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
+				83DC73202F0C1C0000AECBE1 /* EnemyFactory.swift in Sources */,
 				83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */,
 				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,

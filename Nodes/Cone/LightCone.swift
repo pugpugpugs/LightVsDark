@@ -13,7 +13,7 @@ class LightCone: SKShapeNode {
     private var targetAngle: CGFloat
     
     // DPS
-    var baseDPS: CGFloat = 1
+    var baseDPS: CGFloat = 5
     private let innerMultiplier: CGFloat = 2.5
     private let middleMultiplier: CGFloat = 1.0
     private let outerMultiplier: CGFloat = 0.5
@@ -30,7 +30,7 @@ class LightCone: SKShapeNode {
     
     let damageTickInterval: TimeInterval = 0.15
     
-    var enemiesInCone: Set<Enemy> = []
+    var enemiesInCone = NSHashTable<Enemy>.weakObjects()
     
     // MARK: - Init
     init(baseLength: CGFloat = 150, baseAngle: CGFloat = .pi / 3) {
@@ -153,7 +153,7 @@ class LightCone: SKShapeNode {
     }
     
     func enemyEnteredCone(_ enemy: Enemy) {
-        enemiesInCone.insert(enemy)
+        enemiesInCone.add(enemy)
         enemy.enterLight()
     }
 
@@ -165,7 +165,7 @@ class LightCone: SKShapeNode {
     func applyDamage(deltaTime: CGFloat) {
         let baseDamage = baseDPS * deltaTime
 
-        for enemy in enemiesInCone {
+        for enemy in enemiesInCone.allObjects {
             guard let enemyParent = enemy.parent else { continue }
 
             // Convert enemy position to cone's local space

@@ -13,6 +13,8 @@ class Player: SKShapeNode {
     let spinDecay: CGFloat = 6.0
     var facingAngle: CGFloat = 0
     
+    var hitPoints = 3
+    
     // Multipliers
     var spinSpeedMultiplier: CGFloat = 1.0
 
@@ -67,5 +69,11 @@ class Player: SKShapeNode {
         facingAngle += spinSpeed * spinSpeedMultiplier * deltaTime
         zRotation = facingAngle
         lightCone?.zRotation = facingAngle
+    }
+    
+    func takeDamage() {
+        hitPoints -= 1
+        print("damaged: \(hitPoints)")
+        ScoreManager.shared.playerHit()
     }
 }
