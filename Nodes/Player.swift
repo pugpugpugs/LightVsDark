@@ -74,6 +74,5 @@ class Player: SKShapeNode {
     func takeDamage() {
         hitPoints -= 1
         print("damaged: \(hitPoints)")
-        ScoreManager.shared.playerHit()
     }
 }

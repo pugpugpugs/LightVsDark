@@ -5,6 +5,7 @@ class EnemyFactory {
 
     func spawnEnemy(at position: CGPoint = .zero) -> Enemy {
         enemyCount += 1
+        return EasyEnemy(position: position)
 
         switch enemyCount % 3 {
         case 0: return EasyEnemy(position: position)

@@ -8,9 +8,9 @@ struct DifficultySettings {
     let roundDuration: TimeInterval   // 30 seconds for a standard round
 
     static let `default` = DifficultySettings(
-        startEnemySpeed: 50,
-        maxEnemySpeed: 120,
-        startSpawnInterval: 2.5,
+        startEnemySpeed: 1,
+        maxEnemySpeed: 3,
+        startSpawnInterval: 5,
         minSpawnInterval: 0.8,
         roundDuration: 30
     )

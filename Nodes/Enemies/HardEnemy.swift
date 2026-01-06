@@ -1,8 +1,17 @@
 import SpriteKit
 
 class HardEnemy: Enemy {
-
     init(position: CGPoint) {
+        let stats = EnemyStats(
+            maxHealth: 20,
+            baseSpeed: 30,
+            attackRange: 80,
+            hitRadius: 20,
+            speedMultiplierRange: 0.9...1.2
+        )
+        
+        let physics = EnemyPhysics(spriteSize: CGSize(width: 80, height: 80), body: SKPhysicsBody(circleOfRadius: 30))
+
         let provider = SpriteSheetAnimationProvider(
             stateSheets: [
                 .idle: SKTexture(imageNamed: "Lancer_Idle"),
@@ -12,25 +21,22 @@ class HardEnemy: Enemy {
                 .attacking: SKTexture(imageNamed: "Lancer_Attack")
             ],
             rowsPerSheet: [
-                .idle: 1,
-                .moving: 1,
-                .takingDamage: 1,
-                .dead: 1,
-                .attacking: 1
+                .idle: 1, .moving: 1, .takingDamage: 1, .dead: 1, .attacking: 1
             ],
             columnsPerSheet: [
-                .idle: 12,
-                .moving: 6,
-                .takingDamage: 6,
-                .dead: 3,
-                .attacking: 3
+                .idle: 12, .moving: 6, .takingDamage: 6, .dead: 3, .attacking: 3
             ]
         )
-        super.init(position: position, animationProvider: provider, movementStyle: .zigZag(amplitude: 40, frequency: 4.0), spriteSize: CGSize(width: 80, height: 80), attackRange: 20)
+
+        super.init(
+            position: position,
+            stats: stats,
+            physics: physics,
+            animationProvider: provider,
+            movementStyle: .zigZag(amplitude: 40, frequency: 4.0)
+        )
         self.name = "enemy"
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
+    required init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
 }

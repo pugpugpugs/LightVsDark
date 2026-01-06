@@ -43,6 +43,8 @@
 		83DC73202F0C1C0000AECBE1 /* EnemyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC731F2F0C1C0000AECBE1 /* EnemyFactory.swift */; };
 		83DC73232F0C71AB00AECBE1 /* DifficultySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73222F0C71AB00AECBE1 /* DifficultySettings.swift */; };
 		83DC73252F0C760700AECBE1 /* EnemyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73242F0C760700AECBE1 /* EnemyManager.swift */; };
+		83DC73272F0C883E00AECBE1 /* EnemyStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73262F0C883E00AECBE1 /* EnemyStats.swift */; };
+		83DC73292F0C8BDD00AECBE1 /* EnemyPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73282F0C8BDC00AECBE1 /* EnemyPhysics.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,8 @@
 		83DC731F2F0C1C0000AECBE1 /* EnemyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyFactory.swift; sourceTree = "<group>"; };
 		83DC73222F0C71AB00AECBE1 /* DifficultySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultySettings.swift; sourceTree = "<group>"; };
 		83DC73242F0C760700AECBE1 /* EnemyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyManager.swift; sourceTree = "<group>"; };
+		83DC73262F0C883E00AECBE1 /* EnemyStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyStats.swift; sourceTree = "<group>"; };
+		83DC73282F0C8BDC00AECBE1 /* EnemyPhysics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyPhysics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +216,8 @@
 				83DC72FA2F06F93D00AECBE1 /* EasyEnemy.swift */,
 				83DC731B2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift */,
 				83DC731F2F0C1C0000AECBE1 /* EnemyFactory.swift */,
+				83DC73262F0C883E00AECBE1 /* EnemyStats.swift */,
+				83DC73282F0C8BDC00AECBE1 /* EnemyPhysics.swift */,
 			);
 			path = Enemies;
 			sourceTree = "<group>";
@@ -341,6 +347,7 @@
 				83DC730E2F098E9D00AECBE1 /* MovementManager.swift in Sources */,
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
 				83DC73202F0C1C0000AECBE1 /* EnemyFactory.swift in Sources */,
+				83DC73292F0C8BDD00AECBE1 /* EnemyPhysics.swift in Sources */,
 				83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */,
 				83DC73252F0C760700AECBE1 /* EnemyManager.swift in Sources */,
 				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,
@@ -370,6 +377,7 @@
 				83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */,
 				83DC731A2F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift in Sources */,
 				83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */,
+				83DC73272F0C883E00AECBE1 /* EnemyStats.swift in Sources */,
 				83DC73092F0820EC00AECBE1 /* ConeZoneConfig.swift in Sources */,
 				83DC72FE2F07250800AECBE1 /* DebugDrawer.swift in Sources */,
 				83DC73182F09B56700AECBE1 /* AnimationProvider.swift in Sources */,

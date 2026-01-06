@@ -68,8 +68,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         difficultyManager.onSpawnIntervalChange = { [weak self] interval in
             self?.spawnManager.enemySpawnInterval = interval
         }
-        difficultyManager.onEnemySpeedChange = { [weak self] speed in
-            self?.enemyManager.updateAllEnemiesSpeed(to: speed)
+        difficultyManager.onEnemySpeedChange = { [weak self] speedMultiplier in
+            self?.enemyManager.updateAllEnemiesSpeedMultiplier(to: speedMultiplier)
         }
 
         // --- PowerUps ---
@@ -78,9 +78,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // --- Collision Handling ---
         collisionHandler = CollisionHandler(player: player, lightCone: lightCone, powerUpManager: powerUpManager)
         
-//        collisionHandler.onPlayerHitByEnemy = { [weak self] in
-//            self?.player.takeDamage()
-//        }
+        collisionHandler.onPlayerHitByEnemy = { [weak self] in
+            self?.player.takeDamage()
+            ScoreManager.shared.playerHit()
+        }
 
         collisionHandler.onEnemyEnteredCone = { [weak self] enemy in
             self?.lightCone.enemyEnteredCone(enemy)

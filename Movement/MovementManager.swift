@@ -46,7 +46,7 @@ final class MovementManager {
             dy: target.y - enemy.position.y
         ).normalized()
 
-        let speed: CGFloat = enemy.baseSpeed * enemy.speedMultiplier
+        let speed: CGFloat = enemy.stats.baseSpeed * enemy.speedMultiplier
 
         return CGVector(
             dx: direction.dx * speed * deltaTime,
@@ -72,9 +72,7 @@ final class MovementManager {
             dy: direction.dx
         )
 
-        enemy.timeElapsed += deltaTime
-
-        let speed = enemy.baseSpeed * enemy.speedMultiplier
+        let speed = enemy.stats.baseSpeed * enemy.speedMultiplier
 
         // Forward movement (same as straight)
         let forward = CGVector(
@@ -110,7 +108,7 @@ final class MovementManager {
         ).normalized()
 
         // 2. Forward speed
-        let speed = (enemy.baseSpeed * enemy.speedMultiplier) * (1.0 + CGFloat.random(in: -speedVariation...speedVariation))
+        let speed = (enemy.stats.baseSpeed * enemy.speedMultiplier) * (1.0 + CGFloat.random(in: -speedVariation...speedVariation))
 
         let forward = CGVector(
             dx: direction.dx * speed * deltaTime,
@@ -126,9 +124,6 @@ final class MovementManager {
             dx: perpendicular.dx * lateralOffset * deltaTime,  // scale by deltaTime!
             dy: perpendicular.dy * lateralOffset * deltaTime
         )
-
-        // 5. Accumulate time
-        enemy.timeElapsed += deltaTime
 
         return CGVector(
             dx: forward.dx + lateral.dx,

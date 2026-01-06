@@ -40,9 +40,9 @@ class EnemyManager {
     }
 
     // MARK: - Mass Updates
-    func updateAllEnemiesSpeed(to speed: CGFloat) {
+    func updateAllEnemiesSpeedMultiplier(to: CGFloat) {
         for enemy in enemies {
-            enemy.baseSpeed = speed
+            enemy.speedMultiplier = to
         }
     }
 }

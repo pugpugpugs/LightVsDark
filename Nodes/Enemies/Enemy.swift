@@ -1,100 +1,89 @@
 import SpriteKit
 
+// MARK: - Base Enemy Class
 class Enemy: SKNode {
 
-    // MARK: - Properties
-    let hitRadius: CGFloat
-    let sprite: SKSpriteNode
-    var timeElapsed: CGFloat = 0
-    private var forwardAnchor: CGPoint?
-    let defaultSpriteColor: UIColor
-    
-    var maxHealth: CGFloat = 10
-    var health: CGFloat = 10
-    let healthBar: HealthBar
-    
-    fileprivate var isTakingDamage: Bool = false
-    fileprivate let flashDuration: CGFloat = 0.2
-    
-    var isInLightCone: Bool = false {
-        didSet { handleLightConeChange() }
+    // MARK: - Stats
+    let stats: EnemyStats
+    var health: CGFloat
+    var speedMultiplier: CGFloat
+    var currentSpeed: CGFloat {
+        stats.baseSpeed * speedMultiplier
     }
-    
-    var baseSpeed: CGFloat = 35.0
-    var speedMultiplier: CGFloat = 1.0
-    private let movementManager = MovementManager()
-    var movementStyle: MovementStyle
-    private var movementTime: CGFloat = 0
-    private var movementAnchor: CGPoint?
-    
     var attackRange: CGFloat
-    
-    var onDestroyed: (() -> Void)?
-    var onAttackHit: (() -> Void)?
-    
-    // MARK: - Animation Provider
+    let hitRadius: CGFloat
+
+    // MARK: - Visuals
+    let sprite: SKSpriteNode
+    let healthBar: HealthBar
     let animationProvider: SpriteSheetAnimationProvider
-    
-    // MARK: - State Machine
+    private let defaultSpriteColor: UIColor
+
+    // MARK: - State
+    var isInLightCone: Bool = false { didSet { handleLightConeChange() } }
     lazy var stateMachine: EnemyStateMachine = {
         EnemyStateMachine(enemy: self, animationProvider: animationProvider)
     }()
-    
+
+    // MARK: - Callbacks
+    var onDestroyed: (() -> Void)?
+    var onAttackHit: (() -> Void)?
+
+    // MARK: - Movement
+    private let movementManager = MovementManager()
+    var movementStyle: MovementStyle
+    private(set) var timeElapsed: CGFloat = 0
+
     // MARK: - Init
     init(position: CGPoint,
+         stats: EnemyStats,
+         physics: EnemyPhysics,
          animationProvider: SpriteSheetAnimationProvider,
-         movementStyle: MovementStyle = .straight,
-         spriteSize: CGSize = CGSize(width: 80, height: 80),
-         speedMultiplierRange: ClosedRange<CGFloat> = 0.8...1.3,
-         attackRange: CGFloat) {
+         movementStyle: MovementStyle = .straight) {
 
-        // MARK: Health
+        self.stats = stats
+        self.health = stats.maxHealth
+        self.speedMultiplier = CGFloat.random(in: stats.speedMultiplierRange)
+        self.attackRange = stats.attackRange
+        self.hitRadius = stats.hitRadius
         self.movementStyle = movementStyle
-        self.maxHealth = 10
-        self.health = maxHealth
-        self.healthBar = HealthBar(maxHealth: maxHealth, size: CGSize(width: 40, height: 6))
 
-        // MARK: Hit radius & speed
-        self.hitRadius = max(spriteSize.width, spriteSize.height) * 0.2
-        self.speedMultiplier = CGFloat.random(in: speedMultiplierRange)
-        self.attackRange = attackRange
-
-        // MARK: Sprite node
-        self.sprite = SKSpriteNode(texture: nil)
-        self.sprite.size = spriteSize
+        // Sprite
+        self.sprite = SKSpriteNode(texture: nil, color: .white, size: physics.spriteSize)
         self.sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.sprite.zPosition = 9
         self.defaultSpriteColor = self.sprite.color
 
-        // MARK: AnimationProvider
+        // Health bar
+        self.healthBar = HealthBar(maxHealth: stats.maxHealth, size: CGSize(width: physics.spriteSize.width / 2, height: 6))
+
         self.animationProvider = animationProvider
 
         super.init()
-
         self.position = position
 
-        // Add sprite and health bar
+        // Add visuals
         addChild(sprite)
-        healthBar.position = CGPoint(x: 0, y: sprite.size.height / 2 + 8)
+        healthBar.position = CGPoint(x: 0, y: physics.spriteSize.height / 2 + 8)
         addChild(healthBar)
 
         // Physics
-        setupPhysics(radius: hitRadius)
+        setupPhysics(body: physics.body)
 
-        // Set initial state safely after everything is initialized
+        // Initial state
         stateMachine.enter(.idle)
     }
-    
+
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     // MARK: - Update Loop
     func update(deltaTime: CGFloat, targetPosition: CGPoint) {
-        movementTime += deltaTime
-        
+        timeElapsed += deltaTime
         stateMachine.targetPosition = targetPosition
         stateMachine.update(deltaTime: deltaTime)
     }
-    
+
+    // MARK: - Light Cone
     private func handleLightConeChange() {
         if isInLightCone {
             stateMachine.enter(.takingDamage)
@@ -103,20 +92,35 @@ class Enemy: SKNode {
             stateMachine.enter(nextState)
         }
     }
-    
+
+    func enterLight() { isInLightCone = true }
+    func exitLight() { isInLightCone = false }
+
     // MARK: - Movement
     func move(deltaTime: CGFloat, targetPosition: CGPoint) {
+        guard stateMachine.currentState == .moving else { return }
         guard position.distance(to: targetPosition) > attackRange else { return }
-        
         let movement = movementManager.movementDelta(for: self, toward: targetPosition, deltaTime: deltaTime)
         position.x += movement.dx
         position.y += movement.dy
     }
-    
+
+    // MARK: - Attack
     func didFinishAttack() {
         onAttackHit?()
         destroy()
     }
+
+    // MARK: - Damage
+    func takeDamage(_ amount: CGFloat) {
+        health -= amount
+        healthBar.takeDamage(amount)
+        if health <= 0 { stateMachine.enter(.dead) }
+    }
+
+    // MARK: - Damage Effects
+    fileprivate var isTakingDamage: Bool = false
+    fileprivate let flashDuration: CGFloat = 0.2
 
     func startDamageEffect() {
         guard !isTakingDamage else { return }
@@ -148,20 +152,9 @@ class Enemy: SKNode {
         sprite.blendMode = .alpha
     }
 
-    // MARK: - Light Cone Interaction
-    func enterLight() { isInLightCone = true }
-    func exitLight() { isInLightCone = false }
-
-    // MARK: - Damage
-    func takeDamage(_ amount: CGFloat) {
-        health -= amount
-        healthBar.takeDamage(amount)
-        if health <= 0 { stateMachine.enter(.dead) }
-    }
-
     // MARK: - Physics
-    private func setupPhysics(radius: CGFloat) {
-        physicsBody = SKPhysicsBody(circleOfRadius: radius)
+    private func setupPhysics(body: SKPhysicsBody) {
+        physicsBody = body
         physicsBody?.isDynamic = true
         physicsBody?.categoryBitMask = PhysicsCategory.enemy
         physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.lightCone
@@ -169,13 +162,13 @@ class Enemy: SKNode {
         physicsBody?.affectedByGravity = false
         physicsBody?.usesPreciseCollisionDetection = true
     }
-    
+
+    // MARK: - Death
     func die() {
         ScoreManager.shared.enemyKilled(basePoints: 10)
         destroy()
     }
 
-    // MARK: - Death
     func destroy() {
         physicsBody = nil
         removeAllActions()
