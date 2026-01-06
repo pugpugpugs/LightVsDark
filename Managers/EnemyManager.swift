@@ -6,6 +6,7 @@ class EnemyManager {
     var render: ((Enemy) -> Void)?
     var count: Int { enemies.count }
     var activeEnemies: [Enemy] { enemies }
+    var onEnemyAttackHit: (() -> Void)?
 
     // MARK: - Add / Remove Enemies
     func add(enemy: Enemy) {
@@ -18,6 +19,14 @@ class EnemyManager {
             guard let self = self, let enemy = enemy else { return }
             self.remove(enemy: enemy)
         }
+        
+        enemy.onAttackHit = { [weak self] in
+            self?.handleEnemyAttack()
+        }
+    }
+    
+    private func handleEnemyAttack() {
+        onEnemyAttackHit?()
     }
 
     func remove(enemy: Enemy) {

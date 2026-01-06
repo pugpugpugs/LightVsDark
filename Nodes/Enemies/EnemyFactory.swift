@@ -3,14 +3,15 @@ import SpriteKit
 class EnemyFactory {
     private var enemyCount = 0
 
-    func spawnEnemy(at position: CGPoint = .zero) -> Enemy {
-        enemyCount += 1
-        return EasyEnemy(position: position)
+    private let enemyConstructors: [(CGPoint) -> Enemy] = [
+        { EasyEnemy(position: $0) },
+        { HardEnemy(position: $0) },
+        { EdgeSkaterEnemy(position: $0) }
+    ]
 
-        switch enemyCount % 3 {
-        case 0: return EasyEnemy(position: position)
-        case 1: return HardEnemy(position: position)
-        default: return EdgeSkaterEnemy(position: position)
-        }
+    func spawnEnemy(at position: CGPoint = .zero) -> Enemy {
+        let constructor = enemyConstructors[enemyCount % enemyConstructors.count]
+        enemyCount += 1
+        return constructor(position)
     }
 }

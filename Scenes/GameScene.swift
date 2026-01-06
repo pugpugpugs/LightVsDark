@@ -43,9 +43,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func setupPlayer() {
-        player = Player(position: CGPoint(x: frame.midX, y: frame.midY), screenSize: size)
-        lightCone = player.lightCone
+        let player = PlayerFactory.createDefaultPlayer(at: CGPoint(x: frame.midX, y: frame.midY))
         addChild(player)
+        self.player = player
+        self.lightCone = player.lightCone
     }
 
     private func setupManagers() {
@@ -62,6 +63,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemyManager.render = { [weak self] enemy in
             self?.addChild(enemy)
         }
+        
+        enemyManager?.onEnemyAttackHit = { [weak self] in
+            self?.player.takeDamage()
+            ScoreManager.shared.playerHit()
+        }
 
         // --- Difficulty ---
         difficultyManager = DifficultyManager()
@@ -77,11 +83,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Collision Handling ---
         collisionHandler = CollisionHandler(player: player, lightCone: lightCone, powerUpManager: powerUpManager)
-        
-        collisionHandler.onPlayerHitByEnemy = { [weak self] in
-            self?.player.takeDamage()
-            ScoreManager.shared.playerHit()
-        }
 
         collisionHandler.onEnemyEnteredCone = { [weak self] enemy in
             self?.lightCone.enemyEnteredCone(enemy)

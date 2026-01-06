@@ -8,6 +8,7 @@ class StateMachine<State: Hashable> {
 
     init(initialState: State) {
         self.currentState = initialState
+        self.setupAnimations()
     }
 
     /// Call this to enter a new state
@@ -29,6 +30,8 @@ class StateMachine<State: Hashable> {
     func update(deltaTime: CGFloat) {
         updateState(currentState, deltaTime: deltaTime)
     }
+    
+    func setupAnimations() {}
 
     /// Override in subclass: things that happen on enter
     func enterState(_ state: State) {}

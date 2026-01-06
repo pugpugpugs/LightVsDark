@@ -13,7 +13,7 @@ class EdgeSkaterEnemy: Enemy {
         
         let physics = EnemyPhysics(spriteSize: CGSize(width: 80, height: 80), body: SKPhysicsBody(circleOfRadius: 30))
 
-        let provider = SpriteSheetAnimationProvider(
+        let provider = SpriteSheetAnimationProvider<EnemyState>(
             stateSheets: [
                 .idle: SKTexture(imageNamed: "Warrior_Idle"),
                 .moving: SKTexture(imageNamed: "Warrior_Run"),

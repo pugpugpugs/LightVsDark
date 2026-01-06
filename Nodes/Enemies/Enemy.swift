@@ -16,7 +16,7 @@ class Enemy: SKNode {
     // MARK: - Visuals
     let sprite: SKSpriteNode
     let healthBar: HealthBar
-    let animationProvider: SpriteSheetAnimationProvider
+    let animationProvider: SpriteSheetAnimationProvider<EnemyState>
     private let defaultSpriteColor: UIColor
 
     // MARK: - State
@@ -38,7 +38,7 @@ class Enemy: SKNode {
     init(position: CGPoint,
          stats: EnemyStats,
          physics: EnemyPhysics,
-         animationProvider: SpriteSheetAnimationProvider,
+         animationProvider: SpriteSheetAnimationProvider<EnemyState>,
          movementStyle: MovementStyle = .straight) {
 
         self.stats = stats

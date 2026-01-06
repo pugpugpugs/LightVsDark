@@ -2,6 +2,13 @@ import SpriteKit
 
 class LightCone: SKShapeNode {
     
+    var debugDrawEnabled: Bool = true {
+        didSet {
+            updateDebugVisibility()
+        }
+    }
+    private var physicsDebugNode: SKShapeNode?
+    
     // MARK: - Properties
     let baseLength: CGFloat
     let baseAngle: CGFloat
@@ -140,7 +147,20 @@ class LightCone: SKShapeNode {
             physicsBody?.isDynamic = false
             physicsBody?.affectedByGravity = false
             physicsBody?.usesPreciseCollisionDetection = true
+
+            // --- DEBUG PHYSICS SHAPE ---
+            let debugNode = SKShapeNode(path: outerPath)
+            debugNode.strokeColor = .cyan
+            debugNode.lineWidth = 2
+            debugNode.fillColor = .clear
+            debugNode.zPosition = 100
+            addChild(debugNode)
+            physicsDebugNode = debugNode
+        } else {
+            physicsDebugNode?.path = outerPath
         }
+
+        updateDebugVisibility()
     }
     
     // MARK: - Update per frame
@@ -206,8 +226,20 @@ class LightCone: SKShapeNode {
             let damage = baseDamage * multiplier
             enemy.takeDamage(damage)
 
-            // Debug
-//            print("Enemy \(enemy) hit in \(zone) zone for \(damage) damage")
+#if DEBUG
+let hitDot = SKShapeNode(circleOfRadius: 4)
+hitDot.fillColor = .white
+hitDot.strokeColor = .clear
+hitDot.position = localPos
+hitDot.zPosition = 200
+addChild(hitDot)
+
+hitDot.run(.sequence([
+    .fadeOut(withDuration: 0.15),
+    .removeFromParent()
+]))
+#endif
+
         }
     }
 
@@ -223,4 +255,16 @@ class LightCone: SKShapeNode {
         targetLength += (baseLength - targetLength) * decayRate * deltaTime
         targetAngle += (baseAngle - currentAngle) * decayRate * deltaTime
     }
+    
+    private func updateDebugVisibility() {
+        innerOverlay.isHidden = !debugDrawEnabled
+        middleOverlay.isHidden = !debugDrawEnabled
+        outerOverlay.isHidden = !debugDrawEnabled
+        physicsDebugNode?.isHidden = !debugDrawEnabled
+        
+        innerOverlay.alpha = 0.35
+        middleOverlay.alpha = 0.25
+        outerOverlay.alpha = 0.15
+    }
+
 }

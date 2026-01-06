@@ -12,7 +12,7 @@ class EasyEnemy: Enemy {
         
         let physics = EnemyPhysics(spriteSize: CGSize(width: 80, height: 80), body: SKPhysicsBody(circleOfRadius: 30))
 
-        let provider = SpriteSheetAnimationProvider(
+        let provider = SpriteSheetAnimationProvider<EnemyState>(
             stateSheets: [
                 .idle: SKTexture(imageNamed: "Pawn_Idle"),
                 .moving: SKTexture(imageNamed: "Pawn_Run"),

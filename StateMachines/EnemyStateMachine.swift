@@ -3,20 +3,19 @@ import SpriteKit
 class EnemyStateMachine: StateMachine<EnemyState> {
 
     weak var enemy: Enemy?
-    private var animationProvider: AnimationProvider
+    private var animationProvider: SpriteSheetAnimationProvider<EnemyState>
     private var stateAnimations: [EnemyState: SKAction] = [:]
     var targetPosition: CGPoint = .zero
 
-    init(enemy: Enemy, animationProvider: AnimationProvider) {
+    init(enemy: Enemy, animationProvider: SpriteSheetAnimationProvider<EnemyState>) {
         self.enemy = enemy
         self.animationProvider = animationProvider
         super.init(initialState: .none)
-
-        setupAnimations()
+        
         super.enter(.idle) // Trigger initial state enter
     }
 
-    private func setupAnimations() {
+    override func setupAnimations() {
         for state in [EnemyState.idle, .moving, .takingDamage, .attacking, .dead] {
             let frames = animationProvider.frames(for: state)
             guard !frames.isEmpty else { continue }
@@ -35,9 +34,6 @@ class EnemyStateMachine: StateMachine<EnemyState> {
     // MARK: - Enter
     override func enterState(_ state: EnemyState) {
         guard let enemy = enemy else { return }
-
-        print(state)
-//        enemy.sprite.removeAllActions() // Clear previous state actions
 
         switch state {
         case .idle:
