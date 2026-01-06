@@ -4,75 +4,107 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Properties
     private var sceneStartTime: TimeInterval?
-    
-    var player: Player!
-    var lightCone: LightCone!
-    var spawnManager: SpawnManager!
-    var safeSpawnGenerator: SafeSpawnGenerator!
-    var enemyFactory: EnemyFactory!
-    
-    var enemies: [Enemy] = []
-    var isGameOver = false
-    
     private var lastUpdateTime: TimeInterval = 0
-    var isTouchingLeft = false
-    var isTouchingRight = false
     var sceneTime: TimeInterval = 0
 
-    // Managers / Handlers
+    var isGameOver = false
+    var isTouchingLeft = false
+    var isTouchingRight = false
+
+    // MARK: - Game Objects
+    var player: Player!
+    var lightCone: LightCone!
+
+    // MARK: - Managers
+    var enemyFactory: EnemyFactory!
+    var safeSpawnGenerator: SafeSpawnGenerator!
+    var spawnManager: SpawnManager!
+    var enemyManager: EnemyManager!
     var difficultyManager: DifficultyManager!
+    var powerUpManager: PowerUpManager!
     var collisionHandler: CollisionHandler!
     var scoreManager: ScoreManager!
-    var powerUpManager: PowerUpManager!
-    
+
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         becomeFirstResponder()
-
         backgroundColor = .black
-        physicsWorld.contactDelegate = self
-        physicsWorld.gravity = .zero
 
-        // --- Player setup ---
-        player = Player(position: CGPoint(x: frame.midX, y: frame.midY), screenSize: self.size)
+        // Physics
+        physicsWorld.gravity = .zero
+        physicsWorld.contactDelegate = self
+
+        // --- Player & LightCone ---
+        setupPlayer()
+
+        // --- Managers ---
+        setupManagers()
+    }
+
+    private func setupPlayer() {
+        player = Player(position: CGPoint(x: frame.midX, y: frame.midY), screenSize: size)
         lightCone = player.lightCone
         addChild(player)
-        
-        // --- PowerUpManager ---
-        powerUpManager = PowerUpManager(cone: player.lightCone, player: player, enemies: enemies)
+    }
 
-        // --- CollisionHandler ---
-        collisionHandler = CollisionHandler(player: player, lightCone: lightCone, powerUpManager: powerUpManager)
-
+    private func setupManagers() {
+        // --- Enemy / Spawn ---
         enemyFactory = EnemyFactory()
         safeSpawnGenerator = SafeSpawnGenerator(sceneSize: size, player: player)
-        
-        // --- SpawnManager ---
         spawnManager = SpawnManager(enemyFactory: enemyFactory, safeSpawnGenerator: safeSpawnGenerator)
+        spawnManager.onEnemyReady = { [weak self] enemy in
+            self?.enemyManager.add(enemy: enemy)
+        }
 
-        // --- DifficultyManager ---
-        difficultyManager = DifficultyManager(
-            initialSpeed: 50,
-            initialSpawnInterval: 2.5,
-            spawnIntervalMin: 0.5,
-            rampRate: 10,
-            spawnDecrease: 0.1
-        )
+        enemyManager = EnemyManager()
+        // render closure decouples scene from manager
+        enemyManager.render = { [weak self] enemy in
+            self?.addChild(enemy)
+        }
 
-        // --- ScoreManager ---
+        // --- Difficulty ---
+        difficultyManager = DifficultyManager()
+        difficultyManager.onSpawnIntervalChange = { [weak self] interval in
+            self?.spawnManager.enemySpawnInterval = interval
+        }
+        difficultyManager.onEnemySpeedChange = { [weak self] speed in
+            self?.enemyManager.updateAllEnemiesSpeed(to: speed)
+        }
+
+        // --- PowerUps ---
+        powerUpManager = PowerUpManager(cone: lightCone, player: player, enemies: enemyManager.activeEnemies)
+
+        // --- Collision Handling ---
+        collisionHandler = CollisionHandler(player: player, lightCone: lightCone, powerUpManager: powerUpManager)
+        
+//        collisionHandler.onPlayerHitByEnemy = { [weak self] in
+//            self?.player.takeDamage()
+//        }
+
+        collisionHandler.onEnemyEnteredCone = { [weak self] enemy in
+            self?.lightCone.enemyEnteredCone(enemy)
+        }
+
+        collisionHandler.onEnemyExitedCone = { [weak self] enemy in
+            self?.lightCone.enemyExitedCone(enemy)
+        }
+
+        // --- Score / Combo ---
         scoreManager = ScoreManager(
             scene: self,
             scorePosition: CGPoint(x: frame.midX, y: frame.height - 60),
             comboPosition: CGPoint(x: frame.midX, y: frame.height - 120)
         )
     }
-    
+
     // MARK: - Game Loop
     override func update(_ currentTime: TimeInterval) {
         guard !isGameOver else { return }
-        
-        // Delta time
+
+        // --- Delta time ---
+        if sceneStartTime == nil { sceneStartTime = currentTime }
+        sceneTime = currentTime - (sceneStartTime ?? currentTime)
         let deltaTime: CGFloat
         if lastUpdateTime > 0 {
             deltaTime = CGFloat(sceneTime - lastUpdateTime)
@@ -81,46 +113,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         lastUpdateTime = sceneTime
 
-        // --- Player ---
-        var input: CGFloat = 0
-        if isTouchingLeft { input = -1 }
-        if isTouchingRight { input = 1 }
-        
+        // --- Player & LightCone ---
+        let input: CGFloat = (isTouchingLeft ? -1 : 0) + (isTouchingRight ? 1 : 0)
         player.updateRotation(deltaTime: deltaTime, inputDirection: input)
-        
-        player.lightCone?.update(deltaTime: deltaTime)
-        
-        player.lightCone?.applyDamage(deltaTime: deltaTime)
+        lightCone.update(deltaTime: deltaTime)
+        lightCone.applyDamage(deltaTime: deltaTime)
 
         // --- Difficulty ---
         difficultyManager.update(deltaTime: Double(deltaTime))
 
-        // --- Spawn ---
-        if let enemy = spawnManager.update(currentTime: currentTime) {
-                    // Set closure for attack
-                    enemy.onAttackHit = { [weak self] in
-                        self?.player.takeDamage()
-                    }
+        // --- Spawn Enemies ---
+        spawnManager.update(currentTime: currentTime)
 
-                    // Set closure for destruction
-                    enemy.onDestroyed = { [weak self, weak enemy] in
-                        guard let self = self, let enemy = enemy else { return }
-                        self.enemies.removeAll { $0 === enemy }
-                    }
+        // --- Update all enemies ---
+        enemyManager.update(deltaTime: deltaTime, playerPosition: player.position)
 
-                    addChild(enemy)
-                    enemies.append(enemy)
-                }
-
-                // Update all enemies
-                for enemy in enemies {
-                    enemy.update(deltaTime: CGFloat(deltaTime), targetPosition: player.position)
-                }
-
-        // --- Score ---
+        // --- Score / Combo ---
         scoreManager.update(deltaTime: Double(deltaTime))
     }
- 
+
+
     // MARK: - Touch Input
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
@@ -138,7 +150,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         collisionHandler.handleBegin(contact: contact)
     }
-    
+
     func didEnd(_ contact: SKPhysicsContact) {
         collisionHandler.handleEnd(contact: contact)
     }

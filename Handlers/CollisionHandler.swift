@@ -1,9 +1,15 @@
 import SpriteKit
 
 class CollisionHandler {
-    weak var lightCone: LightCone?
-    weak var player: Player?
-    weak var powerUpManager: PowerUpManager?
+    // MARK: - Dependencies
+    private weak var player: Player?
+    private weak var lightCone: LightCone?
+    private let powerUpManager: PowerUpManager
+
+    // MARK: - Event closures
+    var onPlayerHitByEnemy: (() -> Void)?
+    var onEnemyEnteredCone: ((Enemy) -> Void)?
+    var onEnemyExitedCone: ((Enemy) -> Void)?
 
     init(player: Player, lightCone: LightCone, powerUpManager: PowerUpManager) {
         self.player = player
@@ -11,48 +17,30 @@ class CollisionHandler {
         self.powerUpManager = powerUpManager
     }
 
-    private lazy var beginHandlers: [UInt32: (SKNode, SKNode) -> Void] = [
-        PhysicsCategory.lightCone | PhysicsCategory.enemy: { [weak self] nodeA, nodeB in
-            guard let cone = self?.lightCone else { return }
-
-            let enemyNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.enemy ? nodeA : nodeB
-            guard let enemy = enemyNode as? Enemy else { return }
-            cone.enemyEnteredCone(enemy)
-        },
-
-        PhysicsCategory.player | PhysicsCategory.enemy: { [weak self] nodeA, nodeB in
-            let enemyNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.enemy ? nodeA : nodeB
-            guard let enemy = enemyNode as? Enemy else { return }
-            
-            enemy.stateMachine.enter(.attacking)
-        },
-
-//        PhysicsCategory.lightCone | PhysicsCategory.powerUp: { [weak self] nodeA, nodeB in
-//            guard let cone = self?.lightCone else { return }
-//            guard let powerUp = nodeA as? PowerUp ?? nodeB as? PowerUp else { return }
-//
-//            // Forward collision to manager
-//            self.powerUpManager.collect(powerUp, sceneTime: scene.sceneTime)
-//        }
-    ]
-    
-    private lazy var endHandlers: [UInt32: (SKNode, SKNode) -> Void] = [
-        PhysicsCategory.lightCone | PhysicsCategory.enemy: { [weak self] nodeA, nodeB in
-            guard let cone = self?.lightCone else { return }
-
-            let enemyNode = nodeA.physicsBody?.categoryBitMask == PhysicsCategory.enemy ? nodeA : nodeB
-            guard let enemy = enemyNode as? Enemy else { return }
-
-            cone.enemyExitedCone(enemy)
-        }
-    ]
-
+    // MARK: - Physics Contact
     func handleBegin(contact: SKPhysicsContact) {
         guard let nodeA = contact.bodyA.node,
               let nodeB = contact.bodyB.node else { return }
 
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        beginHandlers[collision]?(nodeA, nodeB)
+
+        switch collision {
+        case PhysicsCategory.lightCone | PhysicsCategory.enemy:
+            if let enemy = nodeA as? Enemy ?? nodeB as? Enemy {
+                onEnemyEnteredCone?(enemy)
+            }
+
+        case PhysicsCategory.player | PhysicsCategory.enemy:
+            break
+//            onPlayerHitByEnemy?()
+
+        case PhysicsCategory.lightCone | PhysicsCategory.powerUp:
+            if let powerUp = nodeA as? PowerUp ?? nodeB as? PowerUp {
+//                powerUpManager.collect(powerUp)
+            }
+
+        default: break
+        }
     }
 
     func handleEnd(contact: SKPhysicsContact) {
@@ -60,7 +48,14 @@ class CollisionHandler {
               let nodeB = contact.bodyB.node else { return }
 
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        endHandlers[collision]?(nodeA, nodeB)
-    }
 
+        switch collision {
+        case PhysicsCategory.lightCone | PhysicsCategory.enemy:
+            if let enemy = nodeA as? Enemy ?? nodeB as? Enemy {
+                onEnemyExitedCone?(enemy)
+            }
+
+        default: break
+        }
+    }
 }

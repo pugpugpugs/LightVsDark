@@ -23,9 +23,9 @@ class EnemyStateMachine: StateMachine<EnemyState> {
 
             let action: SKAction
             if state == .attacking || state == .dead {
-                action = SKAction.animate(with: frames, timePerFrame: 0.1)
+                action = SKAction.animate(with: frames, timePerFrame: 0.2)
             } else {
-                action = SKAction.repeatForever(SKAction.animate(with: frames, timePerFrame: 0.1))
+                action = SKAction.repeatForever(SKAction.animate(with: frames, timePerFrame: 0.2))
             }
 
             stateAnimations[state] = action
@@ -36,7 +36,8 @@ class EnemyStateMachine: StateMachine<EnemyState> {
     override func enterState(_ state: EnemyState) {
         guard let enemy = enemy else { return }
 
-        enemy.sprite.removeAllActions() // Clear previous state actions
+        print(state)
+//        enemy.sprite.removeAllActions() // Clear previous state actions
 
         switch state {
         case .idle:
