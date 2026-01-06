@@ -13,7 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Game Objects
     var player: Player!
-    var lightCone: LightCone!
+    var playerWeapon: PlayerWeapon!
 
     // MARK: - Managers
     var enemyFactory: EnemyFactory!
@@ -46,7 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let player = PlayerFactory.createDefaultPlayer(at: CGPoint(x: frame.midX, y: frame.midY))
         addChild(player)
         self.player = player
-        self.lightCone = player.lightCone
+        self.playerWeapon = player.weapon
     }
 
     private func setupManagers() {
@@ -79,17 +79,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         // --- PowerUps ---
-        powerUpManager = PowerUpManager(cone: lightCone, player: player, enemies: enemyManager.activeEnemies)
+        powerUpManager = PowerUpManager(weapon: player.weapon, player: player, enemies: enemyManager.activeEnemies)
 
         // --- Collision Handling ---
-        collisionHandler = CollisionHandler(player: player, lightCone: lightCone, powerUpManager: powerUpManager)
+        collisionHandler = CollisionHandler(player: player, playerWeapon: playerWeapon, powerUpManager: powerUpManager)
 
-        collisionHandler.onEnemyEnteredCone = { [weak self] enemy in
-            self?.lightCone.enemyEnteredCone(enemy)
+        collisionHandler.onPlayerStartAttack = { [weak self] enemy in
+            self?.playerWeapon.startAttack(on: enemy)
         }
 
-        collisionHandler.onEnemyExitedCone = { [weak self] enemy in
-            self?.lightCone.enemyExitedCone(enemy)
+        collisionHandler.onPlayerEndAttack = { [weak self] enemy in
+            self?.playerWeapon.endAttack(on: enemy)
         }
 
         // --- Score / Combo ---
@@ -117,9 +117,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Player & LightCone ---
         let input: CGFloat = (isTouchingLeft ? -1 : 0) + (isTouchingRight ? 1 : 0)
-        player.updateRotation(deltaTime: deltaTime, inputDirection: input)
-        lightCone.update(deltaTime: deltaTime)
-        lightCone.applyDamage(deltaTime: deltaTime)
+        player.update(deltaTime: deltaTime, inputDirection: input)
 
         // --- Difficulty ---
         difficultyManager.update(deltaTime: Double(deltaTime))

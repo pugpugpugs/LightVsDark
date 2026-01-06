@@ -49,6 +49,7 @@
 		83DC73302F0DA56C00AECBE1 /* PlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC732F2F0DA56C00AECBE1 /* PlayerState.swift */; };
 		83DC73322F0DA77D00AECBE1 /* PlayerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73312F0DA77D00AECBE1 /* PlayerFactory.swift */; };
 		83DC73342F0DACCC00AECBE1 /* PlayerStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */; };
+		83DC73372F0DB68C00AECBE1 /* PlayerWeapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		83DC732F2F0DA56C00AECBE1 /* PlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerState.swift; sourceTree = "<group>"; };
 		83DC73312F0DA77D00AECBE1 /* PlayerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFactory.swift; sourceTree = "<group>"; };
 		83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStateMachine.swift; sourceTree = "<group>"; };
+		83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerWeapon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				83DC72CD2F046DEA00AECBE1 /* Utilities */,
 				83DC72CC2F046DE200AECBE1 /* Managers */,
 				83DC730C2F098DC500AECBE1 /* Movement */,
+				83DC73352F0DB67D00AECBE1 /* Weapons */,
 				83DC72CB2F046DDC00AECBE1 /* Nodes */,
 				83DC72F32F06F82600AECBE1 /* Spawning */,
 				83DC72CA2F046DD400AECBE1 /* Scenes */,
@@ -241,7 +244,6 @@
 		83DC73052F0820C900AECBE1 /* Cone */ = {
 			isa = PBXGroup;
 			children = (
-				83DC72E92F05DA9700AECBE1 /* LightCone.swift */,
 				83DC73062F0820E200AECBE1 /* ConeZone.swift */,
 				83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */,
 			);
@@ -293,6 +295,15 @@
 				83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */,
 			);
 			path = Player;
+			sourceTree = "<group>";
+		};
+		83DC73352F0DB67D00AECBE1 /* Weapons */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72E92F05DA9700AECBE1 /* LightCone.swift */,
+				83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */,
+			);
+			path = Weapons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -398,6 +409,7 @@
 				83DC72E62F04AF8300AECBE1 /* CGPointExtensions.swift in Sources */,
 				83DC72EC2F06001100AECBE1 /* PowerUp.swift in Sources */,
 				83DC73002F0745F300AECBE1 /* PowerUpManager.swift in Sources */,
+				83DC73372F0DB68C00AECBE1 /* PlayerWeapon.swift in Sources */,
 				83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */,
 				83DC731A2F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift in Sources */,
 				83DC73322F0DA77D00AECBE1 /* PlayerFactory.swift in Sources */,

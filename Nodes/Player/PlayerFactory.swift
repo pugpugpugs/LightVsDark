@@ -32,6 +32,10 @@ struct PlayerFactory {
             playerPhysics: playerPhysics,
             animationProvider: animationProvider
         )
+        
+        let lightCone = LightCone()
+        
+        player.equipWeapon(lightCone)
 
         return player
     }

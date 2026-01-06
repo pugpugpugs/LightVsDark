@@ -20,10 +20,10 @@ class Enemy: SKNode {
     private let defaultSpriteColor: UIColor
 
     // MARK: - State
-    var isInLightCone: Bool = false { didSet { handleLightConeChange() } }
     lazy var stateMachine: EnemyStateMachine = {
         EnemyStateMachine(enemy: self, animationProvider: animationProvider)
     }()
+    private(set) var isBeingAttacked: Bool = false
 
     // MARK: - Callbacks
     var onDestroyed: (() -> Void)?
@@ -84,17 +84,36 @@ class Enemy: SKNode {
     }
 
     // MARK: - Light Cone
-    private func handleLightConeChange() {
-        if isInLightCone {
+    private func handleAttackStateChange(isUnderAttack: Bool) {
+        if isUnderAttack {
             stateMachine.enter(.takingDamage)
         } else if stateMachine.currentState == .takingDamage {
-            let nextState: EnemyState = position.distance(to: stateMachine.targetPosition) <= attackRange ? .attacking : .moving
+            let nextState: EnemyState =
+                position.distance(to: stateMachine.targetPosition) <= attackRange
+                ? .attacking
+                : .moving
             stateMachine.enter(nextState)
         }
     }
+    
+    // MARK: - Being Attacked
+    func isAttackedStart() {
+        guard !isBeingAttacked else { return }
+        isBeingAttacked = true
+        stateMachine.enter(.takingDamage)
+    }
+    
+    func isAttackedEnd() {
+        guard isBeingAttacked else { return }
+        isBeingAttacked = false
+        
+        let nextState: EnemyState =
+            position.distance(to: stateMachine.targetPosition) <= attackRange
+            ? .attacking
+            : .moving
 
-    func enterLight() { isInLightCone = true }
-    func exitLight() { isInLightCone = false }
+        stateMachine.enter(nextState)
+    }
 
     // MARK: - Movement
     func move(deltaTime: CGFloat, targetPosition: CGPoint) {
@@ -119,13 +138,12 @@ class Enemy: SKNode {
     }
 
     // MARK: - Damage Effects
-    fileprivate var isTakingDamage: Bool = false
-    fileprivate let flashDuration: CGFloat = 0.2
 
     func startDamageEffect() {
-        guard !isTakingDamage else { return }
-        isTakingDamage = true
+        guard stateMachine.currentState == .takingDamage else { return }
 
+        let flashDuration: CGFloat = 0.2
+        
         let flash = SKAction.sequence([
             SKAction.run { [weak self] in
                 guard let s = self else { return }
@@ -144,8 +162,7 @@ class Enemy: SKNode {
     }
 
     func stopDamageEffect() {
-        guard isTakingDamage else { return }
-        isTakingDamage = false
+        guard stateMachine.currentState != .takingDamage else { return }
         sprite.removeAction(forKey: "damageAnimation")
         sprite.color = defaultSpriteColor
         sprite.colorBlendFactor = 0
@@ -157,7 +174,7 @@ class Enemy: SKNode {
         physicsBody = body
         physicsBody?.isDynamic = true
         physicsBody?.categoryBitMask = PhysicsCategory.enemy
-        physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.lightCone
+        physicsBody?.contactTestBitMask = PhysicsCategory.player | PhysicsCategory.playerWeapon
         physicsBody?.collisionBitMask = 0
         physicsBody?.affectedByGravity = false
         physicsBody?.usesPreciseCollisionDetection = true

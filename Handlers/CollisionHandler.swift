@@ -3,17 +3,17 @@ import SpriteKit
 class CollisionHandler {
     // MARK: - Dependencies
     private weak var player: Player?
-    private weak var lightCone: LightCone?
+    private weak var playerWeapon: PlayerWeapon?
     private let powerUpManager: PowerUpManager
 
     // MARK: - Event closures
     var onPlayerHitByEnemy: (() -> Void)?
-    var onEnemyEnteredCone: ((Enemy) -> Void)?
-    var onEnemyExitedCone: ((Enemy) -> Void)?
+    var onPlayerStartAttack: ((Enemy) -> Void)?
+    var onPlayerEndAttack: ((Enemy) -> Void)?
 
-    init(player: Player, lightCone: LightCone, powerUpManager: PowerUpManager) {
+    init(player: Player, playerWeapon: PlayerWeapon, powerUpManager: PowerUpManager) {
         self.player = player
-        self.lightCone = lightCone
+        self.playerWeapon = playerWeapon
         self.powerUpManager = powerUpManager
     }
 
@@ -25,16 +25,16 @@ class CollisionHandler {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
 
         switch collision {
-        case PhysicsCategory.lightCone | PhysicsCategory.enemy:
+        case PhysicsCategory.playerWeapon | PhysicsCategory.enemy:
             if let enemy = nodeA as? Enemy ?? nodeB as? Enemy {
-                onEnemyEnteredCone?(enemy)
+                onPlayerStartAttack?(enemy)
             }
 
         case PhysicsCategory.player | PhysicsCategory.enemy:
             break
 //            onPlayerHitByEnemy?()
 
-        case PhysicsCategory.lightCone | PhysicsCategory.powerUp:
+        case PhysicsCategory.playerWeapon | PhysicsCategory.powerUp:
             if let powerUp = nodeA as? PowerUp ?? nodeB as? PowerUp {
 //                powerUpManager.collect(powerUp)
             }
@@ -50,9 +50,9 @@ class CollisionHandler {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
 
         switch collision {
-        case PhysicsCategory.lightCone | PhysicsCategory.enemy:
+        case PhysicsCategory.playerWeapon | PhysicsCategory.enemy:
             if let enemy = nodeA as? Enemy ?? nodeB as? Enemy {
-                onEnemyExitedCone?(enemy)
+                onPlayerEndAttack?(enemy)
             }
 
         default: break

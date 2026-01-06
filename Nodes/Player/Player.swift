@@ -16,7 +16,9 @@ class Player: SKNode {
 
     // MARK: - Visuals
     let sprite: SKSpriteNode
-    private(set) var lightCone: LightCone
+
+    // MARK: - Weapon
+    private(set) var weapon: PlayerWeapon?
     
     // MARK: - Animation
     let animationProvider: SpriteSheetAnimationProvider<PlayerState>
@@ -31,14 +33,9 @@ class Player: SKNode {
         self.stats = stats
         self.hitPoints = stats.maxHealth
         
-        // Light Cone
-        self.lightCone = LightCone()
-        
-        // Animation
         self.animationProvider = animationProvider
-        
-        // Sprite
         self.playerPhysics = playerPhysics
+        
         self.sprite = SKSpriteNode(texture: nil, color: .white, size: playerPhysics.spriteSize)
         self.sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.sprite.zPosition = 10
@@ -48,32 +45,30 @@ class Player: SKNode {
 
         // Add visuals
         addChild(sprite)
-        addChild(lightCone)
 
         // Physics
         setupPhysics(body: playerPhysics.body)
+
+        // Start in attacking state
         stateMachine.enter(.attacking)
     }
 
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
+    // MARK: - Update Loop
     func update(deltaTime: CGFloat, inputDirection: CGFloat) {
         // --- Rotation ---
         updateRotation(deltaTime: deltaTime, inputDirection: inputDirection)
         
-        // --- State machine ---
+        // --- State Machine ---
         stateMachine.update(deltaTime: deltaTime)
         
-        // --- Light cone ---
-        lightCone.update(deltaTime: deltaTime)
-        lightCone.applyDamage(deltaTime: deltaTime)
-        
-        // --- Optional: other per-frame logic ---
+        // --- Weapon ---
+        weapon?.update(deltaTime: deltaTime)
     }
 
     // MARK: - Input / Rotation
     func applyInput(direction: CGFloat, deltaTime: CGFloat) {
-        // direction: -1 = left, +1 = right, 0 = none
         spinSpeed += direction * stats.spinAcceleration * deltaTime
         spinSpeed = min(max(spinSpeed, -stats.maxSpinSpeed), stats.maxSpinSpeed)
     }
@@ -91,7 +86,14 @@ class Player: SKNode {
         // Update rotation
         facingAngle += spinSpeed * spinSpeedMultiplier * deltaTime
         zRotation = facingAngle
-        lightCone.zRotation = facingAngle
+        weapon?.node.zRotation = facingAngle
+    }
+    
+    // MARK: - Weapon
+    func equipWeapon(_ weapon: PlayerWeapon) {
+        self.weapon = weapon
+        weapon.owner = self
+        addChild(weapon.node)
     }
 
     // MARK: - Damage
@@ -100,6 +102,7 @@ class Player: SKNode {
         print("Player damaged! HP: \(hitPoints)")
     }
     
+    // MARK: - Physics
     private func setupPhysics(body: SKPhysicsBody) {
         physicsBody = body
         physicsBody?.categoryBitMask = PhysicsCategory.player

@@ -31,7 +31,7 @@ class PowerUp: SKShapeNode {
         self.physicsBody = SKPhysicsBody(circleOfRadius: radius)
         self.physicsBody?.isDynamic = true              // dynamic so contact fires
         self.physicsBody?.categoryBitMask = PhysicsCategory.powerUp
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.lightCone
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.playerWeapon
         self.physicsBody?.collisionBitMask = 0
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
