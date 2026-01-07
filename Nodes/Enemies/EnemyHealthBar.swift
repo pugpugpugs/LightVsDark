@@ -1,7 +1,7 @@
 import SpriteKit
 
 /// A reusable health bar for any node
-class HealthBar: SKNode {
+class EnemyHealthBar: SKNode {
     
     // MARK: - Properties
     

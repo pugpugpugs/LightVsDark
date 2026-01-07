@@ -32,7 +32,7 @@
 		83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73032F074A8200AECBE1 /* HardEnemy.swift */; };
 		83DC73072F0820E200AECBE1 /* ConeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73062F0820E200AECBE1 /* ConeZone.swift */; };
 		83DC73092F0820EC00AECBE1 /* ConeZoneConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */; };
-		83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC730A2F088D1900AECBE1 /* HealthBar.swift */; };
+		83DC730B2F088D1900AECBE1 /* EnemyHealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC730A2F088D1900AECBE1 /* EnemyHealthBar.swift */; };
 		83DC730E2F098E9D00AECBE1 /* MovementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC730D2F098E9D00AECBE1 /* MovementManager.swift */; };
 		83DC73112F09AF3700AECBE1 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73102F09AF3700AECBE1 /* StateMachine.swift */; };
 		83DC73132F09AF7C00AECBE1 /* EnemyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73122F09AF7C00AECBE1 /* EnemyState.swift */; };
@@ -85,7 +85,7 @@
 		83DC73032F074A8200AECBE1 /* HardEnemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardEnemy.swift; sourceTree = "<group>"; };
 		83DC73062F0820E200AECBE1 /* ConeZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConeZone.swift; sourceTree = "<group>"; };
 		83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConeZoneConfig.swift; sourceTree = "<group>"; };
-		83DC730A2F088D1900AECBE1 /* HealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthBar.swift; sourceTree = "<group>"; };
+		83DC730A2F088D1900AECBE1 /* EnemyHealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyHealthBar.swift; sourceTree = "<group>"; };
 		83DC730D2F098E9D00AECBE1 /* MovementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovementManager.swift; sourceTree = "<group>"; };
 		83DC73102F09AF3700AECBE1 /* StateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateMachine.swift; sourceTree = "<group>"; };
 		83DC73122F09AF7C00AECBE1 /* EnemyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyState.swift; sourceTree = "<group>"; };
@@ -136,7 +136,6 @@
 				83DC733C2F0ECECA00AECBE1 /* UI */,
 				83DC72CB2F046DDC00AECBE1 /* Nodes */,
 				83DC72F32F06F82600AECBE1 /* Spawning */,
-				83DC72CA2F046DD400AECBE1 /* Scenes */,
 				83DC730F2F09AF0700AECBE1 /* StateMachines */,
 				83DC72F82F06F89000AECBE1 /* Handlers */,
 				83DC73162F09B53B00AECBE1 /* Animation */,
@@ -162,22 +161,12 @@
 			path = "LightVsDark iOS";
 			sourceTree = "<group>";
 		};
-		83DC72CA2F046DD400AECBE1 /* Scenes */ = {
-			isa = PBXGroup;
-			children = (
-				83DC72D22F0471DB00AECBE1 /* GameScene.swift */,
-			);
-			path = Scenes;
-			sourceTree = "<group>";
-		};
 		83DC72CB2F046DDC00AECBE1 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				83DC73452F0ED86600AECBE1 /* PowerUps */,
 				83DC732A2F0DA28F00AECBE1 /* Player */,
-				83DC73052F0820C900AECBE1 /* Cone */,
 				83DC72F92F06F92800AECBE1 /* Enemies */,
-				83DC72EB2F06001100AECBE1 /* PowerUp.swift */,
-				83DC730A2F088D1900AECBE1 /* HealthBar.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -231,6 +220,7 @@
 		83DC72F92F06F92800AECBE1 /* Enemies */ = {
 			isa = PBXGroup;
 			children = (
+				83DC730A2F088D1900AECBE1 /* EnemyHealthBar.swift */,
 				83DC72E22F04A99600AECBE1 /* EnemyType.swift */,
 				83DC73012F07499600AECBE1 /* MovementStyle.swift */,
 				83DC72D62F04721A00AECBE1 /* Enemy.swift */,
@@ -250,15 +240,6 @@
 				83DC72FD2F07250800AECBE1 /* DebugDrawer.swift */,
 			);
 			path = Debug;
-			sourceTree = "<group>";
-		};
-		83DC73052F0820C900AECBE1 /* Cone */ = {
-			isa = PBXGroup;
-			children = (
-				83DC73062F0820E200AECBE1 /* ConeZone.swift */,
-				83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */,
-			);
-			path = Cone;
 			sourceTree = "<group>";
 		};
 		83DC730C2F098DC500AECBE1 /* Movement */ = {
@@ -312,6 +293,8 @@
 		83DC73352F0DB67D00AECBE1 /* Weapons */ = {
 			isa = PBXGroup;
 			children = (
+				83DC73062F0820E200AECBE1 /* ConeZone.swift */,
+				83DC73082F0820EC00AECBE1 /* ConeZoneConfig.swift */,
 				83DC72E92F05DA9700AECBE1 /* LightCone.swift */,
 				83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */,
 			);
@@ -338,11 +321,20 @@
 		83DC733E2F0ED49900AECBE1 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				83DC72D22F0471DB00AECBE1 /* GameScene.swift */,
 				83DC733F2F0ED4DE00AECBE1 /* StartScene.swift */,
 				83DC73412F0ED4F300AECBE1 /* HowToPlayOverlay.swift */,
 				83DC73432F0ED50C00AECBE1 /* HighScoresOverlay.swift */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		83DC73452F0ED86600AECBE1 /* PowerUps */ = {
+			isa = PBXGroup;
+			children = (
+				83DC72EB2F06001100AECBE1 /* PowerUp.swift */,
+			);
+			path = PowerUps;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -419,7 +411,7 @@
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
 				83DC73202F0C1C0000AECBE1 /* EnemyFactory.swift in Sources */,
 				83DC73292F0C8BDD00AECBE1 /* EnemyPhysics.swift in Sources */,
-				83DC730B2F088D1900AECBE1 /* HealthBar.swift in Sources */,
+				83DC730B2F088D1900AECBE1 /* EnemyHealthBar.swift in Sources */,
 				83DC73252F0C760700AECBE1 /* EnemyManager.swift in Sources */,
 				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,
 				83DC73232F0C71AB00AECBE1 /* DifficultySettings.swift in Sources */,

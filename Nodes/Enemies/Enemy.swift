@@ -15,7 +15,7 @@ class Enemy: SKNode {
 
     // MARK: - Visuals
     let sprite: SKSpriteNode
-    let healthBar: HealthBar
+    let healthBar: EnemyHealthBar
     let animationProvider: SpriteSheetAnimationProvider<EnemyState>
     private let defaultSpriteColor: UIColor
 
@@ -55,7 +55,7 @@ class Enemy: SKNode {
         self.defaultSpriteColor = self.sprite.color
 
         // Health bar
-        self.healthBar = HealthBar(maxHealth: stats.maxHealth, size: CGSize(width: physics.spriteSize.width / 2, height: 6))
+        self.healthBar = EnemyHealthBar(maxHealth: stats.maxHealth, size: CGSize(width: physics.spriteSize.width / 2, height: 6))
 
         self.animationProvider = animationProvider
 
