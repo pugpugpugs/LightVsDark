@@ -50,6 +50,7 @@
 		83DC73322F0DA77D00AECBE1 /* PlayerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73312F0DA77D00AECBE1 /* PlayerFactory.swift */; };
 		83DC73342F0DACCC00AECBE1 /* PlayerStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */; };
 		83DC73372F0DB68C00AECBE1 /* PlayerWeapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */; };
+		83DC73392F0DDA7500AECBE1 /* PlayerHealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73382F0DDA7500AECBE1 /* PlayerHealthBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +99,7 @@
 		83DC73312F0DA77D00AECBE1 /* PlayerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerFactory.swift; sourceTree = "<group>"; };
 		83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStateMachine.swift; sourceTree = "<group>"; };
 		83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerWeapon.swift; sourceTree = "<group>"; };
+		83DC73382F0DDA7500AECBE1 /* PlayerHealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHealthBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -293,6 +295,7 @@
 				83DC732F2F0DA56C00AECBE1 /* PlayerState.swift */,
 				83DC73312F0DA77D00AECBE1 /* PlayerFactory.swift */,
 				83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */,
+				83DC73382F0DDA7500AECBE1 /* PlayerHealthBar.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,
 				83DC73232F0C71AB00AECBE1 /* DifficultySettings.swift in Sources */,
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
+				83DC73392F0DDA7500AECBE1 /* PlayerHealthBar.swift in Sources */,
 				83DC72EE2F06002600AECBE1 /* PowerUpType.swift in Sources */,
 				83DC73302F0DA56C00AECBE1 /* PlayerState.swift in Sources */,
 				83DC732C2F0DA2B500AECBE1 /* PlayerStats.swift in Sources */,

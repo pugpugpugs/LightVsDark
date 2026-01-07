@@ -13,6 +13,7 @@ class Player: SKNode {
 
     // MARK: - Health
     private(set) var hitPoints: Int
+    let healthBar: PlayerHealthBar
 
     // MARK: - Visuals
     let sprite: SKSpriteNode
@@ -27,6 +28,8 @@ class Player: SKNode {
     lazy var stateMachine: PlayerStateMachine = {
         PlayerStateMachine(player: self, animationProvider: animationProvider)
     }()
+    
+    // MARK: - Callbacks
 
     // MARK: - Init
     init(position: CGPoint, stats: PlayerStats, playerPhysics: PlayerPhysics, animationProvider: SpriteSheetAnimationProvider<PlayerState>) {
@@ -39,6 +42,9 @@ class Player: SKNode {
         self.sprite = SKSpriteNode(texture: nil, color: .white, size: playerPhysics.spriteSize)
         self.sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.sprite.zPosition = 10
+        
+        self.healthBar = PlayerHealthBar(maxHP: stats.maxHealth)
+        healthBar.position = CGPoint(x: 0, y: -playerPhysics.spriteSize.height / 2 - 10)
         
         super.init()
         self.position = position
@@ -97,9 +103,17 @@ class Player: SKNode {
     }
 
     // MARK: - Damage
-    func takeDamage() {
-        hitPoints -= 1
-        print("Player damaged! HP: \(hitPoints)")
+    func takeDamage(_ amount: Int = 1) {
+        guard hitPoints > 0 else { return }
+        hitPoints -= amount
+        healthBar.update(hp: hitPoints)
+        if hitPoints <= 0 {
+            die()
+        }
+    }
+    
+    func die() {
+        
     }
     
     // MARK: - Physics

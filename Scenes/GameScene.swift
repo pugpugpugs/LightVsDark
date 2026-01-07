@@ -43,8 +43,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func setupPlayer() {
-        let player = PlayerFactory.createDefaultPlayer(at: CGPoint(x: frame.midX, y: frame.midY))
+        let player = PlayerFactory.createDefaultPlayer(at: CGPoint(x: frame.midX, y: frame.midY))     
         addChild(player)
+        addChild(player.healthBar)
+        
+        player.healthBar.position = CGPoint(x: player.position.x, y: player.position.y - 25)
         self.player = player
         self.playerWeapon = player.weapon
     }

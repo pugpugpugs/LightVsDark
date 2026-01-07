@@ -42,8 +42,6 @@ class LightCone: SKShapeNode, PlayerWeapon {
     private let middleOverlay = SKShapeNode()
     private let outerOverlay = SKShapeNode()
     
-    var enemiesInCone = NSHashTable<Enemy>.weakObjects()
-    
     // MARK: - Init
     init(baseLength: CGFloat = 150, baseAngle: CGFloat = .pi / 3) {
         self.baseLength = baseLength
