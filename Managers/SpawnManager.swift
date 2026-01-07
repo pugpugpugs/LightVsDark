@@ -28,4 +28,9 @@ class SpawnManager {
         enemy.position = safeSpawnGenerator.generateSafeSpawnPoint(spriteSize: enemy.sprite.size)
         return enemy
     }
+    
+    func stop() {
+        lastSpawnTime = 0
+        onEnemyReady = nil
+    }
 }

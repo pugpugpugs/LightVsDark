@@ -54,4 +54,14 @@ class EnemyManager {
             enemy.speedMultiplier = to
         }
     }
+    
+    func stopAllEnemies() {
+        for enemy in enemies {
+            enemy.onDestroyed = nil
+            enemy.onAttackHit = nil
+            enemy.removeFromParent()
+        }
+        
+        enemies.removeAll()
+    }
 }

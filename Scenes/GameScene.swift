@@ -25,6 +25,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var collisionHandler: CollisionHandler!
     var scoreManager: ScoreManager!
 
+    // MARK: - Overlays
+    var gameOverOverlay: GameOverOverlay!
+
     // MARK: - Scene Lifecycle
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -40,6 +43,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         // --- Managers ---
         setupManagers()
+        
+        // -- Setup Overlay
+        setupOverlay()
+    }
+    
+    private func setupOverlay() {
+        let gameOverOverlay = GameOverOverlay()
+        gameOverOverlay.position = CGPoint(x: frame.midX, y: frame.midY)
+        gameOverOverlay.onRestart = { [weak self] in
+            self?.restartGame()
+        }
+        addChild(gameOverOverlay)
+
+        self.gameOverOverlay = gameOverOverlay
+        gameOverOverlay.isHidden = true
+        
+        gameOverOverlay.onRestart = { [weak self] in
+            self?.restartGame()
+        }
     }
 
     private func setupPlayer() {
@@ -68,6 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         enemyManager?.onEnemyAttackHit = { [weak self] in
+            self?.gameOver()
             self?.player.takeDamage()
             ScoreManager.shared.playerHit()
         }
@@ -160,18 +183,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     // MARK: - Game Over
     func gameOver() {
-        return
         guard !isGameOver else { return }
         isGameOver = true
-        removeAllActions()
 
-        let wait = SKAction.wait(forDuration: 1.0)
-        let restart = SKAction.run { [weak self] in
-            guard let self = self, let view = self.view else { return }
-            let newScene = GameScene(size: view.bounds.size)
-            newScene.scaleMode = .resizeFill
-            view.presentScene(newScene, transition: .fade(withDuration: 0.5))
-        }
-        run(SKAction.sequence([wait, restart]))
+        stopGameLogic()               // stop everything
+
+        gameOverOverlay.isHidden = false
+    }
+
+    
+    func restartGame() {
+        guard let view = view else { return }
+        
+        let newScene = GameScene(size: view.bounds.size)
+        newScene.scaleMode = scaleMode
+        
+        view.presentScene(newScene, transition: .fade(withDuration: 0.4))
+    }
+    
+    func stopGameLogic() {
+        spawnManager.stop()
+//        enemyManager.stopAllEnemies()
+//        powerUpManager.removeAllPowerUps()
     }
 }

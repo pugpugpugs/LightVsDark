@@ -51,6 +51,7 @@
 		83DC73342F0DACCC00AECBE1 /* PlayerStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */; };
 		83DC73372F0DB68C00AECBE1 /* PlayerWeapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */; };
 		83DC73392F0DDA7500AECBE1 /* PlayerHealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73382F0DDA7500AECBE1 /* PlayerHealthBar.swift */; };
+		83DC733B2F0ECDF200AECBE1 /* GameOverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC733A2F0ECDF200AECBE1 /* GameOverOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 		83DC73332F0DACCC00AECBE1 /* PlayerStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStateMachine.swift; sourceTree = "<group>"; };
 		83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerWeapon.swift; sourceTree = "<group>"; };
 		83DC73382F0DDA7500AECBE1 /* PlayerHealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHealthBar.swift; sourceTree = "<group>"; };
+		83DC733A2F0ECDF200AECBE1 /* GameOverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverOverlay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				83DC72CC2F046DE200AECBE1 /* Managers */,
 				83DC730C2F098DC500AECBE1 /* Movement */,
 				83DC73352F0DB67D00AECBE1 /* Weapons */,
+				83DC733C2F0ECECA00AECBE1 /* UI */,
 				83DC72CB2F046DDC00AECBE1 /* Nodes */,
 				83DC72F32F06F82600AECBE1 /* Spawning */,
 				83DC72CA2F046DD400AECBE1 /* Scenes */,
@@ -309,6 +312,22 @@
 			path = Weapons;
 			sourceTree = "<group>";
 		};
+		83DC733C2F0ECECA00AECBE1 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				83DC733D2F0ECEEC00AECBE1 /* Overlays */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		83DC733D2F0ECEEC00AECBE1 /* Overlays */ = {
+			isa = PBXGroup;
+			children = (
+				83DC733A2F0ECDF200AECBE1 /* GameOverOverlay.swift */,
+			);
+			path = Overlays;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -378,6 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DC733B2F0ECDF200AECBE1 /* GameOverOverlay.swift in Sources */,
 				83DC730E2F098E9D00AECBE1 /* MovementManager.swift in Sources */,
 				83DC72D52F04720000AECBE1 /* Player.swift in Sources */,
 				83DC73202F0C1C0000AECBE1 /* EnemyFactory.swift in Sources */,
