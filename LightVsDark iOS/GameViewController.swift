@@ -19,6 +19,7 @@ class GameViewController: UIViewController {
         
         guard let skView = self.view as? SKView else { return }
         
+//        let scene = StartScene(size: skView.bounds.size)
         let scene = GameScene(size: skView.bounds.size)
         scene.scaleMode = .resizeFill
         

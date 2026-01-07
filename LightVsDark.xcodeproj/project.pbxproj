@@ -52,6 +52,9 @@
 		83DC73372F0DB68C00AECBE1 /* PlayerWeapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */; };
 		83DC73392F0DDA7500AECBE1 /* PlayerHealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73382F0DDA7500AECBE1 /* PlayerHealthBar.swift */; };
 		83DC733B2F0ECDF200AECBE1 /* GameOverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC733A2F0ECDF200AECBE1 /* GameOverOverlay.swift */; };
+		83DC73402F0ED4DE00AECBE1 /* StartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC733F2F0ED4DE00AECBE1 /* StartScene.swift */; };
+		83DC73422F0ED4F300AECBE1 /* HowToPlayOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73412F0ED4F300AECBE1 /* HowToPlayOverlay.swift */; };
+		83DC73442F0ED50C00AECBE1 /* HighScoresOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DC73432F0ED50C00AECBE1 /* HighScoresOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +105,9 @@
 		83DC73362F0DB68C00AECBE1 /* PlayerWeapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerWeapon.swift; sourceTree = "<group>"; };
 		83DC73382F0DDA7500AECBE1 /* PlayerHealthBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHealthBar.swift; sourceTree = "<group>"; };
 		83DC733A2F0ECDF200AECBE1 /* GameOverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverOverlay.swift; sourceTree = "<group>"; };
+		83DC733F2F0ED4DE00AECBE1 /* StartScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScene.swift; sourceTree = "<group>"; };
+		83DC73412F0ED4F300AECBE1 /* HowToPlayOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPlayOverlay.swift; sourceTree = "<group>"; };
+		83DC73432F0ED50C00AECBE1 /* HighScoresOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoresOverlay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -315,6 +321,7 @@
 		83DC733C2F0ECECA00AECBE1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				83DC733E2F0ED49900AECBE1 /* Screens */,
 				83DC733D2F0ECEEC00AECBE1 /* Overlays */,
 			);
 			path = UI;
@@ -326,6 +333,16 @@
 				83DC733A2F0ECDF200AECBE1 /* GameOverOverlay.swift */,
 			);
 			path = Overlays;
+			sourceTree = "<group>";
+		};
+		83DC733E2F0ED49900AECBE1 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				83DC733F2F0ED4DE00AECBE1 /* StartScene.swift */,
+				83DC73412F0ED4F300AECBE1 /* HowToPlayOverlay.swift */,
+				83DC73432F0ED50C00AECBE1 /* HighScoresOverlay.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,6 +424,7 @@
 				83DC73042F074A8200AECBE1 /* HardEnemy.swift in Sources */,
 				83DC73232F0C71AB00AECBE1 /* DifficultySettings.swift in Sources */,
 				83DC72D92F04722B00AECBE1 /* SpawnManager.swift in Sources */,
+				83DC73402F0ED4DE00AECBE1 /* StartScene.swift in Sources */,
 				83DC73392F0DDA7500AECBE1 /* PlayerHealthBar.swift in Sources */,
 				83DC72EE2F06002600AECBE1 /* PowerUpType.swift in Sources */,
 				83DC73302F0DA56C00AECBE1 /* PlayerState.swift in Sources */,
@@ -420,6 +438,7 @@
 				83DC73072F0820E200AECBE1 /* ConeZone.swift in Sources */,
 				83DC732E2F0DA2C600AECBE1 /* PlayerPhysics.swift in Sources */,
 				83DC73342F0DACCC00AECBE1 /* PlayerStateMachine.swift in Sources */,
+				83DC73442F0ED50C00AECBE1 /* HighScoresOverlay.swift in Sources */,
 				83DC731C2F09EC7900AECBE1 /* EdgeSkaterEnemy.swift in Sources */,
 				83DC72F02F06D60600AECBE1 /* SafeSpawnGenerator.swift in Sources */,
 				83DC72EA2F05DA9700AECBE1 /* LightCone.swift in Sources */,
@@ -436,6 +455,7 @@
 				83DC73372F0DB68C00AECBE1 /* PlayerWeapon.swift in Sources */,
 				83DC72FB2F06F93D00AECBE1 /* EasyEnemy.swift in Sources */,
 				83DC731A2F09B57C00AECBE1 /* SpriteSheetAnimationProvider.swift in Sources */,
+				83DC73422F0ED4F300AECBE1 /* HowToPlayOverlay.swift in Sources */,
 				83DC73322F0DA77D00AECBE1 /* PlayerFactory.swift in Sources */,
 				83DC72DF2F04897300AECBE1 /* PhysicsCategory.swift in Sources */,
 				83DC73272F0C883E00AECBE1 /* EnemyStats.swift in Sources */,
