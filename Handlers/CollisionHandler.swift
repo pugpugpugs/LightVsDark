@@ -4,17 +4,15 @@ class CollisionHandler {
     // MARK: - Dependencies
     private weak var player: Player?
     private weak var playerWeapon: PlayerWeapon?
-    private let powerUpManager: PowerUpManager
 
     // MARK: - Event closures
     var onPlayerHitByEnemy: (() -> Void)?
     var onPlayerStartAttack: ((Enemy) -> Void)?
     var onPlayerEndAttack: ((Enemy) -> Void)?
 
-    init(player: Player, playerWeapon: PlayerWeapon, powerUpManager: PowerUpManager) {
+    init(player: Player, playerWeapon: PlayerWeapon) {
         self.player = player
         self.playerWeapon = playerWeapon
-        self.powerUpManager = powerUpManager
     }
 
     // MARK: - Physics Contact
@@ -32,13 +30,7 @@ class CollisionHandler {
 
         case PhysicsCategory.player | PhysicsCategory.enemy:
             break
-//            onPlayerHitByEnemy?()
-
-        case PhysicsCategory.playerWeapon | PhysicsCategory.powerUp:
-            if let powerUp = nodeA as? PowerUp ?? nodeB as? PowerUp {
-//                powerUpManager.collect(powerUp)
-            }
-
+            
         default: break
         }
     }

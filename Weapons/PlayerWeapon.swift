@@ -1,6 +1,6 @@
 import SpriteKit
 
-protocol PlayerWeapon: AnyObject {
+protocol PlayerWeapon: PowerUpAccepting {
     var owner: Player? { get set }
 
     // Called each frame

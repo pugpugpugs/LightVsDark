@@ -1,6 +1,9 @@
 import SpriteKit
 
-class LightCone: SKShapeNode, PlayerWeapon {
+class LightCone: SKShapeNode, PlayerWeapon, PowerUpAccepting {
+    
+    // MARK: - PowerUps
+    let supportedPowerUps: [PowerUpType] = [.widenCone, .narrowCone]
     
     // MARK: - PlayerWeapon
     weak var owner: Player?
@@ -18,6 +21,7 @@ class LightCone: SKShapeNode, PlayerWeapon {
     // MARK: - Cone Properties
     let baseLength: CGFloat
     let baseAngle: CGFloat
+    private var angleMultiplier: CGFloat = 1.0
     
     private(set) var currentLength: CGFloat
     private(set) var currentAngle: CGFloat
@@ -182,10 +186,52 @@ class LightCone: SKShapeNode, PlayerWeapon {
         return path
     }
     
+    func widen() {
+        angleMultiplier = 1.5
+        targetAngle = baseAngle * angleMultiplier
+    }
+
+    func narrow() {
+        angleMultiplier = 0.6
+        targetAngle = baseAngle * angleMultiplier
+    }
+
+    func resetWidth() {
+        angleMultiplier = 1.0
+        targetAngle = baseAngle
+    }
+    
     private func updateDebugVisibility() {
         innerOverlay.isHidden = !debugDrawEnabled
         middleOverlay.isHidden = !debugDrawEnabled
         outerOverlay.isHidden = !debugDrawEnabled
         physicsDebugNode?.isHidden = !debugDrawEnabled
+    }
+    
+    // MARK: - Power Ups
+    func applyPowerUp(powerUp: PowerUpType) {
+        guard supportedPowerUps.contains(powerUp) else { return }
+        
+        switch powerUp {
+        case .widenCone:
+            widen()
+        case .narrowCone:
+            narrow()
+        default:
+            break
+        }
+    }
+
+    func removePowerUp(powerUp: PowerUpType) {
+        guard supportedPowerUps.contains(powerUp) else { return }
+        
+        switch powerUp {
+        case .widenCone:
+            resetWidth()
+        case .narrowCone:
+            resetWidth()
+        default:
+            break
+        }
     }
 }

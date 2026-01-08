@@ -92,14 +92,21 @@ final class SafeSpawnGenerator {
         // Pick a random zone
         let zone = spawnZones.randomElement()!
 
-        // Clamp the available width/height to at least 1
-        let maxX = max(zone.maxX - spriteSize.width, zone.minX)
-        let maxY = max(zone.maxY - spriteSize.height, zone.minY)
+        // Clamp the available width/height to ensure the sprite fits fully inside the zone
+        let minX = zone.minX + spriteSize.width/2
+        let maxX = zone.maxX - spriteSize.width/2
+        let minY = zone.minY + spriteSize.height/2
+        let maxY = zone.maxY - spriteSize.height/2
 
-        let x = CGFloat.random(in: zone.minX...maxX)
-        let y = CGFloat.random(in: zone.minY...maxY)
+        // Clamp to ensure min <= max
+        let clampedMinX = min(minX, maxX)
+        let clampedMaxX = max(minX, maxX)
+        let clampedMinY = min(minY, maxY)
+        let clampedMaxY = max(minY, maxY)
+
+        let x = CGFloat.random(in: clampedMinX...clampedMaxX)
+        let y = CGFloat.random(in: clampedMinY...clampedMaxY)
 
         return CGPoint(x: x, y: y)
     }
-
 }

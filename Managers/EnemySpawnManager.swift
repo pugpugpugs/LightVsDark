@@ -1,6 +1,6 @@
 import SpriteKit
 
-class SpawnManager {
+class EnemySpawnManager {
     let enemyFactory: EnemyFactory
     let safeSpawnGenerator: SafeSpawnGenerator
     

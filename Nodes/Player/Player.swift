@@ -112,6 +112,11 @@ class Player: SKNode {
         }
     }
     
+    private func heal(amount: Int) {
+        self.hitPoints = min(self.stats.maxHealth, self.hitPoints + amount)
+        self.healthBar.update(hp: self.hitPoints)
+    }
+    
     func die() {
         
     }
@@ -125,5 +130,27 @@ class Player: SKNode {
         physicsBody?.isDynamic = true
         physicsBody?.affectedByGravity = false
         physicsBody?.allowsRotation = false
+    }
+}
+
+extension Player: PowerUpAccepting {
+    var supportedPowerUps: [PowerUpType] {
+        return [.heal]
+    }
+    
+
+    func applyPowerUp(powerUp: PowerUpType) {
+        guard supportedPowerUps.contains(powerUp) else { return }
+                
+        switch powerUp {
+        case .heal:
+            self.heal(amount: 1)
+        default:
+            break
+        }
+    }
+
+    func removePowerUp(powerUp: PowerUpType) {
+        // For health, nothing to remove; effect is instantaneous
     }
 }

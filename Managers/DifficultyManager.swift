@@ -6,6 +6,7 @@ class DifficultyManager {
     
     var onSpawnIntervalChange: ((TimeInterval) -> Void)?
     var onEnemySpeedChange: ((CGFloat) -> Void)?
+    var onPowerUpSpawnIntervalChange: ((TimeInterval) -> Void)?
 
     // Computed properties for current frame
     var enemySpeed: CGFloat {
@@ -16,13 +17,18 @@ class DifficultyManager {
     
     var enemySpawnInterval: TimeInterval {
         let t = min(elapsedTime / settings.roundDuration, 1)
-        return settings.startSpawnInterval - (settings.startSpawnInterval - settings.minSpawnInterval) * t
+        return settings.startEnemySpawnInterval - (settings.startEnemySpawnInterval - settings.minEnemySpawnInterval) * t
     }
     
     var currentDifficulty: CGFloat {
         // 1..10 scale based on elapsed time fraction
         let fraction = min(elapsedTime / settings.roundDuration, 1)
         return 1 + fraction * 9
+    }
+    
+    var powerUpBaseSpawnInterval: TimeInterval {
+        let t = min(elapsedTime / settings.roundDuration, 1)
+        return 5 + 5 * t
     }
     
     init(settings: DifficultySettings = .default) {
@@ -33,6 +39,7 @@ class DifficultyManager {
         elapsedTime += deltaTime
         onSpawnIntervalChange?(enemySpawnInterval)
         onEnemySpeedChange?(enemySpeed)
+        onPowerUpSpawnIntervalChange?(powerUpBaseSpawnInterval)
     }
     
     func reset() {
