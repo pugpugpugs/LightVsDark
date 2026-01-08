@@ -20,6 +20,6 @@ class HealPowerUp: PowerUp {
         )
         let size = CGSize(width: 80, height: 80)
         
-        super.init(type: .heal, animationProvider: provider, size: size, duration: 5.0)
+        super.init(type: .heal, animationProvider: provider, size: size, effectDuration: 0)
     }
 }

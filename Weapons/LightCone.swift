@@ -78,12 +78,12 @@ class LightCone: SKShapeNode, PlayerWeapon, PowerUpAccepting {
         
         let damage = baseDPS * deltaTime
         for enemy in activeEnemies.allObjects {
-            guard let enemyParent = enemy.parent else { return }
+            guard let enemyParent = enemy.parent else { continue }
             let localPos = convert(enemy.position, from: enemyParent)
             let x = localPos.x
             let y = localPos.y
             
-            if y < 0 || y > currentLength { return }
+            if y < 0 || y > currentLength { continue }
             let innerWidthAtY = innerHalfWidth * (y / currentLength)
             let middleWidthAtY = middleHalfWidth * (y / currentLength)
             let outerWidthAtY = outerHalfWidth * (y / currentLength)
@@ -92,7 +92,7 @@ class LightCone: SKShapeNode, PlayerWeapon, PowerUpAccepting {
             if absX <= innerWidthAtY { multiplier = innerMultiplier }
             else if absX <= middleWidthAtY { multiplier = middleMultiplier }
             else if absX <= outerWidthAtY { multiplier = outerMultiplier }
-            else { return }
+            else { continue }
             
             enemy.takeDamage(damage * multiplier)
         }
@@ -131,9 +131,9 @@ class LightCone: SKShapeNode, PlayerWeapon, PowerUpAccepting {
     }
     
     private func updateHalfWidths() {
-        innerHalfWidth  = tan(currentAngle / 18) * currentLength
-        middleHalfWidth = tan(currentAngle / 4) * currentLength
-        outerHalfWidth  = tan(currentAngle / 2) * currentLength
+        outerHalfWidth = tan(currentAngle / 2) * currentLength
+        middleHalfWidth = outerHalfWidth * 0.6
+        innerHalfWidth = outerHalfWidth * 0.25
     }
     
     private func updatePathAndPhysics() {
@@ -173,18 +173,24 @@ class LightCone: SKShapeNode, PlayerWeapon, PowerUpAccepting {
         let baseY = currentLength
         let steps = 20
         let arcHeight: CGFloat = 20
-        
+
         path.move(to: tip)
+
         for i in 0...steps {
-            let t = CGFloat(i)/CGFloat(steps)
-            let x = -halfWidth + t * (halfWidth*2)
-            let yOffset = sin((x/outerHalfWidth + 1) * .pi/2) * arcHeight
+            let t = CGFloat(i) / CGFloat(steps)
+            let x = -halfWidth + t * (halfWidth * 2)
+
+            let normalizedX = x / max(halfWidth, 0.001)
+            let yOffset = sin((normalizedX + 1) * .pi / 2) * arcHeight
+
             path.addLine(to: CGPoint(x: x, y: baseY + yOffset))
         }
+
         path.addLine(to: tip)
         path.closeSubpath()
         return path
     }
+
     
     func widen() {
         angleMultiplier = 1.5
@@ -198,7 +204,7 @@ class LightCone: SKShapeNode, PlayerWeapon, PowerUpAccepting {
 
     func resetWidth() {
         angleMultiplier = 1.0
-        targetAngle = baseAngle
+        targetAngle = baseAngle * angleMultiplier
     }
     
     private func updateDebugVisibility() {
@@ -211,6 +217,8 @@ class LightCone: SKShapeNode, PlayerWeapon, PowerUpAccepting {
     // MARK: - Power Ups
     func applyPowerUp(powerUp: PowerUpType) {
         guard supportedPowerUps.contains(powerUp) else { return }
+        
+        print("applying powerup \(powerUp)")
         
         switch powerUp {
         case .widenCone:

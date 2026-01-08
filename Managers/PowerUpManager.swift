@@ -7,6 +7,7 @@ final class PowerUpManager {
     private struct ActivePowerUp {
         let powerUp: PowerUp
         let target: PowerUpAccepting
+        let startTime: TimeInterval
     }
 
     // MARK: - Properties
@@ -41,40 +42,46 @@ final class PowerUpManager {
 
     /// Called when a player touches a PowerUp node
     func handlePickup(_ powerUp: PowerUp, currentTime: TimeInterval) {
-        // Prevent duplicate pickups
-        guard !active.contains(where: { $0.powerUp === powerUp }) else { return }
-
         // Determine valid target
         guard let target = target(for: powerUp.type) else { return }
 
         // Activate visuals/effect
         powerUp.activate(currentTime: currentTime)
         target.applyPowerUp(powerUp: powerUp.type)
+        
+        if powerUp.type.isInstant {
+            return
+        }
+        
+        guard !active.contains(where: { $0.powerUp === powerUp }) else { return }
 
         // Track active power-up
-        active.append(ActivePowerUp(powerUp: powerUp, target: target))
+        active.append(ActivePowerUp(powerUp: powerUp, target: target, startTime: currentTime))
     }
 
     /// Called each frame to update expiration
     func update(currentTime: TimeInterval) {
-        // Remove expired power-ups
+        for activePowerUp in active {
+            activePowerUp.powerUp.update(currentTime: currentTime)
+        }
+        
         var expiredIndices: [Int] = []
 
         for (index, activePowerUp) in active.enumerated() {
-            if activePowerUp.powerUp.isExpired(currentTime: currentTime) {
-                // Remove effect
+            let elapsed = currentTime - activePowerUp.startTime
+            let duration = activePowerUp.powerUp.effectDuration
+
+            if elapsed >= duration {
                 activePowerUp.target.removePowerUp(powerUp: activePowerUp.powerUp.type)
-                // Cleanup node/visuals
-                activePowerUp.powerUp.deactivate()
                 expiredIndices.append(index)
             }
         }
 
-        // Remove expired from active array
         for index in expiredIndices.reversed() {
             active.remove(at: index)
         }
     }
+
 
     /// Remove a power-up manually (optional)
     func remove(_ powerUp: PowerUp) {
@@ -83,7 +90,6 @@ final class PowerUpManager {
 
         // Remove effect & visuals
         activePowerUp.target.removePowerUp(powerUp: activePowerUp.powerUp.type)
-        activePowerUp.powerUp.deactivate()
 
         active.remove(at: index)
     }
