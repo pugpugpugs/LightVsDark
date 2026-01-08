@@ -2,7 +2,6 @@ import SpriteKit
 
 final class PowerUpSpawnManager {
     var onSpawn: ((PowerUp, CGPoint) -> Void)?
-    var onRemove: ((PowerUp) -> Void)?
 
     private let factory: PowerUpFactory
     private let safeSpawnGenerator: SafeSpawnGenerator
@@ -26,7 +25,6 @@ final class PowerUpSpawnManager {
             if powerUp.state == .despawning && powerUp.node.parent == nil {
                 if let index = activePowerUpsOnScene.firstIndex(where: { $0 === powerUp }) {
                     activePowerUpsOnScene.remove(at: index)
-                    onRemove?(powerUp)
                 }
             }
         }
@@ -45,6 +43,12 @@ final class PowerUpSpawnManager {
         guard let powerUp = factory.makeRandom(from: candidateTypes) else { return }
 
         let position = safeSpawnGenerator.generateSafeSpawnPoint(spriteSize: powerUp.node.size)
+        
+        powerUp.onRemoved = { [weak self, weak powerUp] in
+            guard let self = self, let powerUp = powerUp else { return }
+            powerUp.node.removeFromParent()
+            self.activePowerUpsOnScene.removeAll { $0 === powerUp }
+        }
 
         activePowerUpsOnScene.append(powerUp)
         onSpawn?(powerUp, position)

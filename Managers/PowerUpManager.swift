@@ -40,33 +40,27 @@ final class PowerUpManager {
         }
     }
 
-    /// Called when a player touches a PowerUp node
     func handlePickup(_ powerUp: PowerUp, currentTime: TimeInterval) {
-        // Determine valid target
+        // Only allow one copy
+        guard !active.contains(where: { $0.powerUp === powerUp }) else { return }
+
         guard let target = target(for: powerUp.type) else { return }
 
         // Activate visuals/effect
         powerUp.activate(currentTime: currentTime)
         target.applyPowerUp(powerUp: powerUp.type)
-        
-        if powerUp.type.isInstant {
-            return
-        }
-        
-        guard !active.contains(where: { $0.powerUp === powerUp }) else { return }
 
-        // Track active power-up
-        active.append(ActivePowerUp(powerUp: powerUp, target: target, startTime: currentTime))
+        // Only track timed power-ups
+        if !powerUp.type.isInstant {
+            let activePowerUp = ActivePowerUp(powerUp: powerUp, target: target, startTime: currentTime)
+            active.append(activePowerUp)
+        }
     }
 
     /// Called each frame to update expiration
     func update(currentTime: TimeInterval) {
-        for activePowerUp in active {
-            activePowerUp.powerUp.update(currentTime: currentTime)
-        }
-        
         var expiredIndices: [Int] = []
-
+        
         for (index, activePowerUp) in active.enumerated() {
             let elapsed = currentTime - activePowerUp.startTime
             let duration = activePowerUp.powerUp.effectDuration
@@ -75,6 +69,8 @@ final class PowerUpManager {
                 activePowerUp.target.removePowerUp(powerUp: activePowerUp.powerUp.type)
                 expiredIndices.append(index)
             }
+            
+            activePowerUp.powerUp.update(currentTime: currentTime)
         }
 
         for index in expiredIndices.reversed() {

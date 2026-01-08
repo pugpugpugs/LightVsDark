@@ -89,12 +89,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Add the node to the scene
             powerUp.addToScene(self, at: position, currentTime: self.sceneTime)
         }
-        powerUpSpawnManager.onRemove = { [weak self] powerUp in
-            guard let self = self else { return }
-            
-            powerUp.node.removeFromParent()
-//            self.powerUpManager.remove(powerUp)
-        }
 
         // Difficulty
         difficultyManager = DifficultyManager()
@@ -150,9 +144,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // PowerUps: spawn eligible types
         let candidates = powerUpManager.eligiblePowerUpTypes()
         powerUpSpawnManager.update(currentTime: sceneTime, candidateTypes: candidates)
+        powerUpManager.update(currentTime: sceneTime)
         
-
-
         // Enemies
         spawnManager.update(currentTime: sceneTime)
         enemyManager.update(deltaTime: deltaTime, playerPosition: player.position)
